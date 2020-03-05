@@ -1,0 +1,29 @@
+%*******************************************************
+% Publications
+%*******************************************************
+\phantomsection
+\pdfbookmark[1]{Publications}{publications}
+\addcontentsline{toc}{chapter}{\tocEntry{Publications}}
+\chapter*{Publications}%\graffito{This is just an early --~and currently ugly~-- test!}
+The following publications have been published, accepted or submitted during my PhD and form the basis of this thesis.
+% This might come in handy for PhD theses: some ideas and figures have appeared previously in the following publications:
+
+%\noindent Put your publications from the thesis here. The packages \texttt{multibib} or \texttt{bibtopic} etc. can be used to handle multiple different bibliographies in your document.
+
+\begin{refsection}[ownpubs]
+    \small
+    % \nocite{*} % is local to to the enclosing refsection
+    \nocite{Olesen2018c,Stephansen2018,Olesen2019,Olesen2020AutomaticSetting, Olesen2020DeepDetection}
+    \printbibliography[heading=none]
+\end{refsection}
+
+Furthermore, I have (co-)authored the following publications during my PhD, that do not form basis of this thesis.
+
+\begin{refsection}[ownpubs]
+    \small
+    % \nocite{*} % is local to to the enclosing refsection
+    \nocite{Olesen2018, Olesen2018a, Olesen2019a, Jacobsen2018, Carvelli2018, Cesari2018, Carvelli2020, Brink-Kjaer2018, Brink-Kjaer2019, Klok2018}
+    \printbibliography[heading=none]
+\end{refsection}
+
+% \emph{Attention}: This requires a separate run of \texttt{bibtex} for your \texttt{refsection}, \eg, \texttt{ClassicThesis1-blx} for this file. You might also use \texttt{biber} as the backend for \texttt{biblatex}. See also \url{http://tex.stackexchange.com/questions/128196/problem-with-refsection}.

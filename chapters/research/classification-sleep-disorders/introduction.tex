@@ -1,0 +1,80 @@
+%!TEX root = ../Thesis.tex
+\acresetall
+\chapter{Classification and prediction of sleep disorders}\label{chap:classification-sleep-disorders}
+% \begin{flushright}{\slshape 
+%         What, so everyone’s supposed to sleep every single night now? You realize that nighttime makes up half of all time?} \\ \medskip
+%         --- Rick Sanchez\\Rick and Morty, season 1, pilot
+% \end{flushright}
+\vspace{6cm}
+
+The previous chapters have focused on characterization of sleep as more of an isolated phenomenon.
+This chapter aims to build upon the knowledge and methods introduced previously by applying them in a clinical setting.
+Specifically, I will describe how we applied one of the sleep stage classification algorithms introduced in~\cref{chap:sleep-stage-classification} to identify patients exhibiting with narcolepsy, which is a sleep disorder characterized by a dysfunctional regulation of the sleep-wake switch described in~\cref{sec:control-sleep}.
+
+This chapter have been modified from the original publication  
+\begin{displayquote}
+    \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International License: \url{http://creativecommons.org/licenses/by/4.0/}}\footnote{\(\dagger\): shared first authorship.}.
+\end{displayquote}
+% \begin{itemize}
+%     \item \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International Licen: \url{http://creativecommons.org/licenses/by/4.0/}}.
+% \end{itemize} 
+
+\section{Research background}
+
+Sleep disorders and sleep dysregulation impact over \num{100} million Americans contributing to cardiovascular disorders, such as arrhythmia, hypertension, and stroke, metabolic disorders, such as diabetes, and obesity, and psychiatric disorders, such as depression, irritability, and addictive behaviors. 
+Furthermore, generalized sleep deprivation impairs performance, judgment and mood, and is a major preventable contributor to motor-vehicle-related accidents~\cite{Krieger2007}.
+There are approximately \num{90} different sleep disorders currently recognized and described in the \ac{ICSD-3} including insomnia\graffito{The prevalences of insomnia, sleep apnea, and restless legs syndrome are estimated to be approximately \SIlist{20;10;4}{\percent} of the population, respectively.}, sleep apnea, restless legs syndrome, \ac{RBD}, and hypersomnia syndromes such as \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
+
+Among these pathologies, \ac{NT1} is unique as a disorder with a known, discrete pathophysiology---a destruction of hypocretin neurons in the hypothalamus likely of autoimmune origin~\cite{Peyron2000}.
+This is reflected in the \ac{CSF} concentrations of the hypocretin-1 neuropeptide\graffito{Hypocretin-1 is also known as orexin-A.}, where a concentration below \SI{110}{\pico\gram\per\milli\liter} is considered indicative of narcolepsy~\cite{AmericanAcademyofSleepMedicine2014}\graffito{There is also a narcolepsy type 2}.
+Typically beginning in childhood or adolescence, narcolepsy affects approximately \SI{0.03}{\percent} of the US, European, Korean and Chinese populations~\cite{Kornum2017}.
+Unique to narcolepsy is the extremely strong association with the genetic marker \hla~\cite{Han2014}, and a well-characterized set of sleep disturbances that include short sleep latency, rapid transitions into \ac{REM} sleep and poor nocturnal sleep consolidation.
+The pathology also includes episodes of \textit{sleep-wake dissociation}, where the patient is half awake and half in \ac{REM}.
+For example, experiencing REM sleep muscle paralysis while awake (sleep paralysis, cataplexy) or dreaming while awake (hypnagogic hallucinations)\todo{Revision. When this happens in NREM it results in ... etc.}.
+
+The differentiation of sleep stages is also particularly important for the diagnosis of narcolepsy.
+Current diagnostic guidelines for \ac{NT1} require a full-night \ac{PSG} and a \ac{MSLT} the following day, which is a test where patients are asked to nap \numrange{4}{5} times for \SI{20}{\minute} every \SI{2}{\hour} during the daytime, and for each nap, the sleep latency and \ac{REM} latency are noted~\cite{Littner2005}.
+A \ac{MSL} less than \SI{8}{\minute}\graffito{A \ac{MSL} less than \SI{8}{\minute} is indicative of excessive sleepiness} and the presence of at least \num{2} \acp{SOREMP}\graffito{A \ac{SOREMP} is defined as \ac{REM} latency less than \SI{15}{\minute} following sleep onset in a nap.} during the \ac{MSLT}, or \num{1} \ac{SOREMP} plus a \ac{REM} latency less than \SI{15}{\minute} during nocturnal \ac{PSG} are diagnostic criteria for \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
+In a recent large study of the \ac{MSLT}, specificity and sensitivity for \ac{NT1} were \SIlist{98.6;92.9}{\percent} in comparing \num{516} \ac{NT1} versus \num{516} controls, respectively; and \SIlist{71.2;93.4}{\percent} in comparing \num{122} \ac{NT1} cases versus \num{132} other hypersomnia cases, respectively~\cite{Andlauer2013}.
+Similar sensitivities of \SIrange{75}{90}{\percent} and specificities of \SIrange{90}{98}{\percent} have been reported by others in large samples of hypersomnia cases versus \ac{NT1}~\cite{Mignot2002,Andlauer2012,Luca2013,Dauvilliers2004,Moscovitch1993}. 
+The \ac{MSLT} is thus both highly specific and highly sensitive, making it incredibly valuable as a diagnostic tool. 
+
+\subsection{Research motivation and objectives}
+
+In \cref{sec:paperiii}, we saw how a sleep stage classification algorithm could be constructed to reliably classify sleep stages as good or better than human experts.
+The results presented an interesting observation: sleep stage classification performance was unperturbed by existing sleep disorders, except in patients with narcolepsy.
+Furthermore, when comparing the hypnodensities in patients with and without narcolepsy, the former exhibited a much more diffuse sleep architecture with less pronounced sleep-wake cycles and increased \ac{REM}/\ac{W}/\ac{N1} disassociation. 
+This is illustrated in~\cref{fig:paperiii-figure03} where the bottom (top) trace shows a hypnodensity graph for a subject with (without) narcolepsy.
+
+\begin{figure}[t]
+    \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+        \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-iii/Figure_3.png}
+        \caption[Examples of hypnodensity graphs.]{Examples of hypnodensity graph in subjects with and without narcolepsy. 
+        Hypnodensity for a subject without narcolepsy (top) and a subject with narcolepsy (bottom). 
+        Color codes: white, \ac{W}; red, \ac{N1}; light blue, \ac{N2}; dark blue, \ac{N3}; black, \ac{REM}.}
+        \label{fig:paperiii-figure03}
+    \end{adjustwidth*}
+\end{figure}
+
+These findings motivated a novel research question with is directly associated with research hypothesis~\ref{hypothesis:sleep-disorders}\graffito{\label{question:}\hypothesisSleepDisorders.}: 
+\newcommand{\questionSleepDisorders}{based on a single overnight \ac{PSG} recording, can we diagnose narcolepsy with the same level of performance as the current clinical gold standard?}
+\begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~\arabic*}, ref={\bfseries\scshape RQ~\arabic*}]
+    \item \questionSleepDisorders\label{question:sleep-disorders}
+\end{enumerate}
+% \begin{displayquote}
+%     based on a single overnight \ac{PSG} recording, can we diagnose narcolepsy with the same level of performance as the current clinical gold standard?
+% \end{displayquote}
+
+Derived from the research hypothesis and associated question, the following research, or design, objectives can be formulated:
+
+\begin{enumerate}[label=(\roman*)]
+    \item to design a model capable of diagnosing narcolepsy from the hypnodensity representation of a \ac{PSG} study;
+    \item the model should have the same level of performance as the gold standard \ac{PSG}-\ac{MSLT} combination.
+\end{enumerate}
+
+The following sections will describe the steps taken to complete the posed design objectives and answer the research question.
+
+% Research papers
+\input{chapters/research/classification-sleep-disorders/paper-iii}
+
+\section{Chapter summary}

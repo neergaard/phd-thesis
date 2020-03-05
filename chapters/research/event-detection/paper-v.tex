@@ -1,0 +1,206 @@
+\section{Paper V: Deep transfer learning for improving single-EEG arousal detection}\label{sec:paperv}
+\sectionmark{Olesen, Jennum, Mignot, \& Sorensen, 2020}
+
+\subsection{Methods}
+
+\paragraph*{Notation} We denote by \(\llbracket a, b \rrbracket\) the set of integers \(\lbrace n \in \N \mid a \leq n \leq b\rbrace\) with \(\llbracket N \rrbracket\) being shorthand for \(\llbracket 1, N \rrbracket\), and by \(n \in \llbracket N \rrbracket \) the \(n\)th sample in \(\llbracket N \rrbracket\).
+A model for a given experiment is denoted by $\mathcal{M}_{(\cdot)}$, while an optimized model is superscripted with a star as $\mathcal{M}_{(\cdot)}^{*}$.
+A segment of PSG data is denoted by $\mathbf{x} \in \real^{C \times T}$, where $C, T$ is the number of channels and the duration of the segment in samples, respectively.
+
+\subsubsection{Data}
+We collected PSGs from \num{1500} subjects in the MrOS Sleep Study~\cite{Blank2005, Orwoll2005, Blackwell2011} from the National Sleep Research Resource repository~\cite{Dean2016, Zhang2018}.
+From each PSG, we extracted left and right EEG, left and right EOG, and chin EMG.
+EEG and EOG channels were referenced to the contralateral mastoid process.
+For each PSG, we also extracted time-stamped arousal scorings containing starts and durations of scored arousal events.
+We did not exclude any PSGs from this study based on sleep duration, number of arousal events, or similar criteria.
+
+\subsubsection{Data partitioning}
+The 1500 PSGs were initially partitioned into three subsets \train\textsubscript{1}, \eval\textsubscript{1}, and \test\textsubscript{1} containing 400, 100 and 1000 PSGs, respectively.
+Furthermore, we additionally partitioned \test\textsubscript{1} into three smaller subsets \train\textsubscript{2}, \eval\textsubscript{2}, and \test\textsubscript{2} containing 400, 100, and 500 PSGs, respectively.
+
+\subsubsection{Preprocessing pipeline}
+All signals were resampled to \SI{128}{\hertz} using poly-phase filtering with a Kaiser window ($\beta = 5.0$) prior to subsequent processing.
+Extracted EEG and EOG signals were filtered with \nth{2} order Butterworth IIR bandpass filters with cutoff frequencies \SI{0.3}{\hertz} and \SI{35}{\hertz}. 
+Chin EMG was filtered with a \nth{4} order Butterworth IIR highpass filter with a cutoff frequency of \SI{10}{\hertz}.
+Filtered signals were subsequently standardized by 
+\begin{equation}
+    \mathbf{x}^{(i)} = \frac{\tilde{\mathbf{x}}^{(i)} - \boldsymbol{\mu}^{(i)}}{\boldsymbol{\sigma}^{(i)}},
+\end{equation}
+where $\tilde{\mathbf{x}}^{(i)} \in \real^{C \times T}$ is the raw matrix containing $C$ input channels and $T$ samples, and $\boldsymbol{\mu}^{(i)}, \boldsymbol{\sigma}^{(i)} \in \real^{C}$ are the mean and standard deviation vectors for the \textit{i}'th PSG, respectively.
+
+\subsubsection{Model setup}
+We expand upon previous work using similar models for sleep event detection~\cite{Chambon2018b, Chambon2019, Olesen2019}. 
+Briefly, the model takes as input a tensor of PSG data $\mathbf{x} \in \real^{C \times T}$ and outputs 
+\begin{equation}
+    \mathbf{z} = \left( \mathbf{p}, \mathbf{y} \right) \in \real^{N_d \times T^{\prime} \times (K+1)} \times \real^{N_d \times T^{\prime} \times 2}
+\end{equation}
+containing predicted arousal probabilities $\mathbf{p}$ and associated start and durations for predicted arousal events $\mathbf{y}$.
+The differentiable function underlying the model comprises a deep neural network architecture consisting of the following modules:
+\paragraph{Input mixing module}
+Here, non-linear combinations of the input PSG data $\mathbf{x}$ are made using a non-linear mixing block $\phi_{\mathrm{mix}} : \real^{1 \times C \times T} \to \real^{C \times 1 \times T}$.
+\paragraph{Feature extraction module}
+This module contains two components. 
+The first is a convolutional feature extraction block $\varphi_{\mathrm{conv}} : \real^{C \times 1 \times T} \to \real^{f^{\prime} \times 1 \times T^{\prime}}$ consisting of $k_{\mathrm{max}}$ successions of convolutional, batch normalization, and rectified linear unit (ReLU) layers.
+Second is a recurrent feature extraction block $\varphi_{\mathrm{rec}} : \real^{f^{\prime} \times 1 \times T^{\prime}} \to \real^{f^{\prime} \times 2 \times T^{\prime}}$ with $f^{\prime}=f_02^{k_{\mathrm{max}}}$ hidden units.
+The $\varphi_{\mathrm{conv}}$ block is responsible for bulk feature extraction and temporal decimation using strided convolutions, while $\varphi_{\mathrm{rec}}$ processes the raw features across the reduced temporal dimension using a bidirectional gated recurrent unit~\cite{Cho2014} with $f^{\prime}$ hidden units.
+\paragraph{Event detection module}
+The output from $\varphi_{\mathrm{rec}}$ is processed by two separate blocks: $ \psi_{\mathrm{clf}} : \real^{f^{\prime} \times 2 \times T^{\prime}} \to \real^{\left( K + 1 \right) \! N_d \times 1 \times T^{\prime}} $ outputs the tensor $\mathbf{p}$ containing predicted arousal probabilities for each time point $t \in \llbracket T^{\prime} \rrbracket$ for each default event window. 
+$ \psi_{\mathrm{loc}} : \real^{f^{\prime} \times 2 \times T^{\prime}} \to \real^{2N_d \times T^{\prime}} $ outputs the tensor $\mathbf{y}$ containing predicted start time and durations of arousal events. 
+Both $\psi_{\mathrm{clf}}$ and $\psi_{\mathrm{loc}}$ are implemented using $\left(2, 1\right)$ convolutions rather than convolutions over the entire volume as in~\cite{Chambon2018b, Chambon2019, Olesen2019}.
+This serves a dual purpose: the first is to reduce the number of parameters to make the network more memory-efficient, while the second purpose is to allow the kernel and feature maps to be temporally invariant.
+
+For a detailed description of the network architecture, see~\cref{tab:paperv-architecture}.
+
+\begin{landscape}
+\begin{table}[tb]
+    \begin{threeparttable}
+        \centering
+        \caption[MSED architecture overview]{Network architecture overview.} 
+        \label{tab:paperv-architecture}
+        \begin{tabular}{@{}llllllll@{}}
+            \toprule
+            \textbf{Module} & \textbf{Layer type} & \textbf{Kernel} & \textbf{Stride} & \textbf{Feature maps} & \textbf{Input size} & \textbf{Output size} & \textbf{Activation} \\ \midrule
+            \(\mathbf{x}\) & Input & --- & --- & --- & \( C \times T \) & \( 1 \times C \times T \) & --- \\
+            \( \phi_{\mathrm{mix}} \) & 2D convolution & \( (C, 1) \) & \( (1, 1) \) & \( C \) & \( 1 \times C \times T \) & \( C \times 1 \times T \) & ReLU \\ \midrule
+            \( \varphi_{\mathrm{conv},1} \) & 2D convolution & \( (1, c) \) & \( (1, s) \) & \( 2f_0 \) & \( C \times 1 \times T \) & \( 2f_0 \times 1 \times T/s \) & --- \\
+            & Batch norm. & --- & --- & \(2f_0\) & \(2f_0 \times 1 \times T/s\) & \(2f_0 \times 1 \times T/s\) & ReLU \\
+            \( \varphi_{\mathrm{conv},k} \) & 2D convolution & \( (1, c) \) & \( (1, s) \) & \( f_02^{k} \) & \( f_02^{k-1} \times 1 \times T/s^{k-1} \) & \( f_02^{k} \times 1 \times T/s^k \) & --- \\
+            \( k \in \llbracket 2, k_{\mathrm{max}} \rrbracket \) & Batch norm. & --- & --- & \(f_02^{k}\) & \(f_02^{k} \times 1 \times T/s^k\) & \(f_02^{k} \times 1 \times T/s^k\) & ReLU \\
+            \( \varphi_{\mathrm{rec}} \) & bGRU & --- & --- & $f^{\prime}$ & \( f^{\prime} \times 1 \times T^{\prime} \) & \( f^{\prime} \times 2 \times T^{\prime} \) & --- \\ \midrule
+            \( \psi_{\mathrm{clf}} \) & 2D convolution & \( (2, 1) \) & \( (1, 1) \) & \( \left( K + 1 \right) \! N_d \) & $f^{\prime} \times 2 \times T^{\prime}$ & $\left( K + 1 \right) \! N_d \times 1 \times T^{\prime}$ & Softmax over \( K + 1 \) \\
+            \( \psi_{\mathrm{loc}} \) & 2D convolution & \( (2, 1) \) & \( (1, 1) \) & \( 2 N_d \) & $f^{\prime} \times 2 \times T^{\prime}$ & $2 N_d \times 1 \times T^{\prime}$ & Linear \\ \midrule
+            \(\mathbf{z}\) & Output, \(\mathbf{p}\) & --- & --- & --- & $\left( K + 1 \right) \! N_d \times 1 \times T^{\prime}$ & $N_d \times T^{\prime} \times \left( K + 1 \right)$ & --- \\
+             & Output, \(\mathbf{y}\) & --- & --- & --- & $2 N_d \times 1 \times T^{\prime}$ & $N_d \times T^{\prime} \times 2$ & --- \\
+            \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \small
+            \item \(\mathbf{x}\), input containing PSG data; $\mathbf{z}$, output containing predicted arousal probabilities and associated start and duration predictions; \( \phi_{\mathrm{mix}} \), non-linear mixing block; \(\varphi_{\mathrm{conv}}\), convolutional feature extraction block; \( \varphi_{\mathrm{rec}} \) recurrent feature extraction block; \( \psi_{\mathrm{clf}} \), event classification block; \( \psi_{\mathrm{loc}} \), event localization block; $C$, number of input channels; $T$, number of samples in a segment of PSG data; $c$, temporal kernel size; $s$, temporal stride; $f_0$, base number of feature maps; $f^{\prime}=f_02^{k_{\mathrm{max}}}$, maximum number of feature maps; $T^{\prime} = T/s^{k_{\mathrm{max}}}$, reduced temporal dimension in samples; $N_d$, number of default event windows in segment; $K$, number of classes; ReLU, rectified linear unit; bGRU, bidirectional gated recurrent unit.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+\end{landscape}
+
+\subsubsection{Loss objective}
+The network parameters were optimized according to a three-component loss objective comprising a localization loss \( \ell_{\mathrm{loc}} \) and a positive and negative classification loss $\ell_{+}$ and $\ell_{-}$, respectively, such that
+\begin{equation}\label{eq:paperv-loss}
+    \ell = \ell_{\mathrm{loc}} + \ell_{+} + \ell_{-}.
+\end{equation}
+The localization loss was calculated using a Huber function
+\begin{equation}
+    \ell_{\mathrm{loc}} = \frac{1}{N_{\pi \backslash \emptyset}} \sum_{i \in \pi \backslash \emptyset}\!{h^{(i)}} \\
+    % \ell_{\mathrm{loc}} = \frac{1}{\sum_{i}{i \\pi \backslash \emptyset}} \sum_{i \in \pi \backslash \emptyset}\!{h^{(i)}} \\
+\end{equation} 
+\begin{equation}
+    \mathbf{h} =
+    \begin{cases}
+        0.5 \! \left( \mathbf{y} - \mathbf{t} \right)^2, & \text{if } \lvert \mathbf{y} - \mathbf{t} \rvert < 1, \\
+        \lvert \mathbf{y} - \mathbf{t} \rvert - 0.5, & \text{otherwise,}
+    \end{cases}
+\end{equation}
+where $i \in \pi \backslash \emptyset$ indicates event windows with a non-empty arousal target.
+Contributions from the positive/negative classification losses were calculated using a focal loss function~\cite{Lin2020}:
+\begin{align}
+    \ell_{+} &= \frac{1}{N_{\pi \backslash \emptyset}} \sum_{i \in \pi \backslash \emptyset}\!{-\alpha \left( 1 - \mathbf{p} \right)^{\gamma}\log \left( \mathbf{p} \right)}, \, \text{and} \\
+    \ell_{-} &= \frac{1}{N_{\pi = \emptyset}} \sum_{i \in \pi = \emptyset}\!{-\alpha \left( 1 - \mathbf{p} \right)^{\gamma}\log \left( \mathbf{p} \right)},
+\end{align}
+where $\alpha=0.25$ and $\gamma=2$.
+This serves to counter the class imbalance in a single data segment, which typically consists of many event windows with few positive examples.
+
+\subsubsection{Experimental setups}
+We investigated the channel mismatch problem with the following four experimental setups:
+\paragraph{Full montage baseline (FM)}
+In this experiment, we trained the event detection algorithm on $\train_1$ using \(C=5\) channels: left/right central EEG, left/right EOG, and chin EMG.
+Convergence and the optimal detection threshold were assessed on $\eval_1$ and performance was evaluated on \test\textsubscript{2}.
+The optimal baseline model was used as an initialization for the two transfer learning experiments described below.
+\paragraph{Pretraining (PT)}
+The optimal model $\mbl^{*}$ was used in this experiment as an initialization for $\mpt$.
+We adjusted the mixing module and first convolutional layer in the feature extraction module to account for the channel mismatch by replacing the convolutional and batch normalization layers, and subsequently trained these from scratch.
+The rest of the weights and bias terms were frozen to the optimized values from $\mbl^{*}$.
+The network was trained on $\train_2$ with only $C=1$ channels (left central EEG, C3).
+Convergence and optimal detection threshold were assesed on $\eval_2$, while final performance was evaluated on \test\textsubscript{2}.
+\paragraph{Fine-tuning (FT)}
+Similar to PT, the optimal model $\mbl^{*}$ was used in this experiment as an initialization for $\mft$.
+Also, the mixing module and first convolutional layer in the feature extraction module were likewise adjusted.
+However, all other layers in $\mft$ were permitted to be further optmized by fine-tuning weights and bias terms during training.
+The model was trained using the same 400 PSGs from $\train_2$ with the same $C=1$ channel configuration as in PT.
+\paragraph{Single EEG benchmark (SE)}
+We benchmarked our two transfer learning experiments to a comparable situation in which an event detection model was trained on the same PSGs in $\train_2$ using only the left central EEG (C3).
+
+
+
+In all experimental runs, we optimized the loss objective in~\cref{eq:paperv-loss} using the Adam optimization algorithm with a learning rate of \(\alpha=10^{-3}\) and the default parameter values \( \left( \beta_1, \beta_2 \right) = \left( 0.9, 0.999 \right) \) as suggested in~\cite{Kingma2015}.
+We applied the same data sampling strategy as proposed in~\cite{Olesen2019}, in which a segment of data is sampled such that it contains at least 50\% of a randomly sampled event across all PSGs.
+We used a default event window size of \SI{15}{\second} with \SI{50}{\percent} overlap as this was found previously to work well for arousal detection~\cite{Olesen2019}.
+
+All experiments were implemented in PyTorch 1.2~\cite{Paszke2019}.
+
+\subsubsection{Performance evaluation}
+Bipartite matching were used to match detected and true events during training and testing.
+At test time, detected events were subjected to non-maximum suppression based on an intersection-over-union (IOU) of at least 0.5 between detected and true events.
+We evaluated the performance of our experimental setups using precision, recall and F1 scores.
+
+\subsubsection{Statistical analysis}
+We used Kruskal–Wallis one-way analysis of variance tests for differences in performance metrics between groups (SE, FT and PT) with a significance level of $\alpha=0.05$.
+Post-hoc testing was performed with Mann-Whitney U-tests for each pair-combination (SE/FT, SE/PT, and FT/PT) likewise with $\alpha=0.05$.
+We accounted for multiple comparisons by adjusting \textit{p}-values with Bonferroni corrections.
+
+
+\subsection{Results}
+\begin{figure}[tb]
+    \centering
+    \includegraphics[width=\columnwidth]{figures/paper-v/paperv-figure01.pdf}
+    \caption[MSED-TL performance on \test\textsubscript{2}]{Performance metrics as evaluated on \test\textsubscript{2} for each experimental setup. Metrics are shown as means with 95\% confidence interval as error bars. Note the $y$-axis scaling. SE: single-EEG. FT: fine-tuning. PT: pre-training. FM: full montage. ns: not significant, $^{**}$: $p_{\mathrm{adj}} \leq 10^{-2}$; $^{****}$: $p_{\mathrm{adj}} \leq 10^{-4}$.}
+    \label{fig:paperv-figure01}
+\end{figure}
+
+\begin{table}[tb]
+    \centering
+    \begin{threeparttable}
+        \footnotesize
+        \caption{Performance metrics across experiments.}
+        \label{tab:paperv-results}
+        \begin{tabular}{@{}lccc@{}}
+        \toprule
+        \textbf{Experiment} &        \textbf{Precision} &           \textbf{Recall} &               \textbf{F1} \\ \midrule
+        FM &  $0.739 \pm 0.122$ &  $0.675 \pm 0.139$ &  $0.694 \pm 0.115$ \\
+        SE &  $0.723 \pm 0.124$ &  $0.624 \pm 0.137$ &  $0.659 \pm 0.117$ \\ \midrule
+        FT &  $\mathbf{0.710 \pm 0.128}$ &  $\mathbf{0.676 \pm 0.130}$ & $\mathbf{0.682 \pm 0.110}$ \\
+        PT &  $0.699 \pm 0.141$ &  $0.619 \pm 0.153$ &  $0.642 \pm 0.129$ \\
+        \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+            \small
+            \item Metrics are shown evaluated on \test\textsubscript{2} as means $\pm$ standard deviation. Best performing transfer learning experiment is shown in bold. SE: single-EEG. FT: fine-tuning. PT: pre-training. FM: full montage.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+
+We show the results of the transfer learning experiments (FT, PT) as well as the baseline and benchmark experiments (FM, SE) in~\cref{fig:paperv-figure01} and~\cref{tab:paperv-results}. 
+Performance metrics were not calculated for \num{10} subjects in \test\textsubscript{2}, as these did not have any scored arousals and are thus not reflected in~\cref{fig:paperv-figure01} and~\cref{tab:paperv-results}.
+
+The baseline F1 performance is shown to be slightly lower than previously reported ($0.694 \pm 0.115$ vs. $0.749 \pm 0.105$~\cite{Olesen2019}).
+However, our baseline model was trained on \num{400} subjects compared to \num{1485} in~\cite{Olesen2019}, which would account for the lower F1 score. 
+By reducing the available input channels from $C=5$ different modalities to $C=1$ EEG channels as in the SE benchmark experiment, the F1 score drops to $0.659 \pm 0.117$, while the precision and recall scores likewise drop from $0.739 \pm 0.122$ to $0.723 \pm 0.124$, and $0.675 \pm 0.139$ to $0.624 \pm 0.137$, respectively.
+
+We found statistically significant differences in F1 scores between SE, FT, and PT ($p=3.189\times 10^{-7}$). 
+Post-hoc testing further revealed statistically significant differences between SE and FT ($p_{\mathrm{adj}}=2.224 \times 10^{-3}$), and FT and PT ($p_{\mathrm{adj}}=2.685 \times 10^{-7}$), but not between SE and PT  ($p_{\mathrm{adj}}=0.080$). 
+We also found that recall scores differed between experimental setups ($p=7.085 \times 10^{-13}$).
+Post-hoc testing showed statistically significant differences between SE, FT ($p_{\mathrm{adj}}=5.180 \times 10^{-11}$), and FT and PT ($p_{\mathrm{adj}}=1.440 \times 10^{-9}$), but not between SE and PT ($p_{\mathrm{adj}}=1.000$).
+Lastly, we saw statistically significant differences in precision scores between experimental setups ($p=0.033$), subsequent post-hoc testing did not reveal any statistical significant differences, when adjusting for multiple comparisons using the Bonferroni procedure (SE/FT, $p_{\mathrm{adj}}=0.214$; FT/PT, $p_{\mathrm{adj}}=1.000$; SE/PT, $p_{\mathrm{adj}}=0.037$).
+
+Our results show, that for some scenarios, we can learn information present in multi-variate PSG data and efficitively transfer that information to a target domain containing only a single EEG channel.
+Specifically, the performance of our fine-tuning strategy is high enough that the mean F1 scores across subjects are statistically insifignicant, when comparing FT and FM setups (not shown).
+
+Previous related work focused on the channel mismatch problem, when comparing different, but the same number of, channel modalities such as transferring EEG-based models to EOG-based target domains, and thus did not investigate how changing the model architecture might impact performance~\cite{Phan2019, Phan2019c}.
+In this work, we investigated transfer learning when the source and target domains only overlap by one input channel.
+This necessitates changing some parts of the underlying model architecture to accommodate the different number of input channels, and these changes might impact downstream feature extraction.
+We did not explore simply zeroing out a large number of input channels in this work, as this requires exhaustive search of which channel indices to zero out in the model based on the number of target input channels. 
+Our strategy does not require this exhaustive search.
+
+Our study applied a simple optimization strategy for the transfer learning experiments, which might limit the potential performance gain.
+This is especially relevant for the FT experiment. 
+For example, one could experiment with with different learning rates and scheduling schemes for the initial layers and pre-trained layers, such that the initial layers were trained with a higher relative learning rate to compensate for their lack of initial training.
+
+Furthermore, we explored transfer learning for the channel mismatch problem in a single cohort of patient recordings. 
+Future directions of this research will investigate scenarios, where both the source and target domains, and the datasets are different.

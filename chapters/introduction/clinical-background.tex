@@ -1,0 +1,265 @@
+\acresetall
+\chapter{Clinical background}\label{chap:clinical-background}
+\begin{flushright}{\slshape 
+        What, so everyone’s supposed to sleep every single night now? You realize that nighttime makes up half of all time?} \\ \medskip
+        --- Rick Sanchez\\Rick and Morty, season 1, pilot episode
+\end{flushright}
+\vspace{6cm}
+    
+    This chapter aims to provide the reader with a basic and preliminary understanding of sleep science. 
+    First, the fundamental aspects of sleep as a physiological phenomenon is reviewed. Unless otherwise stated, the context will be concerning sleep in primarily healthy adults. 
+    This will be followed by a description of how sleep is recorded, quantified and analyzed in clinical practice.
+    Then, a brief overview of common sleep disorders relevant to the topic of this thesis will be provided.
+    The chapter will conclude with a section on some of the major challenges and difficulties that arise in clinical sleep practice, such as inter- and intra-rater variability, and how this can affect clinical outcomes.
+    
+    \section{Fundamental aspects of sleep}\label{sec:fundamental-aspects-sleep}
+    
+        Sleeping is ubiqituous to human life, but although we spend almost a third of our time sleeping, there is still many aspects that are unknown to science. 
+        However, we have a general understanding of how our sleep is structured, which will be described in the following sections. 
+        Sleep is a complex, physiological state, that impacts several aspects of the human physiology, and although our bodies might seem static, it is actually comprised of multiple, very dynamic processes observable across multiple recording modalities.
+        
+        Described in the following sections are two important concepts of sleep.
+        \begin{description}
+            \item[Sleep architecture] refers to the structure of sleep, how it is divided into different states based on physiological characteristics, and the dynamics of those states across the night.
+            This can also be called \textit{macro-sleep}, as it concerns the overall macro-structure of our sleep patterns.
+            \item[Sleep events] are discrete observations with various characteristics that are distinct for the specific event type.
+            Many such events can happen during sleep, and the duration and scope of these events can vary from short and localized (leg movements, sleep spindles), to long and broad (arousals, apneas).
+            The description and characterization of these events can also be called \textit{micro-sleep}, but this term is also sometimes applied to sleep architecture on a small time-scale.
+            In this thesis, I will refer to this concept as either \textit{micro-sleep events} or just \textit{sleep events} for short.
+        \end{description}
+        
+        \subsection{Sleep architecture}\label{sec:sleep-architecture}
+            On average, normal sleep in adult humans lasts between 7-9 hours per night with significant variability between persons. 
+            During this period, the brain and body cycles between alternating \textit{sleep stages}, which can be categorized into a state of drowsiness or semi-conscious \ac{W} stage, a \ac{REM} sleep stage, and three \ac{NREM} stages, \ac{N1}, \ac{N2}, and \ac{N3}.
+            The main distinction between sleep stages comes from the amplitude and spectral content of the brain signals. 
+            For example, wakefulness being associated with high frequency, low amplitude content, and the sleeping stages being associated with more low frequency, high amplitude content. 
+            An overview of relevant frequency bands and their appearance in the brain signals is shown in~\cref{tab:eeg_rythms} as defined in the review paper by~\cite{Brown2012} as well as definitions from the~\ac{AASM} for clinical practice.
+            \begin{table}[tb]
+                \centering
+            \begin{threeparttable}
+                \caption[Clinical EEG frequency bands]{Clinical EEG frequency bands.}
+                \label{tab:eeg_rythms}
+                \begin{tabular}{@{}lcc@{}} \toprule
+                % \begin{tabular}{lc}\toprule
+                    \textbf{Rhythm} & \textbf{\citet{Brown2012}} & \textbf{\citet{Berry2020} (\acs{AASM}2020)} \\ \midrule
+                    Delta, $\delta$ & \SIrange{1}{4}{\hertz} & \SIrange{0}{3.99}{\hertz} \\
+                    \Ac{SWA} & \SIrange{0.5}{4}{\hertz} & \SIrange{0.5}{2.0}{\hertz} \\
+                    Theta, $\theta$ & \SIrange{4}{8}{\hertz} & \SIrange{4}{7.99}{\hertz} \\
+                    Alpha, $\alpha$ & \SIrange{8}{14}{\hertz} & \SIrange{8}{13}{\hertz} \\
+                    Beta, $\beta$ & \SIrange{15}{30}{\hertz} & $>\SI{13}{\hertz}$\\
+                    Gamma, $\gamma$ & \SIrange{30}{120}{\hertz} & n.d.\\ \bottomrule
+                \end{tabular}
+                \begin{tablenotes}
+                    \item n.d., not defined.
+                \end{tablenotes}
+            \end{threeparttable}
+            \end{table}
+            
+            However, certain brain stages are also characterized by the presence of certain micro-structure events with very distinct morphologies, such as sleep spindles or K-complexes in the brain signal recordings, or \acp{REM} in the recordings of eye activity~\citep{Brown2012, Saper2010, Carskadon2011a, Peyron1998}.
+            
+            The following lists the major electrophysiological findings for the five sleep stages currently defined by the~\ac{AASM}.
+            
+            % \begin{itemize}
+            %     \item[\ac{W}] 
+            %     \item[\ac{REM}]
+            %     \item[\ac{N1}]
+            %     \item[\ac{N2}]
+            %     \item[\ac{N3}]
+            % \end{itemize}
+            
+            \subsubsection{Wakefulness}\label{sec:wakefulness}
+            Spanning from a full awareness state to a quiet awakening or drowsiness state, this stage generally accounts for about \SI{5}{\percent} of the total time in bed from lights out to lights on in healthy adults.
+            In this stage, the brain typically exhibits low amplitude, high frequency content in small areas and more widespread theta rhythms.
+            During quiet awakening, these theta rhythms increase in the frontal area, while alpha rhythms are dominant over the occipital region, especially when the eyes are closed.
+            With eyes open, this stage is characterized by eye blinking, reading eye movements\graffito{reading eye movements are WHAT} and \acp{REM}.
+            The muscle tone is typically high with unspecific amplitude (\textcolor{red}{how much?}).
+            
+            \subsubsection{NREM sleep}
+            Sleep in humans generally commences when a person progresses from \ac{W} to one of the three stages of \ac{NREM}\graffito{Sleep was up until 2007 scored using four stages of \ac{NREM} sleep as defined by Rechtschaffen and Kales.}.
+            In general terms, the ordering of \ac{N1}, \ac{N2}, and \ac{N3} respresents a continuum of the depth of sleep, which is primarily constituted by a progressive slowing of the \ac{EEG} activity from predominantly high frequency alpha and theta rhythms with low voltage, to low frequency delta rhythms with large amplitude.
+            Furthermore, another major indicator of deepening sleep is the increasing arousal thresholds associated with the progression from \ac{N1} to \ac{N3}.
+            
+            \paragraph{N1} sleep is usually the first stage to be encountered during sleep, and this stage is generally considered to be a transitional stage between drowsiness and deeper sleep.
+            It is characterized by mixed frequency content, as the alpha rhythms are progressively reduced and replaced with theta rhythms.
+            Additionally, small sleep events called \textit{vertex sharp waves} also appear in the \ac{EEG} during this stage\graffito{Vertex sharp waves are sharply contoured waveforms with a very short duration of less than \SI{0.5}{\second}}.
+            \Acp{REM} and reading eye movements are replaced with slow eye movements and the muscle tone is reduced compared to \ac{W}.
+            
+            
+            Broadly speaking, their ordering represents a depth-of-sleep continuum indicated by both a progression from low voltage, high frequency alpha/theta rythms to large amplitude, low frequency delta rythms (slowing of cortical activity), and by increasing arousal thresholds (Brown et al., 2012; Carskadon and Dement, 2011). They generally constitute approximately 2 % to 5 %, 45 % to 55 %, and 13 % to 23 % of the TST for the first, second, and third NREM stage, respectively.
+            
+            \subsubsection{REM sleep}
+            
+                \cite{Foulkes1962, Ermis2010, Sato1997, Hobson2009}
+                
+            \subsubsection{Neurobiological control of sleep}\label{sec:control-sleep}
+        \subsection{Micro-events durings sleep}
+            \subsubsection{Arousals}
+                \citep{Ermis2010}
+            \subsubsection{Movements of the extremities}
+            \subsubsection{Respiratory disturbances}
+            \subsubsection{K-complexes and sleep spindles}
+                \citep{Cash2009, Gennaro2003, Forget2011}
+    \section{Recording and quantifying sleep}\label{sec:recording-quantifying-sleep}
+        \cite{Berry2020}
+        \subsection{Polysomnography}\label{sec:polysomnography}
+            The principal tool available to sleep physicians and technicians for analysis of sleep patterns is the \textit{polysomnography} (PSG).
+            This is often the first study performed on patients referred to a sleep clinic, and consists of the continuous and concurrent recording of several physiological variables as electrophysiological signals.
+            The primary signals of interest are brain activity (electroencephalography, EEG), eye movements (electrooculography, EOG), chin and leg muscle activity (electromyography, EMG), heart activity (electrocardiography, ECG), respiratory effort (thoracoabdominal inductance plethysmography belts, RIP), nasal pressure, oral airflow, and blood oxygen saturation (pulse oximetry).
+            Sleep experts manually analyze the contents of these signals in order to score sleep stages and annotate sleep events based on a standardized set of guidelines published by the \ac{AASM}~\cite{AASM2014}. 
+            These guidelines also contain technical recommendations for recording sleep studies, such as electrode placements, minimal sampling frequencies and specific filter settings. \cref{tab:aasm_recordings} lists an overview of recommend technical specifications for commonly recorded signals.
+            
+            A common procedure for analysis of sleep studies involve multiple passes through each PSG study.
+            For example, a first pass could be to score every consecutive segment of \SI{30}{\second} data as one of the five sleep stages.
+            A second pass could be to score respiratory events, arousals and leg movements, etc. 
+            The product of these passes is a sleep study report, which summarizes the findings into a hypnogram and assocated PSG variables, such as total sleep time (TST), sleep latency (SL), REM latency (RL), wake after sleep onset (WASO), percentage of time spent in the different sleep stages.
+            Key indices describing the amount of sleep events are also calculated for each study, such as the arousal index (number of arousals per hour of sleep, ArI), apnea-hypopnea index (number of apneas and hypopneas per hour of sleep, AHI), and the periodic limb movements in sleep index (number of peridoc limb movement series in sleep per hour of sleep, PLMSI). 
+
+            \begin{table}[tb]
+            \begin{threeparttable}
+                \small
+                \centering
+                \caption[Technical specifications for recording \ac{PSG} signals]{Technical specifications for recording commong signals in \acp{PSG} according to \ac{AASM} standards~\cite{Berry2020}.}% used for subsequent visualization and analysis}
+                \label{tab:aasm_recordings}
+                \begin{tabular}{@{}llll@{}} \toprule
+                    \textbf{Signal} & \textbf{Recommended recording setup} & \textbf{Min.} \(\mathbf{f_s}\) & \textbf{Filter} \\ \midrule
+                    EEG & F4-M1, C4-M1, O2-M1 (required)    & \SI{200}{\hertz}  & \SIrange[range-units=single,range-phrase=--]{0.3}{35}{\hertz} \\
+                        & F3-M2, C3-M2, O1-M2 (backup)      &                   &                                                               \\
+                    EOG & E1-M2, E2-M2 (required)   & \SI{200}{\hertz}  & \SIrange[range-units=single,range-phrase=--]{0.3}{35}{\hertz} \\
+                        & E1-M1, E2-M1 (backup)     &                   &                                                               \\
+                    EMG & Chin2-ChinZ (required, chin EMG)  & \SI{200}{\hertz}  & \SIrange[range-units=single,range-phrase=--]{10}{100}{\hertz} \\
+                        & Chin1-ChinZ (backup, chin EMG)    &                   &                                                               \\
+                        & Bipolar derivation (required, leg EMG) & &                                            \\
+                    ECG & modified Lead II derivation (required) & \SI{200}{\hertz} & \SIrange[range-units=single,range-phrase=--]{0.3}{70}{\hertz} \\ \bottomrule
+                    % RIP & --- & \SI{25}{\hertz} & \SIrange[range-units=single,range-phrase=--]{0.1}{15}{\hertz} \\ 
+                    % Nasal pressure & --- & \SI{25}{\hertz} & \SIrange[range-units=single,range-phrase=--]{\leq 0.03}{100}{\hertz} \\ 
+                    % Airflow & --- & \SI{25}{\hertz} & \SIrange[range-units=single,range-phrase=--]{0.1}{15}{\hertz} \\ 
+                    % Oximetry & --- & \SI{10}{\hertz} & \SIrange[range-units=single,range-phrase=--]{}{15}{\hertz} \\ \bottomrule
+                \end{tabular}
+            \begin{tablenotes}
+            \item  AASM describes a specific requirement as well as a backup in case of failure for each signal. Minimal \( f_s \) lists the minimally acceptable sampling frequency per signal, but the recommendations are higher in order to better capture waveform morphology. Filter settings describe recommended bandpass filter settings
+            \end{tablenotes}
+            \end{threeparttable}
+            \end{table}
+            
+        % \subsection{Multiple sleep latency test}
+        % \subsection{Technical considerations when recording sleep studies}
+    % \section{Abnormal sleep and sleep disorders}
+        
+    %     In the following sections are briefly described some of the common sleep disorders that are relevant to the topic of this thesis.
+    %     % A diagnosis of sleep disorders is based on multiple parameters.
+    %     Commonly, a patient is submitted to a sleep clinic under suspicion of a sleep disorder under referral from a general practitioner or physician, when they experience extreme tiredness during daylight hours, or perhaps a significant other experience nightly disturbances.
+    %     Healthcare professionals make a diagnosis from the medical history, answers to questionnaires, findings from the PSG and/or MSLT, and lab test results, according to diagnostic criteria published by the AASM in~\citetitle{AASM2014}~\cite{AASM2014}.
+        
+    %     \subsection{Sleep related breathing disorders}
+    %     Sleep disordered breathing comprise several disorders and syndromes, but is generally characterized by respiratory problems during sleep and sometimes during wakefulness.
+        
+    %     \textbf{Obstructive sleep apnea} (OSA) is characterized by recurrent restrictions in the upper airways~\cite{Malhotra2002}.
+    %     It is a very common disease with \SIrange[range-units=single,range-phrase=--]{5}{15}{\percent} of the general population in the USA affected by OSA~\cite{Young}. 
+        
+    %     \subsection{Movement disorders}
+        
+    %     \subsection{Narcolepsy}
+    
+    %     \citep{AASM2014}
+    \section{Challenges in scoring sleep studies}\label{sec:challenges-scoring-sleep-studies}
+        Significant human bias can enter into the analysis of sleep studies by virtue of the process being performed manually.
+        Several studies have shown significant \textit{inter-} and \textit{intra-}rater variability\graffito{Interrater variability refers to the variation in scoring that happens between experts on the same study, while intrarater variability refers to the variability in scoring when a single expert scores the same study more than once.} primarily in the case for sleep stage scoring, but some studies have also investigated the reliability of scoring arousals and respiratory events for sleep-related breathing disorders.
+        This variability can be caused by several factors:
+        \begin{enumerate}
+            \item \textit{Imprecise scoring guidelines.}
+            Some have argued that extensive training is required to minimize the subjective component in sleep stage scoring, and that the optimal training requires participation in concensus scoring rounds~\cite{Penzel2013}.
+            \item \textit{Presence of disease or other sleep disorders.}
+            Many neurodegenerative diseases exhibit symptoms of disturbed sleep as the neurodegeneration progresses to the centers in the brain stem responsible for control of sleep and wakefulness.
+            Similarly, central hypersomnias can also exhibit fragmented sleep.
+            Narcolepsy, for instance, show increased fragmentation of sleep, because the hypocretin-producing cells in the latero-posterior hypothalamus are missing~\cite{Kornum2017a}.
+            Since current scoring guidelines are based on clinical experience in healthy subjects exhibiting normal sleep patterns, the scoring of sleep patterns becomes difficult in this context.
+            \item \textit{True errors.}
+            These can occur when annotations are correctly made, but entered wrongly into a computer system or report. 
+            However, these types of errors are difficult to measure in practice.
+        \end{enumerate}
+        
+        Depending on the target variable under investigation, reliability and variability can be measured with different metrics.
+        The following sections will describe some of the studies that have investigated inter- and intra-scorer reliability for various sleep analysis objectives.
+        
+        
+        \subsection{Sleep stage scoring}\label{sec:challenges-sleep-stage-scoring}
+        
+            \citeauthor{Norman2000} found the average epoch by epoch agreement between five experienced PSG technicians representing different clinics to be \SI{73}{\percent} in a dataset containing 62 PSGs~\cite{Norman2000}.
+            Furthermore, they also found this agreement to vary with phenotype, as the average agreement in a normal subset was higher than for a subset consisting of patients with sleep disordered breathing (\SI{76}{\percent} in the normal subset vs. \SI{71}{\percent} in the SDB subset).
+            
+            Later studies also found significant variability in expert agreements when comparing different patient groups. 
+            Notably, \citeauthor{Danker-Hopfe2004} investigated interrater reliability between experienced technicians in eight different sleep clinics in Europe in a sample of 196 recordings from 98 patients exhibiting different disorders, such as depression, general anxiety disorder with and without insomnia, Parkinson's disease, sleep apnea and periodic leg movements in sleep disorder~\cite{Danker-Hopfe2004}.
+            They found that although the overall agreement between experts as measured by \cohen{}\graffito{\cohen{} is a measure of the observed agreement between two agents taking into account chance agreement.} was \num{0.6816}, there was a statistically significant difference between patient groups, where the median $\kappa$ ranged from \num{0.6138} in patients with Parkinson's disease to \num{0.8176} in patients with generalized anxiety disorder.
+            Other studies have found no statistically significant differences in the overall agreement between healthy controls, patients with sleep apnea/hypopnea syndrome, and patients with narcolepsy, when comparing scorers from Berlin and Beijing~\cite{Zhang2015a}. 
+            They did, however, find statistically significant differences in the stage-specific agreements between patient groups.
+            
+            Recent large scale studies on interscorer agreement found that the average consensus-agreement is approximately \SI{83}{\percent} with the overall stage-specific agreement ranging from \SI{63}{\percent} for N1 to \SI{91}{\percent} for REM~\cite{Rosenberg2013}.
+            The authors recognize that their results are heavily biased towards agreements in the N2 stage, as this accounts for almost \SI{60}{\percent} of the total number of epochs, however, this percentage is in agreement with clinical experience and reflects the amount of N2 in a typical sleep study.
+            
+            Although human subjective bias is also a factor, the vast majority of interscorer differences most likely originate from equivocal epochs than have equal probability of being assigned to two stages. 
+            \citeauthor{Younes2016} found that disagreements were most common between W and N1, N2 and N3, and N1 and N2~\cite{Younes2016}, and indeed several studies have found that scoring N1 and N3 sleep is especially difficult~\cite{Danker-Hopfe2004,Rosenberg2013,Zhang2015a, Younes2018}.
+            
+        
+        \subsection{Arousals}\label{sec:challenges-arousals}
+        
+            % While not as well described as scoring of sleep stages or respiratory events, some studies have been investigating the interscorer reliability for arousals.
+            The majority of studies on reliability of arousal scoring are based on scoring criteria from the \ac{ASDA}~\cite{Bonnet2007}.
+            For example, one study compared several different criteria for arousal scoring with the \ac{ASDA} criteria, and found an \ac{ICC}\graffito{the intraclass correlation coefficient is a descriptive statistic for characterizing agreement between data that can be naturally organized in groups.} of 0.84 using the \ac{ASDA} criteria~\cite{Loredo1999}. 
+            The same study also found that experts were less reliable in scoring arousals shorter than \SI{3}{\second} with \ac{ICC} between 0.19 and 0.37, and that the addition of increased \ac{EMG} activity as a criteria in addition to the \ac{ASDA} criteria increased the \ac{ICC} to 0.92.
+            Another study also reported results on the supplementing the \ac{ASDA} criteria with increased \ac{EMG} activity, but did not find any improvement over the already-high \ac{ICC} of 0.98~\cite{Smurra2001}.
+            
+            Another factor to be considered in the reliable scoring of arousals is the placement of the arousal in the sleep continuum.
+            \citeauthor{Drinnan1998} investigated the impact of sleep stage on arousal scoring and found the highest \cohen value for arousals scored in slow wave sleep~\cite{Drinnan1998}.
+            This sleep stage exhibits $\delta$ and \ac{SWA} \ac{EEG} rhythms with high amplitude and low frequency, which is easier to contrast with the shift to high frequency \ac{EEG} content typically associated with arousals.
+            
+            Other types of cues visible in the \ac{PSG} are the presence of autonomous findings such as increased heart rate visible in the \ac{ECG}, or increased respiratory effort.
+            The latter is evident in the study by~\citeauthor{Thomas2003} investigating arousal scoring reliability in 17 \ac{OSA} patients using \ac{ASDA} criteria. 
+            The authors found an event-by-event scoring agreement of \SI{91}{\percent}, which dropped significantly to \SI{59}{\percent} when removing the respiratory signals~\cite{Thomas2003}.
+            
+            Reliability of scoring arousals according to the updated \ac{AASM}2007 criteria remain severely understudied both in terms of 
+            \citeauthor{Magalang2013} reported an intraclass correlation coefficient for the arousal index of \muci{0.68}{0.49}{0.85} in 15 \acp{PSG} scored by nine technicians from unique sleep clinics according to \ac{AASM}2007 criteria~\cite{Magalang2013}.
+            However, these reported results are based solely on the values of the arousal index per study, and thus do not reflect important underlying characteristics of the arousal events.
+            For example, these characteristics could include event morphology and variability in each recorded modality, as well as variations in duration, spectral content, \etc \textit{et cetera}.
+            As such, the arousal index, as well as other index values commonly reported in the \ac{PSG} report are crude approximations of a dynamic process that 
+            As such, two scorers can potentially score completely different arousals for a specific PSG, while still having good agreement between them, since their scored arousal index values are similar.
+            
+            
+        \subsection{Sleep disordered breathing}\label{sec:challenges-sdb}
+        
+            \citeauthor{Whitney1998} investigated inter- and intra-scorer reliability in three technicians for 20 randomly selected \ac{PSG} studies from the \ac{SHHS} cohort using various definitions of \acp{RDI} with or without arousals, and oxygen desaturation levels from \SIrange{2}{5}{\percent}~\cite{Whitney1998}.
+            The authors found that the technicians were in high agreement when scoring respiratory events with oxygen desaturation levels present indicated by an \ac{ICC} between 0.90 and 0.99.
+            However, this reliability droppped to only moderate agreement when oxygen levels where not part of the scoring (\ac{ICC} of 0.77), and when neither oxygen levels or arousals where included (\ac{ICC} of 0.74).
+            
+            The study by~\citeauthor{Magalang2013} also investigated the agreement in scoring respiratory events.
+            The authors reported an \ac{ICC} for the \ac{AHI} of \muci{0.95}{0.91}{0.98} which indicates a very strong agreement between centers.
+            
+            However, as with the arousal scoring, niether the \ac{RDI} nor the \ac{AHI} take into account exact location of respiratory events, which means that two technicians in theory could be in perfect agreement when comparing these values even though they did not score any of the same events.
+            
+            \citeauthor{Whitney1998}\citeyear{Whitney1998}\cite{Whitney1998}
+            
+            \citeauthor{Magalang2013}\cite{Magalang2013}
+            
+            \citeauthor{Rosenberg2014a}\cite{Rosenberg2014a}
+        
+        % Papers that discuss sleep stage scoring
+        % \begin{itemize}
+        %     \item \fullcite{Norman2000}
+        %     \item \fullcite{Danker-Hopfe2009a}
+        %     \item \fullcite{Rosenberg2013}
+        %     \item \fullcite{Penzel2014}
+        %     \item \fullcite{Zhang2015a}
+        %     \item \fullcite{Younes2016}
+        %     \item \fullcite{Younes2018}
+        % \end{itemize}
+        % Papers for sleep disordered breathing
+        % \begin{itemize}
+        %     \item \fullcite{Rosenberg2014a}
+        %     \item \fullcite{Magalang2013}
+        %     \item \fullcite{Redline2007}
+        % \end{itemize}
+        % Papers for arousals
+        % \begin{itemize}
+        %     \item \fullcite{Magalang2013}
+        %     \item \fullcite{Bonnet2007}
+        % \end{itemize}
+    \section{Chapter summary}

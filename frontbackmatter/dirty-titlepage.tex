@@ -1,0 +1,113 @@
+%*******************************************************
+% Little Dirty Titlepage
+%*******************************************************
+%\pdfbookmark[1]{Titel}{title}
+%*******************************************************
+\begin{titlepage}
+\thispagestyle{empty}
+
+    % DTU logo
+    \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north west, 
+          xshift=8.9mm, 
+          yshift=-8.3mm] 
+         at (current page.north west) 
+         {\includegraphics[width=14.75mm,keepaspectratio]{figures/Corporate_Red_CMYK.eps}}; 
+    \end{tikzpicture}
+    
+    % RH-Glostrup logo
+    \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north, 
+          xshift=0, 
+          yshift=-8.3mm] 
+         at (current page.north) 
+         {\includegraphics[height=10mm,keepaspectratio]{figures/Logo_Rigshospitalet_CMYK.eps}}; 
+    \end{tikzpicture}
+    
+    % Stanford logo
+    \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east, 
+          xshift=-8.9mm, 
+          yshift=-8.3mm] 
+         at (current page.north east) 
+         {\includegraphics[height=10mm,keepaspectratio]{figures/Stanford_Medicine_V-Print.eps}}; 
+    \end{tikzpicture}
+    
+    % DTU department (to change see Setup/Settings.tex) 
+    \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west, 
+          xshift=8.9mm, 
+          yshift=8.3mm] 
+          at (current page.south west) 
+          {
+          \includegraphics[height=10mm,keepaspectratio]{figures/DTU Sundhedsteknologi_UK_highdpi.png}
+            % \begingroup
+            %     \renewcommand{\arraystretch}{0.8}
+            %     \fontfamily{Arial}\selectfont \sffamily
+            %     % \color{CTtitle}
+            %     \begin{tabular}{l}
+            %         \textbf{DTU Health Tech} \\
+            %         \myFaculty
+            %         % {\fontfamily{Arial}\selectfont \textbf{\textsf{DTU Health Tech}}} \\
+            %         % {\fontfamily{Arial}\selectfont \textsf{\myFaculty}}
+            %     \end{tabular}
+            % \endgroup
+            % \color{CTtitle}
+            % \begin{tabular}{r} 
+            % % \renewcommand{\arraystretch
+            % {\fontfamily{Arial}\selectfont \textbf{\textsf{DTU Health Tech}}} \\
+            % {\fontfamily{Arial}\selectfont \textsf{\myFaculty}}
+            % \end{tabular}
+          }; 
+    \end{tikzpicture}
+
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+\begin{center}
+
+    \vfill
+    
+    \begingroup
+        \Huge
+        % \fontfamily{helvet}\selectfont
+        {\fontfamily{Helvetica}\selectfont \sffamily \textbf{Deep Learning Methods\\for Clinical Sleep Analysis}}
+        % \normalfont \myTitle
+        % \color{CTtitle}\textbf{\myTitle}
+        % \color{CTtitle}\spacedallcaps{\myTitle}
+    \endgroup
+    
+    \bigskip 
+    
+    \bigskip
+    
+    \begingroup
+        \LARGE
+        % \fontfamily{helvet}\selectfont
+        % {\fontfamily{Helvetica}\selectfont \sffamily \textbf{\myTitle}}
+        % \normalfont \myTitle
+        % \color{CTtitle}\textbf{\myTitle}
+        % \color{CTtitle}\spacedallcaps{\myTitle}
+        {\fontfamily{Helvetica}\selectfont \sffamily \myName}
+    \endgroup
+    
+    % \spacedlowsmallcaps{\myName}
+    
+    \bigskip
+    
+    \begingroup
+        \Large
+        % \fontfamily{helvet}\selectfont
+        % {\fontfamily{Helvetica}\selectfont \sffamily \textbf{\myTitle}}
+        % \normalfont \myTitle
+        % \color{CTtitle}\textbf{\myTitle}
+        % \color{CTtitle}\spacedallcaps{\myTitle}
+        {\fontfamily{Helvetica}\selectfont \sffamily \myDocument, \myTime}
+    \endgroup
+    % \spacedlowsmallcaps{\myDocument, \myTime}
+    
+    \vfill
+    
+    \vfill
+    
+\end{center}
+\end{adjustwidth*}
+\end{titlepage}
