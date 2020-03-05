@@ -23,10 +23,10 @@ This chapter have been modified from the original publication
 
 Sleep disorders and sleep dysregulation impact over \num{100} million Americans contributing to cardiovascular disorders, such as arrhythmia, hypertension, and stroke, metabolic disorders, such as diabetes, and obesity, and psychiatric disorders, such as depression, irritability, and addictive behaviors. 
 Furthermore, generalized sleep deprivation impairs performance, judgment and mood, and is a major preventable contributor to motor-vehicle-related accidents~\cite{Krieger2007}.
-There are approximately \num{90} different sleep disorders currently recognized and described in the \ac{ICSD-3} including insomnia\graffito{The prevalences of insomnia, sleep apnea, and restless legs syndrome are estimated to be approximately \SIlist{20;10;4}{\percent} of the population, respectively.}, sleep apnea, restless legs syndrome, \ac{RBD}, and hypersomnia syndromes such as \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
+There are approximately 90 different sleep disorders currently recognized and described in the \ac{ICSD-3} including insomnia\graffito{The prevalences of insomnia, sleep apnea, and restless legs syndrome are estimated to be approximately \SIlist{20;10;4}{\percent} of the population, respectively.}, sleep apnea, restless legs syndrome, \ac{RBD}, and hypersomnia syndromes such as \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
 
-Among these pathologies, \ac{NT1} is unique as a disorder with a known, discrete pathophysiology---a destruction of hypocretin neurons in the hypothalamus likely of autoimmune origin~\cite{Peyron2000}.
-This is reflected in the \ac{CSF} concentrations of the hypocretin-1 neuropeptide\graffito{Hypocretin-1 is also known as orexin-A.}, where a concentration below \SI{110}{\pico\gram\per\milli\liter} is considered indicative of narcolepsy~\cite{AmericanAcademyofSleepMedicine2014}\graffito{There is also a narcolepsy type 2}.
+Among these pathologies, \ac{NT1} is unique as a disorder with a known, discrete pathophysiology---a destruction of hypocretin neurons in the hypothalamus, which is most likely of autoimmune origin~\cite{Peyron2000}.
+This is reflected in the \ac{CSF} concentrations of the hypocretin-1 neuropeptide\graffito{Hypocretin-1 is also known as orexin-A.}, where a concentration below \SI{110}{\pico\gram\per\milli\liter} is considered indicative of narcolepsy~\cite{AmericanAcademyofSleepMedicine2014}\graffito{There is also a narcolepsy type 2, which does not exhibit low \ac{CSF} hypocretin levels.}.
 Typically beginning in childhood or adolescence, narcolepsy affects approximately \SI{0.03}{\percent} of the US, European, Korean and Chinese populations~\cite{Kornum2017}.
 Unique to narcolepsy is the extremely strong association with the genetic marker \hla~\cite{Han2014}, and a well-characterized set of sleep disturbances that include short sleep latency, rapid transitions into \ac{REM} sleep and poor nocturnal sleep consolidation.
 The pathology also includes episodes of \textit{sleep-wake dissociation}, where the patient is half awake and half in \ac{REM}.
@@ -57,7 +57,7 @@ This is illustrated in~\cref{fig:paperiii-figure03} where the bottom (top) trace
 \end{figure}
 
 These findings motivated a novel research question with is directly associated with research hypothesis~\ref{hypothesis:sleep-disorders}\graffito{\label{question:}\hypothesisSleepDisorders.}: 
-\newcommand{\questionSleepDisorders}{based on a single overnight \ac{PSG} recording, can we diagnose narcolepsy with the same level of performance as the current clinical gold standard?}
+\newcommand{\questionSleepDisorders}{based on a single overnight \ac{PSG} recording, is it possible to diagnose narcolepsy with the same level of performance as the current clinical gold standard?}
 \begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~\arabic*}, ref={\bfseries\scshape RQ~\arabic*}]
     \item \questionSleepDisorders\label{question:sleep-disorders}
 \end{enumerate}
@@ -78,3 +78,7 @@ The following sections will describe the steps taken to complete the posed desig
 \input{chapters/research/classification-sleep-disorders/paper-iii}
 
 \section{Chapter summary}
+
+This chapter concerned the use of signal processing and machine learning for the detection of sleep disorders, the topic of which directly relates to \ref{hypothesis:sleep-disorders}\graffito{\hypothesisSleepDisorders}.
+Specifically, we were interested in the following question: \questionSleepDisorders
+To answer the question and the associated research objectives, we designed a narcolepsy model using feature engineering and probabilistic machine learning models, that can classify \ac{NT1} patients with a \SI{91}{\percent} sensitivity and \SI{96}{\percent} specificity using a hypnodensity representation of a single, overnight \ac{PSG} recording.
