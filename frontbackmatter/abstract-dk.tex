@@ -1,0 +1,42 @@
+%*******************************************************
+% Abstract
+%*******************************************************
+%\renewcommand{\abstractname}{Abstract}
+\pdfbookmark[1]{Resumé}{Resumé}
+\addcontentsline{toc}{chapter}{\tocEntry{Resumé}}
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\let\cleardoublepage\relax
+
+\chapter*{Resumé}
+\begin{otherlanguage}{danish}
+
+Søvnforstyrrelser er udbredte i samfundet og har konsekvenser for personlig sundhed og dødelighed, herunder øget risiko for hjertekarsygdomme, metaboliske og psykiatriske komplikationer.
+Derudover er søvnforstyrrelser en stor omkostning for samfundet, og det er anslået at komplikationer følgende søvnforstyrrelser bidrager til flere hundrede milliarder dollars om året. 
+
+Den nuværende standard for diagnose af søvnforstyrrelse og søvnsygdomme er baseret på manuel analyse af elektroencephalografi (EEG), elektrooculografi (EOG), eletromyografi (EMG) og cardio-respiratoriske variable registreret under søvn efter et sæt retningslinjer defineret af American Academy of Sleep Medicine. 
+Flere studier har imidlertid vist, at dette introducerer et subjektivt bias i den resulterende søvnanalyse på grund af fortolkninger af scoringsretningslinjer, forskelle i optageudstyr og -opsætning blandt forskellige søvnklinikker samt tilstedeværelsen af søvnforstyrrelser, der negativt påvirker normale søvnmønstre.
+
+Hovedformålet med denne afhandling er at udvikle et system baseret på kunstig intelligens, der kan hjælpe klinikere i analysen af søvnmønstre. Dette realiseres i tre forskningstemaer, der hver især fokuserer på et separat aspekt af søvnanalyse.
+
+Først præsenteres resultater relateret til udvikling af metoder til automatisk klassificering af søvnstadier, som er en vigtig del af analysen af søvnmønstre.
+To modeller baseret på dybe neurale netværk anvendt på EEG, EOG og EMG signaler blev udviklet af denne grund.
+Ved hjælp af de rå signaler fra 14086 polysomnografier (PSG) til klassificering af søvnstadier opnåede den første model en gennemsnitlig nøjagtighed på 86.9\% målt over 1584 PSG'er samlet fra fem uafhængige datasæt.
+Den anden model brugte krydskorrelations-repræsentationer af signaler fra 2784 PSG'er til klassificering af søvnstadier med en nøjagtighed på 86.8\% målt henover 70 PSG'er scoret af seks søvnteknikere.
+
+Dernæst præsenteres en metode til automatisk detektion af mikro-opvåg-ninger, benspjæt, og apnø-lignende perioder.
+En model blev designet baseret på dybe neurale netværk anvendt på EEG, EOG, EMG og åndedrætssignaler.
+Modellen var i stand til at lokalisere og klassificere begivenheder i data og blev testet på mere end 1000 PSG'er.
+Desuden blev modellen brugt til overførselslæring, hvor en finjusteret optimeringsstrategi af modellen effektivt kunne gendanne tabt ydeevne forårsaget af et reduceret sæt inputkanaler.
+En fleksibel model som denne vil være nyttig i en klinisk sammenhæng.
+
+Det sidste forskningstema vedrørte klassificering af søvnforstyrrelser ved hjælp af kunstig intelligens.
+En model blev designet baseret på repræsentationer af hypnodensiteten og probabilistiske algoritmer til adskillelse af narkolepsi type 1 (NT1) patienter fra kontroller og patienter med andre centrale hypersomnier.
+NT1 blev identificeret med 91\% sensitivitet og 96\% specificitet i testprøven, mens replikation i to uafhængige datasæt gav tilsvarende resultater.
+
+Samlet set præsenterer denne afhandling nye automatiske metoder til klinisk søvnanalyse baseret på kunstig intelligens.
+Sammenlignet med de nuværende analyse-standarder kan de foreslåede modeller markant reducere analysetiden i kraft af at være hurtigere end manuel analyse, samtidig med at de kan levere lignende eller højere ydeevne.
+
+\end{otherlanguage}
+\endgroup

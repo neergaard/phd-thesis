@@ -31,17 +31,17 @@
 \RequirePackage{silence} % :-\
     \WarningFilter{scrreprt}{Usage of package `titlesec'}
     %\WarningFilter{scrreprt}{Activating an ugly workaround}
-    \WarningFilter{titlesec}{Non standard sectioning command detected}
+    \WarningFilter{titlesec}{Non standard sectioning command}
 \documentclass[ twoside,openright,titlepage,numbers=noenddot,%1headlines,
                 headinclude,footinclude,cleardoublepage=empty,abstract=on,
-                BCOR=5mm,paper=a4,fontsize=10pt
+                BCOR=5mm,paper=a4,fontsize=10pt,
                 ]{scrreprt}
 
 %********************************************************************
 % Note: Make all your adjustments in here
 %*******************************************************
 \input{classicthesis-config}
-
+\let\rightmark\rightbotmark
 %********************************************************************
 % Bibliographies
 %*******************************************************
@@ -97,7 +97,7 @@
 \part{Research areas}\label{part:research}
 % \include{chapters/research/sleep-stage-classification/introduction}\cleardoublepage
 % \include{chapters/research/event-detection/introduction}\cleardoublepage
-\include{chapters/research/classification-sleep-disorders/introduction}\cleardoublepage
+% \include{chapters/research/classification-sleep-disorders/introduction}\cleardoublepage
 
 % \part{Outlook}\label{part:outlook}
 % \include{chapters/outlook/discussion}\cleardoublepage

@@ -1,0 +1,164 @@
+%*******************************************************
+% Table of Contents
+%*******************************************************
+\pagestyle{scrheadings}
+\phantomsection
+\pdfbookmark[1]{\contentsname}{tableofcontents}
+\setcounter{tocdepth}{2} % <-- 2 includes up to subsections in the ToC
+\setcounter{secnumdepth}{3} % <-- 3 numbers up to subsubsections
+\manualmark
+\markboth{\spacedlowsmallcaps{\contentsname}}{\spacedlowsmallcaps{\contentsname}}
+\tableofcontents
+\automark[section]{chapter}
+\renewcommand{\chaptermark}[1]{\markboth{\spacedlowsmallcaps{#1}}{\spacedlowsmallcaps{#1}}}
+\renewcommand{\sectionmark}[1]{\markright{\textsc{\thesection}\enspace\spacedlowsmallcaps{#1}}}
+% %*******************************************************
+% % List of Figures and of the Tables
+% %*******************************************************
+% \clearpage
+% % \pagestyle{empty} % Uncomment this line if your lists should not have any headlines with section name and page number
+% \begingroup
+%     \let\clearpage\relax
+%     \let\cleardoublepage\relax
+%     % %*******************************************************
+%     % % List of Figures
+%     % %*******************************************************
+%     % \phantomsection
+%     % \addcontentsline{toc}{chapter}{\tocEntry{\listfigurename}}
+%     % \pdfbookmark[1]{\listfigurename}{lof}
+%     % \listoffigures
+%     % \newpage
+%     % % \vspace{8ex}
+
+%     %*******************************************************
+%     % List of Tables
+%     %*******************************************************
+%     \phantomsection
+%     \addcontentsline{toc}{chapter}{\tocEntry{\listtablename}}
+%     \pdfbookmark[1]{\listtablename}{lot}
+%     \listoftables
+
+%     \vspace{8ex}
+%     \newpage
+
+%     %*******************************************************
+%     % List of Listings
+%     %*******************************************************
+%     %\phantomsection
+%     % \addcontentsline{toc}{chapter}{\lstlistlistingname}
+%     % \pdfbookmark[1]{\lstlistlistingname}{lol}
+%     % \lstlistoflistings
+
+%     % \vspace{8ex}
+
+%     %*******************************************************
+%     % Acronyms
+%     %*******************************************************
+%     \phantomsection
+%     \addcontentsline{toc}{chapter}{\tocEntry{Acronyms}}
+%     \pdfbookmark[1]{Acronyms}{acronyms}
+%     \markboth{\spacedlowsmallcaps{Acronyms}}{\spacedlowsmallcaps{Acronyms}}
+%     \input{frontbackmatter/acronyms}
+%     \newpage
+    
+%     %*******************************************************
+%     % Publications
+%     %*******************************************************
+% %     \phantomsection
+% %     \pdfbookmark[1]{Publications}{publications}
+% %     \addcontentsline{toc}{chapter}{\tocEntry{Publications}}
+% %     \markboth{\spacedlowsmallcaps{Publications}}{\spacedlowsmallcaps{Publications}}
+% %     \chapter*{Publications}%\graffito{This is just an early --~and currently ugly~-- test!}
+% %     The following first-author publications have been published, accepted or submitted during my PhD studies and form the basis of this thesis.\footnote{\(\dagger\) indicates shared first authorship.}
+% %     % This might come in handy for PhD theses: some ideas and figures have appeared previously in the following publications:
+    
+% %     %\noindent Put your publications from the thesis here. The packages \texttt{multibib} or \texttt{bibtopic} etc. can be used to handle multiple different bibliographies in your document.
+    
+% %     \begin{refsection}[ownpubs]
+% %         % \small
+% %         % \nocite{*} % is local to to the enclosing refsection
+        
+% %         \paragraph{Conference papers}
+% %         \begin{itemize}
+% %             \item \fullcite{Olesen2018c}
+% %             \item \fullcite{Olesen2019}
+% %             \item \fullcite{Olesen2020DeepDetection}
+% %         \end{itemize}
+        
+% %         \paragraph{Journal papers}
+% %         \begin{itemize}
+% %             \item \fullcite{Stephansen2018}
+% %             \item \fullcite{Olesen2020AutomaticSetting}
+% %             \item \fullcite{Olesen2020MSED}
+% %         \end{itemize}
+% %             % \fullcite{Olesen2018, Olesen2019, Olesen2020b}
+% %         % \nocite{Olesen2018c,Stephansen2018,Olesen2019,Olesen2020AutomaticSetting, Olesen2020DeepDetection}
+% %         % \printbibliography[heading=none]
+% %     \end{refsection}
+    
+% %     % \begin{refsection}[ownpubs]
+% %     %     \small
+% %     %     % \nocite{*} % is local to to the enclosing refsection
+% %     %     \nocite{Olesen2018c,Stephansen2018,Olesen2019,Olesen2020AutomaticSetting, Olesen2020DeepDetection}
+% %     %     \printbibliography[heading=none]
+% %     % \end{refsection}
+    
+    
+% %     Furthermore, I have (co-)authored the following publications during my PhD, that although relevant, do not form basis of this thesis.
+    
+% %     \begin{refsection}[ownpubs]
+% %         % \small
+% %         % \nocite{*} % is local to to the enclosing refsection
+% %         \paragraph{Journal papers}
+% %             \begin{itemize}
+% %                 \item \fullcite{Olesen2018}
+% %                 \item \fullcite{Cesari2018}
+% %                 \item \fullcite{Carvelli2020}
+% %                 \item \fullcite{Brink-Kjaer2019}
+% %             \end{itemize}
+            
+% %         \paragraph{Conference papers}
+% %         \begin{itemize}
+% %             \item \fullcite{Klok2018}
+% %         \end{itemize}
+        
+% %         \paragraph{Abstracts}
+% %         \begin{itemize}
+% %             \item \fullcite{Brink-Kjaer2018}
+% %             \item \fullcite{Carvelli2018}
+% %             \item \fullcite{Jacobsen2018}
+% %             \item \fullcite{Olesen2018a}
+% %             \item \fullcite{Olesen2019a}
+% %             \item \fullcite{Thybo2020}
+% %         \end{itemize}
+        
+% %     \end{refsection}
+    
+% %     % \begin{refsection}[ownpubs]
+% %     %     \small
+% %     %     % \nocite{*} % is local to to the enclosing refsection
+% %     %     \paragraph{Conference papers}
+% %     %         \nocite{Klok2018}
+% %     %     \printbibliography[heading=none]
+% %     % \end{refsection}
+    
+% %     % \begin{refsection}[ownpubs]
+% %     %     \small
+% %     %     % \nocite{*} % is local to to the enclosing refsection
+% %     %     \paragraph{Abstracts}
+% %     %         \nocite{Brink-Kjaer2018, Carvelli2018, Jacobsen2018, Olesen2020a, Olesen2019a}
+% %     %     \printbibliography[heading=none]
+% %     % \end{refsection}
+    
+% %     % \begin{refsection}[ownpubs]
+% %     %     \small
+% %     %     % \nocite{*} % is local to to the enclosing refsection
+% %     %     \paragraph{Journal papers}
+% %     %         \nocite{Olesen2018, Cesari2018, Carvelli2020, Brink-Kjaer2019}
+% %     %         \nocite{Olesen2018, Olesen2018a, Olesen2019a, Jacobsen2018, Carvelli2018, Cesari2018, Carvelli2020, Brink-Kjaer2018, Brink-Kjaer2019, Klok2018}
+% %     %     \printbibliography[heading=none]
+% %     % \end{refsection}
+    
+% %     Finally, I have also written a popular science article about my research titled \textit{Intelligente algoritmer indtager søvnklinikken} for the Danish magazine \textit{Medicoteknik}, which is scheduled for publication in April 2020.
+
+% \endgroup

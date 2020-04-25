@@ -1,5 +1,65 @@
-\chapter{Conclusion}
+\chapter{Conclusion}\label{chap:conclusion}
+\begin{flushright}{\slshape 
+        Did we learn a lesson here I'm not seeing?} \\ \medskip
+        --- Summer Sanchez\\Rick and Morty, season 1, episode 9
+\end{flushright}
 
 \vspace{6cm}
 
-This is a conclusion.
+The main focus of this thesis was \emph{\objective}.
+The application of such a system would benefit clinicians and patients by shifting time spent on analysis towards patient care.
+The system was realized in three parts, which each addresses a specific sub-hypothesis:
+
+\bigskip
+\noindent \ref{hypothesis:sleep-stages}: \textit{\hypothesis\xspace sleep stages}.
+
+\Cref{chap:sleep-stage-classification} presented the \ac{MASSC} model for automatic classification of sleep stages using raw \ac{EEG}, \ac{EOG}, and chin \ac{EMG} data extracted from \ac{PSG}.
+This model was initially proposed in~\cite{Olesen2018c}, where it was trained and tested on 1850 and 230 \acp{PSG}, respectively, yielding an accuracy of 84\%. 
+Increasing both the volume and diversity of the data increased performance to 87\%, which was described in~\cref{sec:paperii}.
+
+Also presented was the \ac{STAGES} model for sleep stage classification based on cross-correlation representations of the \ac{EEG}, \ac{EOG} and chin \ac{EMG} and an ensemble of deep neural networks.
+This model was trained on 2784 \acp{PSG} and subsequently validated against six technicians on 70 \acp{PSG}, where it outperformed all technicians both on a biased and unbiased consensus score.
+The model was furthermore found stable with respect to underlying sleep pathologies in all cases except for narcolepsy, which was exploited in~\cref{chap:classification-sleep-disorders}.
+
+These findings suggest that \ac{AI}-based systems such as deep neural networks can augment clinicians with sleep stage classification, and that volume and diversity in datasets are key to high performance.
+% ~\cite{Olesen2020AutomaticSetting}
+% \noindent \paragraph{Main outcome :} the \ac{MASSC} model.
+
+\bigskip
+\noindent \ref{hypothesis:sleep-events}: \textit{\hypothesis\xspace sleep events}.
+
+\Cref{chap:sleep-event-detection} presented the \ac{MSED} model for sleep event detection.
+An initial version of the model was described in~\cref{sec:paperiv} for detection of arousals and leg movements, which was augmented to include sleep disordered breathing events in~\cref{sec:papervi}, using raw \ac{EEG}, \ac{EOG}, chin and leg \ac{EMG}, and respiratory data extracted from the \ac{PSG}.
+Training and testing the model on 1653 and 1000 \acp{PSG}, respectively, yielded F1 scores of 0.70, 0.63, and 0.62 for arousal, leg movement, and sleep disordered breathing event detection, respectively.
+The performance was higher when detecting events jointly compared to corresponding single-event models.
+Index values computed from detected events correlated well with manual annotations with \(r^2\)-values of 0.73, 0.77, and 0.78, respectively.
+
+The \ac{MSED} model was applied in a transfer learning setup under the channel mismatch problem, where the target dataset contained only one \ac{EEG} channel.
+This problem has been investigated previously for the case of sleep stage classification, but remains under-investigated in sleep event detection.
+Using a network pre-trained on a full montage of input channels, stripped of the input processing layers, and subsequently fine-tuned on a smaller dataset allowed for recovery of F1 performance compared to the full montage model.
+
+% The findings argue that an \ac{AI}-based system for sleep event detection can be of use for clinicians due to the performance level, 
+
+% \noindent \paragraph{Main outcome :} the \ac{MSED} model.
+
+\bigskip
+\noindent \ref{hypothesis:sleep-disorders}: \textit{\hypothesis\xspace sleep disorders}.
+\cref{chap:classification-sleep-disorders} presented the application of the \ac{STAGES} for narcolepsy detection.
+The motivation behind this was the finding in~\cref{sec:paperiii}, which led to the development of a probabilistic model using features derived from the hypnogram representation of a \ac{PSG} and a Gaussian process classification algorithm. 
+The \ac{STAGES} model was able to classify \ac{NT1} patients with a 91\% sensitivity and 96\% specificity, which was increased to 99\% by adding \hla typing. 
+This was replicated in an independent cohort of data from two continents for an optimized sensitivity and specificity of 94\% and 94\%.
+These findings match the current gold standard for narcolepsy diagnosis while having the benefit of using the \ac{PSG} alone or in combination with blood samples.
+
+% \noindent \paragraph{Main outcome :} the \ac{STAGES} model.
+
+\bigskip
+
+Altogether, the findings presented in this thesis underline the practicality and utility of incorporating \ac{AI}-based systems in the sleep clinic by providing fast and accurate analysis of sleep stages, sleep events, and sleep disorders.
+
+% This was based on the hypothesis that \MakeLowercase{\hypothesis} sleep stages, sleep events, and sleep disorders.
+% In this thesis, the system was realized using three models.
+% This chapter will touch on the results of three models as described in~\cref{chap:sleep-stage-classification,chap:sleep-event-detection,chap:classification-sleep-disorders}, and discuss aspects of including artificial intelligence in sleep clinics.
+
+% \begin{enumerate}
+%     \item[\ref{hypothesis:sleep-stages}] \\textit{}
+% \end{enumerate}

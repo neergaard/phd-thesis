@@ -1,0 +1,55 @@
+%*******************************************************
+% Abstract
+%*******************************************************
+%\renewcommand{\abstractname}{Abstract}
+\pdfbookmark[1]{Abstract}{Abstract}
+\addcontentsline{toc}{chapter}{\tocEntry{Abstract}}
+\begingroup
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\let\cleardoublepage\relax
+
+\chapter*{Abstract}
+% \vspace{6cm}
+\vfill
+
+Sleep disorders are prevalent in the general population and have major implications for personal health and mortality including increased risk of cardiovascular, metabolic and psychiatric complications.
+Furthermore, sleep disorders have a major economic burden contributing to an estimated cost of several hundred billion dollars per year to society.
+
+The current gold standard for sleep disorder diagnosis is based on manual analysis of \ac{EEG}, \ac{EOG}, \ac{EMG}, and cardio-respiratory variables recorded during sleep following a set of guidelines provided by the American Academy of Sleep Medicine. 
+% Sleep patterns are characterized by \ac{EEG}, \ac{EOG}, \ac{EMG}, and cardio-respiratory variables recorded during sleep.
+However, several studies have shown that this introduces subjective bias in the resulting sleep analysis due to interpretations of scoring guidelines, differences in recording equipment and setup among different sleep clinics, and the presence of sleep disorders interrupting normal sleep patterns.
+
+The main objective of this thesis is \objective. 
+This is realized in three research themes, each focusing on a separate aspect of sleep analysis.
+
+The first research theme presents findings related to the development of methods for automatic sleep stage classification, which is a crucial part of analyzing sleep patterns.
+Two models based on deep neural networks applied to \ac{EEG}, \ac{EOG}, and \ac{EMG} signals were developed for this reason.
+Using the raw signals from \num{14086} \acp{PSG} to classify sleep stages, the first model obtained an average accuracy of 86.9\% across 1584 \acp{PSG} collected from five independent datasets.
+The second model used cross-correlation representations of signals from \num{2784} \acp{PSG} to classify sleep stages with an accuracy of 86.8\% across 70 \acp{PSG} scored by six sleep technicians.
+
+The second research theme concerned methods for automatic detection of sleep events focusing specifically on \acp{Ar}, \acp{LM}, and \ac{SDB} events.
+A model was designed based on deep neural networks applied to \ac{EEG}, \ac{EOG}, \ac{EMG}, and respiratory signals.
+The model was able to precisely localize and classify events in data and was tested on more than 1000 \acp{PSG}.
+Moreover, the model was used in a transfer learning setting, where a fine-tuning optimization strategy could effectively recover lost performance caused by a reduced set of input channels.
+An adaptable model like this would be an important step forward in a clinical setting.
+
+The third and final research theme concerned classification of sleep disorders using artificial intelligence.
+A model was designed based on feature engineering of the hypnodensity-representation and probabilistic classification algorithms to classify \ac{NT1} from both healthy controls and patients with other central hypersomnias. 
+\Ac{NT1} was identified with 91\% sensitivity and 96\% specificity in the test sample, while replication in two independent datasets yielded similar performances. 
+
+% The main outcome of this thesis is a collection of models based on deep neural networks, that collectively form a system for automatic clinical sleep analysis.
+
+In conclusion, this thesis presents new automatic methods for clinical sleep analysis based on artificial intelligence. 
+Compared to current methods, the proposed models could significantly reduce analysis time by virtue of being quick to execute, while providing similar or higher levels of performance.
+
+% \cleardoublepage
+
+% \begin{otherlanguage}{danish}
+% \pdfbookmark[1]{Resum\'e}{Resum\'e}
+% \addcontentsline{toc}{chapter}{\tocEntry{Resum\'e}}
+% \chapter*{Resum\'e}
+% Kort sammenfatning af indholdet på dansk.
+% \end{otherlanguage}
+
+\endgroup

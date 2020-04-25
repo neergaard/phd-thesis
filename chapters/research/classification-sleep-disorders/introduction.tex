@@ -1,39 +1,41 @@
 %!TEX root = ../Thesis.tex
-\acresetall
-\chapter{Classification and prediction of sleep disorders}\label{chap:classification-sleep-disorders}
+% \acresetall
+\chapter{Classification of sleep disorders}\label{chap:classification-sleep-disorders}
 % \begin{flushright}{\slshape 
-%         What, so everyone’s supposed to sleep every single night now? You realize that nighttime makes up half of all time?} \\ \medskip
-%         --- Rick Sanchez\\Rick and Morty, season 1, pilot
+%         Nobody gets it. Nothing you think matters matters. This isn't special, this is happening infinite times across infinite realites.} \\ \medskip
+%         --- Rick Sanchez\\Rick and Morty, season 3, episode 10
 % \end{flushright}
+\begin{flushright}{\slshape 
+        Break the cycle, Morty. Rise above. Focus on science.} \\ \medskip
+        --- Rick Sanchez\\Rick and Morty, season 1, episode 9
+\end{flushright}
 \vspace{6cm}
 
-The previous chapters have focused on characterization of sleep as more of an isolated phenomenon.
 This chapter aims to build upon the knowledge and methods introduced previously by applying them in a clinical setting.
-Specifically, I will describe how we applied one of the sleep stage classification algorithms introduced in~\cref{chap:sleep-stage-classification} to identify patients exhibiting with narcolepsy, which is a sleep disorder characterized by a dysfunctional regulation of the sleep-wake switch described in~\cref{sec:control-sleep}.
+Specifically, I will describe how we applied one of the sleep stage classification algorithms introduced in~\cref{chap:sleep-stage-classification} to identify patients with narcolepsy, which is a sleep disorder characterized by a dysfunctional regulation of the sleep-wake switch described in~\cref{sec:control-sleep}.
 
-This chapter have been modified from the original publication  
+The content of this chapter is based on the original publication  
 \begin{displayquote}
-    \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International License: \url{http://creativecommons.org/licenses/by/4.0/}}\footnote{\(\dagger\): shared first authorship.}.
+    \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International License: \url{http://creativecommons.org/licenses/by/4.0/}}
 \end{displayquote}
-% \begin{itemize}
-%     \item \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International Licen: \url{http://creativecommons.org/licenses/by/4.0/}}.
-% \end{itemize} 
 
 \section{Research background}
 
-Sleep disorders and sleep dysregulation impact over \num{100} million Americans contributing to cardiovascular disorders, such as arrhythmia, hypertension, and stroke, metabolic disorders, such as diabetes, and obesity, and psychiatric disorders, such as depression, irritability, and addictive behaviors. 
-Furthermore, generalized sleep deprivation impairs performance, judgment and mood, and is a major preventable contributor to motor-vehicle-related accidents~\cite{Krieger2007}.
-There are approximately 90 different sleep disorders currently recognized and described in the \ac{ICSD-3} including insomnia\graffito{The prevalences of insomnia, sleep apnea, and restless legs syndrome are estimated to be approximately \SIlist{20;10;4}{\percent} of the population, respectively.}, sleep apnea, restless legs syndrome, \ac{RBD}, and hypersomnia syndromes such as \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
+Sleep disorders and sleep dysregulation impact over \num{100} million Americans by contributing to a range of cardiovascular, metabolic and psychiatric disorders, such as obesity, diabetes, and depression. 
+Generalized sleep deprivation also negatively impairs performance, judgment, and mood, and is a major preventable contributor to motor-vehicle-related accidents~\cite{Findley1988}.
+There are approximately 90 different sleep disorders currently recognized and described in the \ac{ICSD} grouped into six categories: insomnias, circadian rhythm sleep-wake disorders, central hypersomnias (\eg narcolepsy), sleep-related breathing disorders (\eg obstructive sleep apnea), parasomnias (\eg sleepwalking, \ac{RBD}), and sleep-related movement disorders (\eg \ac{PLMD} and restless legs syndrome)~\cite{AmericanAcademyofSleepMedicine2014}.%\graffito{The prevalences of insomnia, sleep apnea, and restless legs syndrome are estimated to be approximately \SIlist{20;10;4}{\percent} of the population, respectively.}, sleep apnea, restless legs syndrome, \ac{RBD}, and hypersomnia syndromes such as \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
 
-Among these pathologies, \ac{NT1} is unique as a disorder with a known, discrete pathophysiology---a destruction of hypocretin neurons in the hypothalamus, which is most likely of autoimmune origin~\cite{Peyron2000}.
-This is reflected in the \ac{CSF} concentrations of the hypocretin-1 neuropeptide\graffito{Hypocretin-1 is also known as orexin-A.}, where a concentration below \SI{110}{\pico\gram\per\milli\liter} is considered indicative of narcolepsy~\cite{AmericanAcademyofSleepMedicine2014}\graffito{There is also a narcolepsy type 2, which does not exhibit low \ac{CSF} hypocretin levels.}.
+Among these pathologies, \ac{NT1} is unique as a disorder with a known, discrete pathophysiology---a destruction of hypocretin neurons in the hypothalamus, which is most likely of autoimmune origin~\cite{Peyron2000, Mignot2002, Kornum2020}.
+This is reflected in the \ac{CSF} concentrations of the hypocretin-1 neuropeptide\graffito{Hypocretin-1 is also known as orexin-A.}, where a concentration below \SI{110}{\pico\gram\per\milli\liter} is considered indicative of narcolepsy~\cite{AmericanAcademyofSleepMedicine2014}\graffito{Although debated, there is also a narcolepsy type 2, which does not exhibit low \ac{CSF} hypocretin levels~\cite{Fronczek2020}.}. 
+
 Typically beginning in childhood or adolescence, narcolepsy affects approximately \SI{0.03}{\percent} of the US, European, Korean and Chinese populations~\cite{Kornum2017}.
 Unique to narcolepsy is the extremely strong association with the genetic marker \hla~\cite{Han2014}, and a well-characterized set of sleep disturbances that include short sleep latency, rapid transitions into \ac{REM} sleep and poor nocturnal sleep consolidation.
-The pathology also includes episodes of \textit{sleep-wake dissociation}, where the patient is half awake and half in \ac{REM}.
-For example, experiencing REM sleep muscle paralysis while awake (sleep paralysis, cataplexy) or dreaming while awake (hypnagogic hallucinations)\todo{Revision. When this happens in NREM it results in ... etc.}.
+The pathology also includes episodes of \textit{sleep-wake dissociations}, where the neuron groups in the sleep-wake or \ac{REM}-\ac{NREM} switches fire at the wrong time.
+This results in the clinical manifestations shown with parentheses in~\cref{fig:clinical-background:flipflop}.
+% For example, experiencing REM sleep muscle paralysis while awake (sleep paralysis, cataplexy) or dreaming while awake (hypnagogic hallucinations)\todo{Revision. When this happens in NREM it results in ... etc.}.
 
 The differentiation of sleep stages is also particularly important for the diagnosis of narcolepsy.
-Current diagnostic guidelines for \ac{NT1} require a full-night \ac{PSG} and a \ac{MSLT} the following day, which is a test where patients are asked to nap \numrange{4}{5} times for \SI{20}{\minute} every \SI{2}{\hour} during the daytime, and for each nap, the sleep latency and \ac{REM} latency are noted~\cite{Littner2005}.
+Current diagnostic guidelines for \ac{NT1} require a full-night \ac{PSG} and a \ac{MSLT} the following day, where patients are asked to nap \numrange{4}{5} times for \SI{20}{\minute} every \SI{2}{\hour} during the daytime, and for each nap, the sleep latency and \ac{REM} latency are noted~\cite{Littner2005}.
 A \ac{MSL} less than \SI{8}{\minute}\graffito{A \ac{MSL} less than \SI{8}{\minute} is indicative of excessive sleepiness} and the presence of at least \num{2} \acp{SOREMP}\graffito{A \ac{SOREMP} is defined as \ac{REM} latency less than \SI{15}{\minute} following sleep onset in a nap.} during the \ac{MSLT}, or \num{1} \ac{SOREMP} plus a \ac{REM} latency less than \SI{15}{\minute} during nocturnal \ac{PSG} are diagnostic criteria for \ac{NT1}~\cite{AmericanAcademyofSleepMedicine2014}.
 In a recent large study of the \ac{MSLT}, specificity and sensitivity for \ac{NT1} were \SIlist{98.6;92.9}{\percent} in comparing \num{516} \ac{NT1} versus \num{516} controls, respectively; and \SIlist{71.2;93.4}{\percent} in comparing \num{122} \ac{NT1} cases versus \num{132} other hypersomnia cases, respectively~\cite{Andlauer2013}.
 Similar sensitivities of \SIrange{75}{90}{\percent} and specificities of \SIrange{90}{98}{\percent} have been reported by others in large samples of hypersomnia cases versus \ac{NT1}~\cite{Mignot2002,Andlauer2012,Luca2013,Dauvilliers2004,Moscovitch1993}. 
@@ -41,7 +43,7 @@ The \ac{MSLT} is thus both highly specific and highly sensitive, making it incre
 
 \subsection{Research motivation and objectives}
 
-In \cref{sec:paperiii}, we saw how a sleep stage classification algorithm could be constructed to reliably classify sleep stages as good or better than human experts.
+In \cref{sec:paperiii}, we saw how a sleep stage classification algorithm could be constructed to reliably classify sleep stages as well or better than human experts.
 The results presented an interesting observation: sleep stage classification performance was unperturbed by existing sleep disorders, except in patients with narcolepsy.
 Furthermore, when comparing the hypnodensities in patients with and without narcolepsy, the former exhibited a much more diffuse sleep architecture with less pronounced sleep-wake cycles and increased \ac{REM}/\ac{W}/\ac{N1} disassociation. 
 This is illustrated in~\cref{fig:paperiii-figure03} where the bottom (top) trace shows a hypnodensity graph for a subject with (without) narcolepsy.
@@ -56,29 +58,33 @@ This is illustrated in~\cref{fig:paperiii-figure03} where the bottom (top) trace
     \end{adjustwidth*}
 \end{figure}
 
-These findings motivated a novel research question with is directly associated with research hypothesis~\ref{hypothesis:sleep-disorders}\graffito{\label{question:}\hypothesisSleepDisorders.}: 
+These findings motivated a novel research question with is directly associated with research hypothesis~\ref{hypothesis:sleep-disorders}\graffito{\ref{hypothesis:sleep-disorders}: \hypothesis\xspace sleep disorders.}: 
 \newcommand{\questionSleepDisorders}{based on a single overnight \ac{PSG} recording, is it possible to diagnose narcolepsy with the same level of performance as the current clinical gold standard?}
-\begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~\arabic*}, ref={\bfseries\scshape RQ~\arabic*}]
+\begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~3.\arabic*}, ref={\bfseries\scshape RQ~3.\arabic*}]
     \item \questionSleepDisorders\label{question:sleep-disorders}
 \end{enumerate}
 % \begin{displayquote}
 %     based on a single overnight \ac{PSG} recording, can we diagnose narcolepsy with the same level of performance as the current clinical gold standard?
 % \end{displayquote}
 
-Derived from the research hypothesis and associated question, the following research, or design, objectives can be formulated:
+Derived from the research hypothesis and associated question, the following objectives were formulated:
 
 \begin{enumerate}[label=(\roman*)]
-    \item to design a model capable of diagnosing narcolepsy from the hypnodensity representation of a \ac{PSG} study;
-    \item the model should have the same level of performance as the gold standard \ac{PSG}-\ac{MSLT} combination.
+    \item the model should be capable of diagnosing narcolepsy from the hypnodensity representation of a \ac{PSG} study;
+    \item the model should have comparable or higher level of performance as the gold standard \ac{PSG}-\ac{MSLT} combination.
 \end{enumerate}
 
-The following sections will describe the steps taken to complete the posed design objectives and answer the research question.
+The following sections describe the steps taken to complete the posed objectives and answer the research question.
 
 % Research papers
-\input{chapters/research/classification-sleep-disorders/paper-iii}
+\clearpage\input{chapters/research/classification-sleep-disorders/paper-iii}
 
-\section{Chapter summary}
+\clearpage\section{Chapter summary}
 
-This chapter concerned the use of signal processing and machine learning for the detection of sleep disorders, the topic of which directly relates to \ref{hypothesis:sleep-disorders}\graffito{\hypothesisSleepDisorders}.
-Specifically, we were interested in the following question: \questionSleepDisorders
-To answer the question and the associated research objectives, we designed a narcolepsy model using feature engineering and probabilistic machine learning models, that can classify \ac{NT1} patients with a \SI{91}{\percent} sensitivity and \SI{96}{\percent} specificity using a hypnodensity representation of a single, overnight \ac{PSG} recording.
+This chapter%
+\graffito{\ref{hypothesis:sleep-disorders}: \hypothesis\xspace sleep disorders} %
+concerned the use of signal processing and machine learning for the detection of sleep disorders, the topic of which directly relates to \ref{hypothesis:sleep-disorders}.
+Specifically, we were interested in the following question: \questionSleepDisorders\xspace 
+
+We designed a narcolepsy model using feature engineering and probabilistic machine learning models to classify \ac{NT1} patients with a \SI{91}{\percent} sensitivity and \SI{96}{\percent} specificity using a hypnodensity representation of a single, overnight \ac{PSG} recording, which is the same level as the current gold standard. 
+By adding \hla typing, the specificity increased to 99\%.

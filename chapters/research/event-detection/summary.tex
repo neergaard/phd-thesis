@@ -1,0 +1,32 @@
+\section{Chapter summary}\label{sec:eventdetection-summary}
+This%
+\graffito{\ref{hypothesis:sleep-events}: \hypothesis{} sleep events.} %
+chapter concerned the detection of sleep events motivated by research hypothesis~\ref{hypothesis:sleep-events}, and research questions~%
+\ref{question:sleep-events-detection}, %
+\ref{question:sleep-events-transfer}, and %
+\ref{question:sleep-events-jointly}%
+\graffito{\ref{question:sleep-events-detection}: \questionSleepEventsDetection.}%
+\graffito{\ref{question:sleep-events-transfer}: \questionSleepEventsTransfer.}%
+\graffito{\ref{question:sleep-events-jointly}: \questionSleepEventsJointly.}.
+
+The first study described the \ac{MSED} model.
+Here, the main objective was to detect multiple sleep events in \ac{PSG} studies simultaneously and independently using only a single model, which was trained and tested on 1485 and 1000 \acp{PSG}, respectively. 
+Optimal arousal detection was obtained by including a recurrent neural network module and using a dynamic default event window yielding an F1 score of 0.75, while optimal leg movement detection was obtained with a static window yielding an F1 score of 0.65.
+
+The second study in this chapter presented the application of the \ac{MSED} algorithm for arousal detection under the channel mismatch problem.
+We investigated two deep transfer learning strategies for overcoming the channel mismatch problem for cases, where two datasets do not contain exactly the same setup leading to degraded performance in single-\ac{EEG} models. 
+Using a fine-tuning strategy, the model yielded similar performance to the baseline model (\(\mathrm{F1}=0.68\) and \(\mathrm{F1}=0.69\), respectively), and was significantly better than a comparable single-channel model.
+While these results are promising, they will have to be validated in a larger setting across separate cohorts.
+
+Motivated by the preliminary results obtained previously, we investigated whether the \ac{MSED} model could be extended with more input channels for added detection of sleep disordered breathing events, the results of which are shown in the last study of this chapter.
+We tested different variations on network architecture and found that a split-stream network with each stream responsible for separate sets of input channels was beneficial for our task.
+The results from evaluating on 1000 separate \ac{PSG} recordings was F1 scores of \numlist{0.70;0.63;0.62} for \ac{Ar}, \ac{LM}, and \ac{SDB} detection, respectively.
+Interestingly, we also found that the model performed better with respect to F1 score for each separate class, when detecting events jointly instead of using single models for each class.
+However, this model remains severely understudied, and future efforts should concentrate on including more data sources, evaluating on a dataset containing multiple scorers, and benchmarking against state of the art methods.
+
+
+
+    % Aspects that were not investigated in this thesis, but are of interest in future work include
+    % \begin{itemize}
+    %     \item An evaluation of individual sleep events when placed in the context of a micro-sleep architecture, \eg a high-resolution hypnodensity.
+    % \end{itemize}

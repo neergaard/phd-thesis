@@ -1,143 +1,256 @@
 \section{Paper II: Automatic sleep stage classification with deep residual networks in a mixed-cohort setting}\label{sec:paperii}
-\sectionmark{Olesen, Jennum, Mignot, \& Sorensen, 2020 (\textit{submitted)}}
+\sectionmark{Olesen, Jennum, Mignot, \& Sorensen, 2020b (\textit{under review)}}
 
+\begin{tcolorbox}[colframe=white]
+\paragraph{Study Objectives:} Sleep stage scoring is performed manually by sleep experts and is prone to subjective interpretation of scoring rules with low intra- and interscorer reliability. 
+Many automatic systems rely on few small-scale databases for developing models, and generalizability to new datasets is thus unknown. 
+We investigated a novel deep neural network to assess the generalizability of several large-scale cohorts.
+\paragraph{Methods:} A deep neural network model was developed using \num{15684} polysomnography studies from five different cohorts. 
+We applied four different scenarios: 1) impact of varying time-scales in the model; 2) performance of a single cohort on other cohorts of smaller, greater or equal size relative to the performance of other cohorts on a single cohort; 3) varying the fraction of mixed-cohort training data compared to using single-origin data; and 4) comparing models trained on combinations of data from 2, 3, and 4 cohorts.
+\paragraph{Results:} Overall classification accuracy improved with increasing fractions of training data (0.25\%: \ci{0.782}{0.097}{0.777}{0.787}; 100\%: \ci{0.869}{0.064}{0.864}{0.872}), and with increasing number of data sources (2: \ci{0.788}{0.102}{0.787}{0.790}; 3: \ci{0.808}{0.092}{0.807}{0.810}; 4: \ci{0.821}{0.085}{0.819}{0.823}). 
+Different cohorts show varying levels of generalization to other cohorts.
+\paragraph{Conclusions:} Automatic sleep stage scoring systems based on deep learning algorithms should consider as much data as possible from as many sources available to ensure proper generalization. 
+Public datasets for benchmarking should be made available for future research.
+\end{tcolorbox}
 
 
 \subsection{Cohort descriptions}
 To investigate and conclude on generalizability of any machine learning or sleep stage classification model, multiple heterogenous datasets must be used for training, validation and testing purposes.
 In this work, we collected datasets from five different sources, each dataset containing a diverse collection of subjects presenting with multiple disease phenotypes.
-Details of the separate cohorts are shown in Table 1 along with reported \textit{p}-values highlighting cohort differences.
-Each cohort was split into a training, validation and testing subset in proportions of 87.5\%, 2.5\% and 10\%, respectively, using random sampling without replacement among unique subjects, so that no subject is shared between subsets.
-With these percentages, we maximize the number of PSGs available for training, while still reserving enough PSGs for validation and testing.
+Details of the separate cohorts are shown in~\cref{tab:sleep-stages:paperii:table-01} along with reported \textit{p}-values highlighting cohort differences.
+Each cohort was split into a training, validation and testing subset in proportions of \SI{87.5}{\percent}, \SI{2.5}{\percent}, and \SI{10}{\percent}, respectively, using random sampling without replacement among unique subjects, so that no subject is shared between subsets.
+With these percentages, we maximize the number of \acp{PSG} available for training, while still reserving enough \acp{PSG} for validation and testing.
 Collecting all the separate subsets across cohorts forms a training, validation, and testing partition, containing the respective subsets from all five cohorts. 
 
-\subsubsection{Institute of Systems and Robotics, University of Coimbra Sleep Cohort (ISRUC)}
+\subsubsection{\ac{ISRUC}}
 This cohort contains 126 recordings from 118 unique subjects recorded at the Sleep Medicine Centre of the Hospital of Coimbra University, Portugal, in the period 2009–2013~\cite{Khalighi2016}.
-The cohort comprises three subgroups: subgroup I contains 100 PSGs of subjects with diagnosed sleep disorders, generally sleep apnea; subgroup II contains 16 recordings of eight subjects most of which are also diagnosed with sleep apnea; and subgroup III contains recordings from 10 subjects with no diagnosed sleep disorders.
-All PSGs were recorded with the same recording hardware and software and each was scored by two technicians for sleep stages and sleep events according to the AASM guidelines.
-ISRUC-Sleep is a freely accessible resource and all data and PSG files can be located at \url{https://sleeptight.isr.uc.pt/ISRUC_Sleep/}.
+The cohort comprises three subgroups: subgroup I contains 100 \acp{PSG} of subjects with diagnosed sleep disorders, generally sleep apnea; subgroup II contains 16 recordings of eight subjects most of which are also diagnosed with sleep apnea; and subgroup III contains recordings from 10 subjects with no diagnosed sleep disorders.
+All \acp{PSG} were recorded with the same recording hardware and software and each was scored by two technicians for sleep stages and sleep events according to the \ac{AASM} guidelines.
+\ac{ISRUC} is a freely accessible resource and all data and \ac{PSG} files can be located at \url{https://sleeptight.isr.uc.pt/ISRUC_Sleep/}.
 
-\subsubsection{The MrOS Sleep Study (MrOS)}
-The MrOS sleep study is part of the larger Osteoporotic Fractures in Men Study, which aims to understand the relationships between sleep disorders, fractures, and vascular diseases in community-dwelling men~\cite{Blank2005, Orwoll2005, Blackwell2011}. 
-It consists of 2907 in-home PSG recordings with an additional 1026 follow-up PSG studies from subjects recruited from six different clinical centers in the USA.
+\subsubsection{\ac{MrOS}}
+The \ac{MrOS} Sleep Study is part of the larger Osteoporotic Fractures in Men Study, which aims to understand the relationships between sleep disorders, fractures, and vascular diseases in community-dwelling men~\cite{Blank2005, Orwoll2005, Blackwell2011}. 
+It consists of 2907 in-home \ac{PSG} recordings with an additional 1026 follow-up \ac{PSG} studies from subjects recruited from six different clinical centers in the USA.
 Each recording was annotated by an expert technician according to Rechtschaffen and Kales (R\&K) criteria for sleep staging~\cite{Rechtschaffen1968}.
-For compatibility with AASM guidelines, we combined stages labeled S3 and S4 into N3. All data were accessed from the National Sleep Research Resource (NSRR) repository~\cite{Dean2016, Zhang2018}.
+For compatibility with \ac{AASM} guidelines, we combined stages labeled S3 and S4 into \ac{N3}. All data were accessed from the \ac{NSRR} repository~\cite{Dean2016, Zhang2018}.
 
-\subsubsection{The Sleep Heart Health Study (SHHS)}
-The SHHS is a large, multi-center study on cardiovascular outcomes related to sleep disorders with a specific focus on sleep-disordered breathing~\cite{Redline1998, Quan1997}.
-The cohort consists of 6441 subjects above 40 years old recruited between 1995 and 1998 undergoing in-home PSG (SHHS Visit 1) with subsequent follow-up PSG between 2001 and 2003 in 3295 subjects (SHHS Visit 2).
-PSG recordings were annotated for sleep stages by trained and certified technicians according to R\&K rules.
-From the original cohort we extracted 5793 PSGs and annotations from Visit 1, and 2651 from Visit 2.
-We aggregated S3 and S4 stages into N3 similar to MrOS.
-All data were accessed from NSRR repository.
+\subsubsection{\ac{SHHS}}
+The \ac{SHHS} is a large, multi-center study on cardiovascular outcomes related to sleep disorders with a specific focus on sleep-disordered breathing~\cite{Quan1997, Redline1998}.
+The cohort consists of 6441 subjects above 40 years old recruited between 1995 and 1998 undergoing in-home \ac{PSG} (\ac{SHHS} Visit 1) with subsequent follow-up \ac{PSG} between 2001 and 2003 in 3295 subjects (\ac{SHHS} Visit 2).
+\ac{PSG} recordings were annotated for sleep stages by trained and certified technicians according to R\&K rules.
+From the original cohort we extracted 5793 \acp{PSG} and annotations from Visit 1, and 2651 from Visit 2.
+We aggregated S3 and S4 stages into \ac{N3} similar to \ac{MrOS}.
+All data were accessed from \ac{NSRR} repository.
 
-\subsubsection{Wisconsin Sleep Cohort (WSC)}
-WSC is a population-based study of sleep-disordered breathing in government workers in Wisconsin, USA that was initiated in 1988~\cite{Young1993, Young2008}.
-In this work, we used 2412 PSGs from 1091 unique subjects in the WSC sample scored by expert technicians according to R\&K rules with subsequent merging of S3 and S4 into N3.
+\subsubsection{\ac{WSC}}
+\ac{WSC} is a population-based study of sleep-disordered breathing in government workers in Wisconsin, USA, that was initiated in 1988~\cite{Young1993, Young2008}.
+In this work, we used 2412 \acp{PSG} from 1091 unique subjects in the \ac{WSC} sample scored by expert technicians according to R\&K rules with subsequent merging of S3 and S4 into \ac{N3}.
 
-\subsubsection{Stanford Sleep Cohort (SSC)}
-PSGs from this cohort originate from patients referred for sleep disorders evaluation and recorded at the Stanford Sleep Clinic since 1999.
-The specific sample used in this study represents a small subset ($n=772$) of the whole cohort, which was selected and described in detail in previous studies scored according to R\&K or AASM guidelines according to prevailing standard at the time of evaluation~\cite{Andlauer2013, Moore2014}. 
+\subsubsection{\ac{SSC}}
+\acp{PSG} from this cohort originate from patients referred for sleep disorders evaluation and recorded at the Stanford Sleep Clinic since 1999.
+The specific sample used in this study represents a small subset ($n=772$) of the whole cohort, which was selected and described in detail in previous studies scored according to R\&K or \ac{AASM} guidelines according to prevailing standard at the time of evaluation~\cite{Andlauer2013, Moore2014}. 
 
+\begin{landscape}
+% \begin{sidewaystable}
+\begin{table}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+\centering
+\small
+\begin{threeparttable}
+\caption{Cohort demographics}
+\label{tab:sleep-stages:paperii:table-01}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+           & \textbf{\ac{ISRUC}}                             & \textbf{\ac{MrOS}}                              & \textbf{\ac{SHHS}}                              & \textbf{\ac{SSC}}                               &\textbf{\ac{WSC}}                               & \textbf{\textit{p}-value}   \\ \midrule
+N (female) & 126 (50)                          & 3932 (0)                          & 8444 (4458)                       & 767 (319)                         & 2401 (1103)                       & ---         \\
+Age, years & 49.8$\pm$15.9 {[}20.0--85.0{]}   & 77.6$\pm$5.6 {[}67.0--90.0{]}    & 64.5$\pm$11.2 {[}39.0--90.0{]}   & 45.7$\pm$14.5 {[}13.0--104.8{]}  & 59.7$\pm$8.4 {[}37.2--82.3{]}    & \num{<0.0001}         \\
+BMI, kg/m2 & ---       & 27.1$\pm$3.8 {[}16.0--47.0{]}    & 28.2$\pm$5.1 {[}18.0--50.0{]}    & 27.2$\pm$6.5 {[}9.8--78.7{]}     & 31.6$\pm$7.2 {[}17.5--70.6{]}    & \num{<0.0001} \\
+TST, min   & 350.0$\pm$67.3 {[}87.5--479.0{]} & 352.1$\pm$71.9 {[}39.0--626.0{]} & 374.1$\pm$69.4 {[}68.0--605.0{]} & 361.0$\pm$83.5 {[}0.0--661.0{]}  & 364.1$\pm$63.6 {[}19.5--575.0{]} & \num{<0.0001}  \\
+SL, min    & 17.7$\pm$20.5 {[}0.0--144.5{]}   & 24.7$\pm$26.9 {[}1.0--402.0{]}   & 24.2$\pm$25.7 {[}0.0--349.0{]}   & 93.5$\pm$58.9 {[}0.5--404.0{]}   & 33.2$\pm$21.4 {[}0.5--333.0{]}   & \num{<0.0001}         \\
+REML, min  & 125.6$\pm$61.4 {[}7.0--323.0{]}  & 104.8$\pm$75.1 {[}0.0--590.0{]}  & 91.7$\pm$58.8 {[}0.0--471.0{]}   & 140.9$\pm$88.0 {[}0.0--464.0{]}  & 128.3$\pm$76.0 {[}3.5--514.0{]}  & \num{<0.0001} \\
+WASO, min  & 76.2$\pm$49.8 {[}7.5--251.0{]}   & 117.5$\pm$67.6 {[}4.0--487.0{]}  & 80.2$\pm$54.7 {[}2.0--378.0{]}   & 79.5$\pm$55.0 {[}3.5--367.0{]}   & 73.6$\pm$45.9 {[}3.0--325.0{]}   & \num{<0.0001} \\
+SE, \%     & 78.8$\pm$14.1 {[}19.5--98.3{]}   & 75.5$\pm$12.4 {[}12.0--99.0{]}   & 80.5$\pm$11.0 {[}11.3--99.0{]}   & 77.4$\pm$14.8 {[}0.0--98.0{]}    & 77.1$\pm$11.2 {[}4.1--95.6{]}    & \num{<0.0001} \\
+N1, \%     & 13.3$\pm$5.8 {[}1.8--33.1{]}     & 8.3$\pm$6.4 {[}0.0--70.0{]}      & 5.5$\pm$4.0 {[}0.0--39.1{]}      & 11.7$\pm$10.2 {[}0.0--92.0{]}    & 10.8$\pm$6.9 {[}1.0--88.4{]}     & \num{<0.0001}         \\
+N2, \%     & 31.9$\pm$10.3 {[}4.4--89.3{]}    & 62.5$\pm$10.0 {[}21.0--95.0{]}   & 56.9$\pm$11.5 {[}10.9--100.0{]}  & 62.8$\pm$24.9 {[}0.0--636.0{]}   & 66.0$\pm$9.4 {[}9.1--93.3{]}     & \num{<0.0001}         \\
+N3, \%     & 19.6$\pm$8.0 {[}0.0--41.1{]}     & 36.0$\pm$31.8 {[}0.0--259.0{]}   & 17.5$\pm$11.6 {[}0.0--70.1{]}    & 9.0$\pm$9.3 {[}0.0--73.0{]}      & 7.2$\pm$7.8 {[}0.0--47.5{]}      & \num{<0.0001}         \\
+REM, \%    & 13.3$\pm$6.3 {[}0.0--37.8{]}     & 19.3$\pm$6.8 {[}0.0--44.0{]}     & 20.1$\pm$6.3 {[}0.0--48.0{]}     & 16.3$\pm$7.2 {[}0.0--40.0{]}     & 16.0$\pm$6.2 {[}0.0--38.2{]}     & \num{<0.0001} \\
+ArI, /h    & 20.2$\pm$10.0 {[}2.1--72.0{]}    & 23.7$\pm$12.1 {[}1.0--105.0{]}   & 18.9$\pm$10.5 {[}0.0--110.4{]}   & 125.0$\pm$124.2 {[}1.0--729.0{]} & ---       & \num{<0.0001}         \\
+AHI, /h    & 13.1$\pm$13.2 {[}0.0--82.2{]}    & 13.7$\pm$14.6 {[}0.0--89.0{]}    & 18.1$\pm$16.2 {[}0.0--161.8{]}   & 13.5$\pm$19.2 {[}0.0--98.6{]}    & 7.0$\pm$9.4 {[}0.0--72.6{]}      & \num{<0.0001}         \\
+PLMI, /h   & 8.0$\pm$27.4 {[}0.0--292.8{]}    & 35.7$\pm$37.5 {[}0.0--233.0{]}   & ---       & 7.0$\pm$18.1 {[}0.0--139.9{]}    & ---       & \num{<0.0001} \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\item %
+\describe{BMI}; %
+\describe{TST}; %
+SL: sleep latency; %
+\describe{REML}; %
+\describe{WASO}; %
+SE: sleep efficiency; %
+\describe{N1}; %
+\describe{N2}; %
+\describe{N3}; %
+\describe{REM}; %
+\describe{ArI}; %
+\describe{AHI}; %
+\describe{PLMI}; %
+\describe{ISRUC}; %
+\describe{MrOS}; %
+\describe{SHHS}; %
+\describe{SSC}; %
+\describe{WSC}; %
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
+% \end{sidewaystable}
+\end{landscape}
+
+\begin{figure}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    \includegraphics[width=\linewidth]{figures/paper-ii/figure_network.png}
+    \caption[\acs{MASSC}v2 model overview]{Model overview. a) The input is a sequence of data \(\mathbf{x}\) containing raw signal data from \ac{EEG}, left/right \ac{EOG}, and \ac{EMG} channels, which is supplied to the network modules in sequence. The feature extraction module consists of \(R\) repeated blocks of residual units, see b) panel to the right. The output of the model is a matrix \(\mathbf{y}\) containing class probabilities for each sleep stage for each time step, which can be visualized either directly as a hypnodensity, or by \(\argmax{\mathbf{y}}\) as a hypnogram. The \textbf{A} and \textbf{M} labels in the hypnogram plots corresponds to automatic and manually scored hypnograms. b) Schematic of a single residual block in the feature extraction module. Convolutional layers are described by the kernel size \(\times\) number of filters using a stride value of 1. Shortcut uses \(1\times1\) convolutions with added zero-padding to maintain temporal dimension. Conv, convolutional layer; BatchNorm, batch normalization; \describe{ReLU}; \(f_0\), base number of filters (\(f_0=4\)).}
+    \label{fig:sleep-stages:paper-ii:figure-01}
+\end{adjustwidth*}
+\end{figure}
 
 \subsection{Methods}
+
 \subsubsection{Data pipeline}
-Electrophysiological signals corresponding to the minimum acceptable montage for sleep staging available across all cohorts were extracted for each PSG.
-These included a central EEG (either C3 or C4 referenced to the contra-lateral mastoid), left and right EOG referenced to the contra-lateral mastoid, and a single submentalis EMG.
-The choice between C3 and C4 was determined based on the lowest total signal energy across the entire duration of the PSG to avoid excessive signal popping.
+Electrophysiological signals corresponding to the minimum acceptable montage for sleep staging available across all cohorts were extracted for each \ac{PSG}.
+These included a central \ac{EEG} (either C3 or C4 referenced to the contra-lateral mastoid), left and right \ac{EOG} referenced to the contra-lateral mastoid, and a single submentalis \ac{EMG}.
+The choice between C3 and C4 was determined based on the lowest total signal energy across the entire duration of the \ac{PSG} to avoid excessive signal popping.
 Other methods to determine appropriate channels include algorithms based on shortest Mahalanobis distance to an already determined reference distribution~\cite{Stephansen2018}, but was not investigated in this study.
-All signals were resampled to $f_s = \SI{128}{\hertz}$ using a polyphase filtering procedure irrespective of original sampling frequency, and subsequently filtered using a zero-phase approach with \nth{4} order Butterworth IIR filters (0.5 to 35 Hz band pass for EEG and EOG; 10 Hz high pass for EMG) in accordance with AASM filter specifications~\cite{Berry2020}.
+All signals were resampled to $f_s = \SI{128}{\hertz}$ using a polyphase filtering procedure irrespective of original sampling frequency, and subsequently filtered using a zero-phase approach with \nth{4} order Butterworth IIR filters (\SIrange{0.5}{35}{\hertz} band-pass for \ac{EEG} and \ac{EOG}; \SI{10}{\hertz} high-pass for \ac{EMG}) in accordance with \ac{AASM}2020 filter specifications~\cite{Berry2020}.
 Each signal was normalized to zero mean and unit variance to accommodate differences in recording equipment and baselines, and to compress the dynamic range into something easily trainable for the neural network architecture.
 We denote by $C$ the number of input signals supplied to the neural network, where in this case $C=4$.
 
 \subsubsection{Machine learning problem}
-We designate by $\mathcal{X} \in \real^{C \times T}$ the set of \SI{30}{\second} input data segments with $S$ input channels and segment length $T$, and the corresponding sleep stage classifications by $\mathcal{Y} = \lbrace y \in \real_{+}^{K} \mid \sum_i y_i = 1 \rbrace$, where $K = 5$ corresponds to the five sleep stages.
+We designate by $\mathcal{X} \in \real{C \times T}$ the set of \SI{30}{\second} input data segments with $S$ input channels and segment length $T$, and the corresponding sleep stage classifications by $\mathcal{Y} = \lbrace y \in \real{K}_{+} \mid \sum_i y_i = 1 \rbrace$, where $K = 5$ corresponds to the five sleep stages.
 Thus, $y$ is a probability simplex, which maps to the ordered set $\mathcal{S} = \lbrace \wake, \nI, \nII, \nIII, \rem \rbrace$ by the argmax function such that $\argmax{y : \mathcal{Y} \to \mathcal{S}}$.
-Furthermore, as we are potentially interested in classifying multiple sleep stages at once, we extend the problem of classifying a single sleep stage given $x \in \mathcal{X}$ to a sequence-to-sequence problem, in which we desire to learn a differentiable function representation $\Phi$, that maps a sequence of \SI{30}{\second} epochs $\mathbf{x} \in \real^{C \times \alpha T}$ to their corresponding label probabilities $\mathbf{y} \in \real^{K \times \alpha}$, where $\alpha$ is a parameter that controls the sequence length. 
-For example, if $\alpha=8$, the sequence $\mathbf{x}$ contains \SI{4}{\minute} of successive PSG data described by 8 epochs of length \SI{30}{\second}.
+Furthermore, as we are potentially interested in classifying multiple sleep stages at once, we extend the problem of classifying a single sleep stage given $x \in \mathcal{X}$ to a sequence-to-sequence problem, in which we desire to learn a differentiable function representation $\Phi$, that maps a sequence of \SI{30}{\second} epochs $\mathbf{x} \in \real{C \times \alpha T}$ to their corresponding label probabilities $\mathbf{y} \in \real{K \times \alpha}$, where $\alpha$ is a parameter that controls the sequence length. 
+For example, if $\alpha=8$, the sequence $\mathbf{x}$ contains \SI{4}{\minute} of successive \ac{PSG} data described by 8 epochs of length \SI{30}{\second}.
 Furthermore, we denote by $\llbracket a, b \rrbracket$ the set of integers from $a$ to $b$, i.e. $\llbracket a, b \rrbracket = \lbrace n \in \mathbb{N} \mid a \leq n \leq b \rbrace$, and by $\llbracket N \rrbracket$ the shorthand form of $\llbracket 1, N \rrbracket$.
 
 \subsubsection{Network architecture}
-\begin{figure}
-    \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-ii/figure_01_a-b.pdf}
-    \caption{Caption}
-    \label{fig:paper-ii-figure1}
-\end{figure}
-As the representation of $\Phi$, we adapted and extended a previously published neural network architecture for automatic sleep stage classification, which was based on a variant of the ResNet-50 architecture commonly used for two-dimensional image classification tasks, but adapted and re-trained from scratch for the specific use-case of one-dimensional, time-dependent signals in the PSG~\cite{Olesen2018c}.
+
+\begin{table}[t]
+% \centering
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+\raggedleft
+\begin{threeparttable}
+    \small
+    % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    \caption[\acs{MASSC}v2 model architecture]{Overview of model architecture.}
+    \label{tab:sleep-stages:paperii:table-02}
+    \begin{tabular}{@{}lllllll@{}} \toprule
+    \textbf{Module} & \textbf{Type} & \textbf{Filters} & \textbf{Kernel} & \textbf{Stride} & \textbf{Activation} & \textbf{Output size} \\ \midrule
+    \(\mathbf{x}\) & Input & --- & --- & --- & --- & \(1 \times C \times T\) \\ \midrule
+    \(\varphi_\text{mix}\) & \twod conv. & \(C\) & \((1, C)\) & 1 & \acs{BN}+\acs{ReLU} & \(C \times 1 \times T\) \\ \midrule
+    \(\varphi_\text{feat}^{(r)}\) & Res. block\(^{\dagger}\) & \(f_0 2^{r-1}\) & \((1, 1)\) & \((1, 1)\)  & \acs{BN}+\acs{ReLU} & \(f_0 2^{r-1} \times 1 \times \frac{T}{2^{r-1}}\) \\
+    \(r \in \llbracket R \rrbracket\)& & \(f_0 2^{r-1}\) & \((1, 3)\) & \((1, 2)\) & \acs{BN}+\acs{ReLU}  & \(f_0 2^{r-1} \times 1 \times \frac{T}{2^r}\) \\ \midrule
+    & & \(4f_0 2^{r-1}\) & \((1, 1)\) & \((1, 1)\) & \acs{BN}+\acs{ReLU} & \(f_0 2^r \times 1 \times \frac{T}{2^r}\) \\
+    \(\varphi_\text{temp}\) & \acs{bGRU} & \(n_h\) & --- & --- & --- & \(2n_h \times \frac{T}{2^R}\) \\ \midrule
+    \(\varphi_\text{clf}\) & \oned conv. & \(K\) & \(2n_h\) & 1 & Softmax & \(K \times \frac{T}{2^R}\) \\ \bottomrule
+    \end{tabular}
+    \begin{tablenotes}
+        \small
+        \item Kernel sizes correspond to the first, second and third convolutional layer in each residual block. Stride counts correspond to the residual block and the subsequent maxpooling operation. %
+        Conv., convolution; %
+        Res. block, residual block; %
+        \describe{BN}, %
+        \describe{ReLU}, %
+        \describe{bGRU}, %
+        \(C\), number of input channels; %
+        \(T\), length of segment in samples; %
+        \(f_0\), base number of filters in residual blocks;
+        \(R\), number of residual blocks; %
+        \(n_h\), number of hidden units in \acs{bGRU}; %
+        \(K\), number of sleep stage classes; %
+        \(^{\dagger}\)See~\cref{fig:sleep-stages:paper-ii:figure-01} for details.
+    \end{tablenotes}
+\end{threeparttable}
+    \end{adjustwidth*}
+\end{table}
+
+As the representation of $\Phi$, we adapted and extended a previously published neural network architecture for automatic sleep stage classification, which was based on a variant of the ResNet-50 architecture commonly used for two-dimensional image classification tasks, but adapted and re-trained from scratch for the specific use-case of one-dimensional, time-dependent signals in the \ac{PSG}~\cite{Olesen2018c}.
 This network has the advantage that it does not require any manual feature engineering and extraction compared to previous state of the art sleep stage classification models~\cite{Stephansen2018}.
-An overview of the proposed network architecture is provided graphically in Figure 1 and Table 2.
+An overview of the proposed network architecture is provided graphically in \cref{fig:sleep-stages:paper-ii:figure-01} and \cref{tab:sleep-stages:paperii:table-02}.
 Briefly, the architecture consists of four modules:
 \begin{enumerate}
     \item an initial mixing module 
     \begin{equation}
-        \varphi_{\mathrm{mix}} : \real^{1 \times C \times T} \to \real^{C \times 1 \times T},
-    \end{equation}%$\varphi_{\mathrm{mix}} : \real^{1 \times C \times T} \to \real^{C \times 1 \times T} $,
+        \varphi_{\mathrm{mix}} : \real{1 \times C \times T} \to \real{C \times 1 \times T},
+    \end{equation}%$\varphi_{\mathrm{mix}} : \real{1 \times C \times T} \to \real{C \times 1 \times T} $,
 	\item a feature extraction module
 	\begin{equation}
-	    \varphi_{\mathrm{feat}} : \real^{C \times 1 \times T} \to \real^{f_0 2^{R+1} \times 1 \times T/2^R},
+	    \varphi_{\mathrm{feat}} : \real{C \times 1 \times T} \to \real{f_0 2^{R+1} \times 1 \times T/2^R},
 	\end{equation}
 	\item a temporal processing module
 	\begin{equation}
-	    \varphi_{\mathrm{temp}}     : \real^{f_0 2^{R+1} \times 1 \times T/2^R} \to \real^{2n_h \times T/2^R}, \, \text{and}
-	\end{equation} %$\varphi_{\mathrm{temp}}     : \real^{f_0 2^{R+1} \times 1 \times T/2^R} \to \real^{2n_h \times T/2^R} $, and
+	    \varphi_{\mathrm{temp}}     : \real{f_0 2^{R+1} \times 1 \times T/2^R} \to \real{2n_h \times T/2^R}, \, \text{and}
+	\end{equation} %$\varphi_{\mathrm{temp}}     : \real{f_0 2^{R+1} \times 1 \times T/2^R} \to \real{2n_h \times T/2^R} $, and
 	\item a classification module
 	\begin{equation}
-	    \varphi_{\mathrm{clf}} : \real^{2n_h \times T/2^R} \to \real^{K \times T/2^R}.
-	\end{equation}%$\varphi_{\mathrm{clf}} : \real^{2n_h \times T/2^R} \to \real^{K \times T/2^R}$.
+	    \varphi_{\mathrm{clf}} : \real{2n_h \times T/2^R} \to \real{K \times T/2^R}.
+	\end{equation}%$\varphi_{\mathrm{clf}} : \real{2n_h \times T/2^R} \to \real{K \times T/2^R}$.
 \end{enumerate}
 Thus, we obtain a differentiable representation of the function  $\Phi$ as
 \begin{align}
 \begin{split}
-    &\Phi : \real^{C \times K} \to \real^{K \times T/2^R} \\
-    &\Phi\left(\mathbf{x}\right) = \varphi_{\mathrm{clf}} \left( \varphi_{\mathrm{temp}} \left( \varphi_{\mathrm{feat}} \left( \varphi_{\mathrm{mix}} \left( \mathbf{x} \right) \right) \right) \right).
+    &\Phi : \real{C \times K} \to \real{K \times T/2^R} \\
+    &\Phi \parentheses{\mathbf{x}} = \varphi_{\mathrm{clf}} \parentheses{ \varphi_{\mathrm{temp}} \parentheses{ \varphi_{\mathrm{feat}} \parentheses{ \varphi_{\mathrm{mix}} \parentheses{ \mathbf{x} } } } }.
 \end{split}
 \end{align}
-The output of this function is the matrix $\mathbf{y} \in \real^{K \times T/2^R}$ containing sleep stage probabilities in the sequence of PSG data evaluated every second.
+The output of this function is the matrix $\mathbf{y} \in \real{K \times T/2^R}$ containing sleep stage probabilities in the sequence of \ac{PSG} data evaluated every second.
 
 \paragraph{Mixing module}
 The raw input data is input to this module, which encourages non-linear channel mixing similar to what has been proposed in recent literature~\cite{Chambon2018c, Chambon2018b, Chambon2019, Olesen2019}.
-The module is realized using a single 2D convolutional operation outputting $C$ feature maps computed using single-strided $(C \times 1)$ kernels followed by rectified linear unit (ReLU) activations.
+The module is realized using a single \twod convolutional operation outputting $C$ feature maps computed using single-strided $(C \times 1)$ kernels followed by \ac{ReLU} activations.
 
 \paragraph{Feature extraction (residual network) module}
-This is comprised of a succession of $R$ residual blocks (see Figure 1)\todo{fix}, which are responsible for the bulk feature extraction from the channel-mixed data.
+This is comprised of a succession of $R$ residual blocks, which are responsible for the bulk feature extraction from the channel-mixed data, see~\cref{fig:sleep-stages:paper-ii:figure-01}.
 Each residual block is realized using bottlenecks of first a $1\times 1$ convolution to reduce the number of feature maps, then a $1\times 3$ convolution, and lastly a $1 \times 1$ convolution to finally increase the number of feature maps. 
 Each convolution operation is followed by a batch normalization~\cite{Ioffe2015} and ReLU activation except after the last convolutional layer, where shortcut projections are added before the activation~\cite{He2016b}.
 This type of block structure enables the design and training of very deep networks without the risk of vanishing gradients due to the projection shortcuts~\cite{He2016}.
 
 \paragraph{Temporal processing module}
-This module is realized by a bidirectional gated recurrent unit (GRU)~\cite{Cho}45 in order to accommodate temporal dependencies in the PSG.
-The GRU runs through the temporal dimension of the output from $\varphi_{\mathrm{feat}}$ of $T/2^R$ time steps each containing $f_0 2^{R+1}$ feature maps and outputs $n_h$ new features in each direction for each time step.
-By running both forward and backward, we can accommodate that technicians base their scoring on looking backwards as well as ahead in time in each time segment (typically 30 s).
+This module is realized by a bidirectional \ac{GRU}~\cite{Cho2014} in order to accommodate temporal dependencies in the \ac{PSG}.
+The \ac{GRU} runs through the temporal dimension of the output from $\varphi_{\mathrm{feat}}$ of $T/2^R$ time steps each containing $f_0 2^{R}$ feature maps and outputs $n_h$ new features in each direction for each time step.
+By running both forward and backward, we can accommodate that technicians base their scoring on looking backwards as well as ahead in time in each time segment (typically \SI{30}{\second}).
 
 \paragraph{Classification module}
 The final module in the architecture performs actual classification based on the forward and backward features for each time step outputted from $\varphi_{\mathrm{temp}}$.
-It is realized by a single convolutional operation with a subsequent softmax activation to compute a probability distribution over the $K$ sleep stage classes, such that the probability of sleep stage $i$ at time step $n$ is given by $y_i^{(n)} = \frac{\exp{a_i}}{\sum_k{\exp{a_k}}}$)), where $a_i \in \mathbf{a}$ is the activation of the last layer in the network and $k=\llbracket K \rrbracket$.
+It is realized by a single convolutional operation with a subsequent softmax activation to compute a probability distribution over the $K$ sleep stage classes, such that the probability of sleep stage $i$ at time step $n$ is given by
+\begin{equation}
+   y_i^{(n)} = \frac{\exp{a_i}}{\sum_k{\exp{a_k}}} ,
+\end{equation}
+where $a_i \in \mathbf{a}$ is the activation of the last layer in the network, and $k \in \llbracket K \rrbracket$.
 
 
 \subsubsection{Loss function specification}
-The network was trained end-to-end with respect to a loss function, that takes the output probabilities from the network $y = \Phi\left( \mathbf{x} \right)$ and calculates the loss as
+The network was trained end-to-end with respect to a loss function, that takes the output probabilities from the network $y = \Phi(\mathbf{x})$ and calculates the loss as
 \begin{align}
 \begin{split}\label{eq:loss-paperII}
-    \mathcal{L}\left( \mathbf{y} \right) &= - \sum_{n=1}^{30/\tau}\sum_{k=1}^{K} t_k^{(n)}\log{\left( \tilde{y}^{(n)}_k \right)}, \\
-    \tilde{y}^{(n)}_k &= \frac{1}{\tau} \sum_{i=\tau \left( j - 1 \right) + 1}^{\tau n} y_k^{(i)},
+    \mathcal{L} \parentheses{ \mathbf{y} } &= - \sum_{n=1}^{30/\tau}\sum_{k=1}^{K} t_k^{(n)}\log{ \parentheses{ \tilde{y}^{(n)}_k }}, \\
+    \tilde{y}^{(n)}_k &= \frac{1}{\tau} \sum_{\mathclap{i=\tau \parentheses{ j - 1 } + 1}}^{\tau n} y_k^{(i)},
 \end{split}
 \end{align}
-which is the cross-entropy between successive time-averaged classifications parameterized by the number of successive one-second predictions $\tau$, and the ground truth labels $t$ broadcasted to $\frac{30}{\tau}$ labels per \SI{30}{\second} segment.
+which is the cross-entropy between successive time-averaged classifications parameterized by the number of successive one-second predictions $\tau$, and the ground truth labels $t$ broadcasted to $\sfrac{30}{\tau}$ labels per \SI{30}{\second} segment.
 This way, we can acquire predictions every second, that can be combined in time at intervals given by $\tau$.
 
-\subsubsection{Experimental setups}
-We set up three different experiments in this study.
+\subsubsection{Experimental setups}\label{sec:sleep-stages:paper-ii:experimental-setup}
+We set up four different experiments in this study.
 \begin{enumerate}
     \item We wished to investigate the effect of increasing the complexity of the recurrent module by varying the number of units $n_h$ in the module $\varphi_{\mathrm{temp}}$ in the space $n_h=2^k, k \in \llbracket 6, 11 \rrbracket$.
     We hypothesize that there exists a sweet-spot in the number of hidden units that balances computational complexity with classification performance, i.e. classifying a sequence of sleep stage labels given a corresponding sequence of outputs from $\varphi_{\mathrm{feat}}$.
     The results of this experiment were furthermore used to determine parameters for models in subsequent experiments.
-    \item Since we have several cohorts at our disposition of both clinical and research origin, we can investigate the compatibility and inherent generalizability of the different cohorts in two ways: 1) we set aside a single cohort for testing, while we train the models on the remaining four (leave-one-cohort-out, LOCO training); and 2) we train on a single cohort, while we set aside the remaining four for testing (leave-one-cohort-in, LOCI training).
+    \item Since we have several cohorts at our disposition of both clinical and research origin, we can investigate the compatibility and inherent generalizability of the different cohorts in two ways: 1) we set aside a single cohort for testing, while we train the models on the remaining four (leave-one-cohort-out, \ac{LOCO} training); and 2) we train on a single cohort, while we set aside the remaining four for testing (leave-one-cohort-in, \ac{LOCI} training).
     \item Generalizability can also be investigated in another way, which can answer the question of how many data sources is necessary.
-    We trained models with all possible 2-, 3-, and 4-combinations of cohorts, i.e. one run trained on ISRUC and MrOS training data, another run with ISRUC and SHHS train data, a third with ISRUC and SSC, etc., with all runs subjected to subsequent evaluation on the test partition. 
+    We trained models with all possible 2-, 3-, and 4-combinations of cohorts, i.e. one run trained on \ac{ISRUC} and \ac{MrOS} training data, another run with \ac{ISRUC} and \ac{SHHS} train data, a third with \ac{ISRUC} and \ac{SSC}, etc., with all runs subjected to subsequent evaluation on the test partition. 
     \item Previous studies have already investigated the performance of automatic sleep staging algorithms using shallow machine learning models.
     At the time of writing however, none have investigated the effect of available training data for deep learning models at this magnitude (up to tens of thousands).
-    We therefore trained models on 0.25\%, 0.5\%, 1\%, 5\%, 10\%, 25\%, 50\%, 75\% and 100\% of the data available for training.
-    Specifically, some of these fractions of the total number of PSGs correspond roughly to the number of PSGs in the training partitions in each cohort, allowing for direct comparisons between training a model with mixed- and single-cohort training data.
+    We therefore trained models on \SIlist{0.25;0.5;1;5;10;25;50;75;100}{\percent} of the data available for training.
+    Specifically, some of these fractions of the total number of \acp{PSG} correspond roughly to the number of \acp{PSG} in the training partitions in each cohort, allowing for direct comparisons between training a model with mixed- and single-cohort training data.
 \end{enumerate}
 
 Common for all experiments were the default parameter values $C=4$, $f_s=\SI{128}{\hertz}$, $T=\tau f_s$, $K=5$, $R=7$, and $f_0=4$ for the number of input channels, sampling frequency, the sequence length, the number of sleep stages, the number of consecutive residual blocks, and the base filter kernel size, respectively.
@@ -158,109 +271,307 @@ The \cohen metric is defined as
 \end{equation}
 where $p_o = \text{Acc}$ is the observed agreement (\ie accuracy) and $p_e$ is the expected chance agreement, which can be reformulated in terms of the outer product between the row and column sums (class-specific recall and precision) of $\mathbf{C}$.
 
+\begin{figure}[t]
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    % \centering
+    \includegraphics[width=\linewidth]{figures/paper-ii/figure_02_a-c.pdf}
+    \caption[\acs{MASSC}v2 temporal context]{Temporal context changes model performance. a) Cohen's kappa as a function of the number of hidden units in the recurrent block. Inset shows zoom of Cohen's kappa for non-zero hidden unit values. b) Cohen's kappa as a function of sequence length. c) Prediction accuracy averaged across all 5-minute sequences in the test partition with a small and large training partition. Full lines are predictions evaluated every 1 s, while dashed lines show predictions averaged every 30 s. Values are shown for panels a), b) as mean with 95\% confidence intervals.}
+    \label{fig:sleep-stages:paper-ii:figure-02}
+\end{adjustwidth*}
+\end{figure}
 
 \subsection{Results}
 
+In this section we report on the results of the three experiments described in~\cref{sec:sleep-stages:paper-ii:experimental-setup}.
+
 \subsubsection{Temporal context impact on model performance}
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/paper-ii/figure_02_a-c.pdf}
-    \caption[MASSCv2 temporal context]{Caption}
-    \label{fig:paper-ii-figure2}
-\end{figure}
-In~\cref{fig:paper-ii-figure2} we show how the model performance depends on the temporal context and complexity of the temporal processing module, when evaluating the model on the validation partition.
-Results are further detailed in Table S1\todo{supplementary tables???}.
-Specifically, we observe a drastic change in \cohen just by introducing a simple recurrent unit into the network as shown in~\cref{fig:paper-ii-figure2}a, where \cohen increases from \ci{0.645}{0.126}{0.633}{0.657} at $n_h=0$ to \ci{0.720}{0.120}{0.709}{0.731} at $n_h=64$. 
-We did not observe any major changes when increasing the number of hidden units beyond $n_h=64$, although we did see a maximum \cohen of \ci{0.734}{0.111}{0.723}{0.744} at $n_h=1024$, which is shown in the inset in~\cref{fig:paper-ii-figure2}a. 
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\begin{table}[t]
+\begin{adjustwidth*}{}{-\marginparwidth-0.5\marginparsep}
+\begin{threeparttable}
+\small
+\caption[\acs{MASSC}v2 temporal context]{Temporal context impact on model performance in validation partition (\(n=426\)).}
+\label{tab:sleep-stages:paper-ii:table-s01}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+                         & \multicolumn{4}{c}{\textbf{Overall accuracy}}                         & \multicolumn{4}{c}{\textbf{Cohen’s kappa}}                            \\ \cline{2-9}
+                         & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI} \\ \midrule
+\textbf{Hidden units}    &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)0                        & 0.779         & 0.083       & 0.794           & [0.771-0.787]         & 0.645         & 0.126       & 0.660           & [0.633-0.657]         \\
+\(\quad\)64                       & 0.818         & 0.079       & 0.837           & [0.810-0.825]         & 0.720         & 0.120       & 0.745           & [0.709-0.731]         \\
+\(\quad\)128                      & 0.821         & 0.080       & 0.841           & [0.813-0.829]         & 0.724         & 0.121       & 0.745           & [0.713-0.736]         \\
+\(\quad\)256                      & 0.820         & 0.082       & 0.843           & [0.812-0.828]         & 0.725         & 0.124       & 0.751           & [0.713-0.736]         \\
+\(\quad\)512                      & 0.822         & 0.079       & 0.841           & [0.815-0.830]         & 0.727         & 0.119       & 0.752           & [0.716-0.739]         \\
+\(\quad\)1024                     & 0.828         & 0.072       & 0.845           & [0.821-0.835]         & 0.734         & 0.111       & 0.758           & [0.723-0.744]         \\
+\(\quad\)2048                     & 0.823         & 0.080       & 0.843           & [0.816-0.831]         & 0.729         & 0.122       & 0.757           & [0.717-0.740]         \\
+\textbf{Sequence length} &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)2 min                    & 0.821         & 0.075       & 0.840           & [0.814-0.828]         & 0.726         & 0.114       & 0.754           & [0.715-0.737]         \\
+\(\quad\)3 min                    & 0.826         & 0.080       & 0.845           & [0.818-0.833]         & 0.733         & 0.123       & 0.762           & [0.721-0.744]         \\
+\(\quad\)4 min                    & 0.828         & 0.079       & 0.849           & [0.820-0.835]         & 0.734         & 0.122       & 0.762           & [0.722-0.745]         \\
+\(\quad\)5 min                    & 0.828         & 0.072       & 0.845           & [0.821-0.835]         & 0.734         & 0.111       & 0.758           & [0.723-0.744]         \\
+\(\quad\)10 min                   & 0.829         & 0.075       & 0.848           & [0.822-0.836]         & 0.734         & 0.113       & 0.759           & [0.723-0.745]         \\
+\textbf{Window length}   &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)1 s                      & 0.824         & 0.074       & 0.843           & [0.817-0.831]         & 0.728         & 0.113       & 0.752           & [0.717-0.738]         \\
+\(\quad\)3 s                      & 0.824         & 0.074       & 0.845           & [0.817-0.832]         & 0.728         & 0.113       & 0.752           & [0.717-0.739]         \\
+\(\quad\)5 s                      & 0.825         & 0.074       & 0.843           & [0.818-0.832]         & 0.728         & 0.113       & 0.752           & [0.717-0.739]         \\
+\(\quad\)10 s                     & 0.825         & 0.074       & 0.844           & [0.818-0.832]         & 0.729         & 0.113       & 0.753           & [0.718-0.739]         \\
+\(\quad\)15 s                     & 0.826         & 0.074       & 0.845           & [0.818-0.833]         & 0.729         & 0.113       & 0.755           & [0.719-0.740]         \\
+\(\quad\)30 s                     & 0.829         & 0.075       & 0.848           & [0.822-0.836]         & 0.734         & 0.113       & 0.759           & [0.723-0.745]         \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small \item The hidden units variable corresponds to varying the complexity in the recurrent module by increasing the number of hidden units. Sequence length indicate the length of the sequence of 30 epochs, while window length correspond to varying the evaluation frequency. Means, standard deviations (SD) and medians are based on performance for each \ac{PSG}.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
+
+In~\cref{fig:sleep-stages:paper-ii:figure-02} we show how the model performance depends on the temporal context and complexity of the temporal processing module, when evaluating the model on the validation partition.
+Results are further detailed in~\cref{tab:sleep-stages:paper-ii:table-s01}.
+Specifically, we observe a drastic change in \cohen just by introducing a simple recurrent unit into the network as shown in~\cref{fig:sleep-stages:paper-ii:figure-02}a, where \cohen increases from \ci{0.645}{0.126}{0.633}{0.657} at $n_h=0$ to \ci{0.720}{0.120}{0.709}{0.731} at $n_h=64$. 
+We did not observe any major changes when increasing the number of hidden units beyond $n_h=64$, although we did see a maximum \cohen of \ci{0.734}{0.111}{0.723}{0.744} at $n_h=1024$, which is shown in the inset in~\cref{fig:sleep-stages:paper-ii:figure-02}a. 
 We observed a general increase in \cohen when classifying longer sequences than \SI{2}{\minute} (\ci{0.726}{0.114}{0.715}{0.737}), but did not see any major differences when classifying over more than \SI{3}{\minute} sequences (\ci{0.733}{0.123}{0.721}{0.7444}).
 Subsequent models were fixed with $n_h=1024$ corresponding to a sequence length of \SI{5}{\minute}.
 
 \subsubsection{Model classifications converge to 30 s predictions given sufficient training data}
-Furthermore, we analyzed the classification performance of the model given a specific sequence length by looking at the average prediction accuracy across all \SI{5}{\minute} sequences in all subject PSGs in the test partition, similar to what~\citeauthor{Brink-Kjaer2019} has shown previously~\cite{Brink-Kjaer2019}.
-In~\cref{fig:paper-ii-figure2}c, we show how the average classification accuracy in a \SI{5}{\minute} sequence both depends on the amount of data and the frequency of evaluating the model output, \ie every \SI{1}{\second} or across \SI{30}{\second}.
+Furthermore, we analyzed the classification performance of the model given a specific sequence length by looking at the average prediction accuracy across all \SI{5}{\minute} sequences in all subject \acp{PSG} in the test partition, similar to what~\citeauthor{Brink-Kjaer2019} has shown previously~\cite{Brink-Kjaer2019}.
+In~\cref{fig:sleep-stages:paper-ii:figure-02}c, we show how the average classification accuracy in a \SI{5}{\minute} sequence both depends on the amount of data and the frequency of evaluating the model output, \ie every \SI{1}{\second} or across \SI{30}{\second}.
 The average classification accuracy was found to be slightly lower in the beginning of each \SI{5}{\minute} sequence, both when training a model with less (500 training subjects) and more (\SI{75}{\percent} of total training subjects).
 Interestingly, when training with less data, we also observed a lower accuracy in the beginning and end of each \SI{30}{\second} segment relative to the accuracy in the middle section, which was not the case when training with more data.
 
 \subsubsection{Choice of cohort impacts classification performance on test set}
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/paper-ii/figure_03_a-b.pdf}
-    \caption[MASSCv2 LOCI and LOCO performance]{Caption}
-    \label{fig:paper-ii-figure3}
+
+\begin{figure}[tb]
+    % \centering
+    \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    \includegraphics[width=\linewidth]{figures/paper-ii/figure_03_a-b.pdf}
+    % \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-ii/figure_03_a-b.pdf}
+    \caption[\acs{MASSC}v2 \acs{LOCI} and \acs{LOCO} performance]{Individual cohorts influence classification performance on test partition \((N=1,584)\). As an example, training on \ac{MrOS} in a \ac{LOCI} configuration, the performance on the test subset of \ac{WSC} is 0.815. The diagonals in all three configurations shows the performance for the same subjects in the test subsets in the respective cohorts making possible direct comparisons between \ac{LOCI} and \ac{LOCO}. For aggregated metrics and more summary statistics, please see Table 4. %
+    \describe{LOCI}; %
+    \acs{LOCI}-wd: \acs{LOCI} with weight decay; %
+    \describe{LOCO}; %
+    \describe{ISRUC}; %
+    \describe{MrOS}; % 
+    \describe{SHHS}; %
+    \describe{SSC}; %
+    \describe{WSC}.}
+    \label{fig:sleep-stages:paper-ii:figure-03}
+    \end{adjustwidth*}
 \end{figure}
-In~\cref{fig:paper-ii-figure3} we show how training on different cohorts yield differing results in subsequent testing performance, here expressed in heatmaps as both overall accuracy (\cref{fig:paper-ii-figure3}a), and \cohen (\cref{fig:paper-ii-figure3}b) averaged across all $N=1584$ subject PSGs in the test partition.
+\begin{figure}[tb]
+    % \centering
+    \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    \includegraphics[width=\linewidth]{figures/paper-ii/figure_04_a-b.pdf}
+    \caption[\acs{MASSC}v2 training on mixed data.]{Training on mixed data increased predictive performance compared to individual cohorts of similar size. a) There is a gain in predictive performance by mixing data from various sources consistent across the size of the training dataset. b) Confusion matrix for a model trained on 100\% of the available training partition data. The model shows excellent performance overall, with most misclassification happening between \ac{W} and \ac{N1}, and \ac{N1}, \ac{N2}, and \ac{N3}. This is somewhat consistent with clinical experience, since \ac{N1} is a transition stage between wake and the deeper stages of sleep with much frequency content overlap with both \ac{W} and \ac{N2}.}
+    \label{fig:sleep-stages:paper-ii:figure-04}
+    \end{adjustwidth*}
+\end{figure}
+
+In~\cref{fig:sleep-stages:paper-ii:figure-03} we show how training on different cohorts yield differing results in subsequent testing performance, here expressed in heatmaps as both overall accuracy (\cref{fig:sleep-stages:paper-ii:figure-03}a), and \cohen (\cref{fig:sleep-stages:paper-ii:figure-03}b) averaged across all $N=1584$ subject \acp{PSG} in the test partition.
 The first two columns show the performance on the cohort on the \textit{x}-axis, when training on the specific cohort on the \textit{y}-axis.
-Since the training subset in ISRUC is small compared to the other cohorts, we trained the models in the left-most column with weight decay of $10^{-4}$ to compensate for the risk of overfitting, however, by comparing the left and middle columns, we did not observe any specific gain in classification performance by doing so.
+Since the training subset in \ac{ISRUC} is small compared to the other cohorts, we trained the models in the left-most column with weight decay of $10^{-4}$ to compensate for the risk of overfitting, however, by comparing the left and middle columns, we did not observe any specific gain in classification performance by doing so.
 The right-most column shows the test performance for each cohort, when excluding that cohort from training.
-We observe a significant spread in classification accuracy across the different cohorts with prediction on ISRUC being poorest, while prediction on MrOS data being best.
-Further details can be found in Table S2\todo{Supp. tables?}.
+We observe a significant spread in classification accuracy across the different cohorts with prediction on \ac{ISRUC} being poorest, while prediction on \ac{MrOS} data being best.
+Further details can be found in~\cref{tab:sleep-stages:paper-ii:table-s02}.
+
+\begin{table}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-0.5\marginparsep}
+\begin{threeparttable}
+\footnotesize
+\caption[\acs{MASSC}v2 performance for \acs{LOCI} and \acs{LOCO}.]{Performance characteristics for \acs{LOCI} and \acs{LOCO} training configurations.}
+\label{tab:sleep-stages:paper-ii:table-s02}
+\begin{tabular}{@{}lccccccccc@{}}
+\toprule
+                 &                 & \multicolumn{4}{c}{\textbf{Overall accuracy}}                         & \multicolumn{4}{c}{\textbf{Cohen’s kappa}}                            \\ \cline{3-10}
+                 & \textbf{N PSGs} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} \\ \midrule
+\textbf{LOCI-wd} &                 &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)\acs{ISRUC}            & 1584            & 0.679         & 0.123       & 0.701           & [0.673-0.685]         & 0.542         & 0.169       & 0.574           & [0.533-0.550]         \\
+\(\quad\)\acs{MrOS}             & 1584            & 0.821         & 0.077       & 0.835           & [0.817-0.825]         & 0.727         & 0.114       & 0.745           & [0.721-0.733]         \\
+\(\quad\)\acs{SHHS}             & 1584            & 0.834         & 0.088       & 0.858           & [0.830-0.839]         & 0.750         & 0.132       & 0.786           & [0.744-0.757]         \\
+\(\quad\)\acs{SHHS}              & 1584            & 0.762         & 0.094       & 0.774           & [0.757-0.767]         & 0.639         & 0.129       & 0.654           & [0.633-0.646]         \\
+\(\quad\)\acs{WSC}              & 1584            & 0.758         & 0.105       & 0.773           & [0.753-0.764]         & 0.633         & 0.145       & 0.653           & [0.626-0.640]         \\
+\textbf{LOCI}    &                 &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)\acs{ISRUC}            & 1584            & 0.676         & 0.124       & 0.700           & [0.670-0.682]         & 0.539         & 0.170       & 0.574           & [0.531-0.547]         \\
+\(\quad\)\acs{MrOS}             & 1584            & 0.826         & 0.074       & 0.839           & [0.822-0.829]         & 0.732         & 0.111       & 0.748           & [0.726-0.737]         \\
+\(\quad\)\acs{SHHS}\(^{\ddagger}\)            & 1584            & 0.837         & 0.084       & 0.858           & [0.833-0.841]         & 0.754         & 0.127       & 0.786           & [0.748-0.761]         \\
+\(\quad\)\acs{SHHS}              & 1584            & 0.773         & 0.088       & 0.785           & [0.769-0.777]         & 0.657         & 0.125       & 0.671           & [0.651-0.663]         \\
+\(\quad\)\acs{WSC}              & 1584            & 0.763         & 0.101       & 0.776           & [0.758-0.768]         & 0.641         & 0.140       & 0.659           & [0.635-0.648]         \\
+\textbf{LOCO}    &                 &               &             &                 &                       &               &             &                 &                       \\
+\(\quad\)\acs{ISRUC}\(^{\dagger}\)           & 52              & 0.749         & 0.081       & 0.764           & [0.727-0.771]         & 0.648         & 0.119       & 0.682           & [0.616-0.680]         \\
+                 & 126             & 0.757         & 0.071       & 0.766           & [0.744-0.769]         & 0.661         & 0.101       & 0.682           & [0.643-0.678]         \\
+\(\quad\)\acs{MrOS}\(^{\dagger}\)            & 371             & 0.843         & 0.066       & 0.851           & [0.836-0.849]         & 0.757         & 0.104       & 0.776           & [0.746-0.767]         \\
+                 & 3932            & 0.841         & 0.069       & 0.854           & [0.838-0.843]         & 0.752         & 0.107       & 0.775           & [0.749-0.755]         \\
+\(\quad\)\acs{SHHS}             & 846             & 0.805         & 0.076       & 0.815           & [0.800-0.810]         & 0.705         & 0.109       & 0.722           & [0.698-0.712]         \\
+                 & 8444            & 0.800         & 0.081       & 0.811           & [0.798-0.801]         & 0.697         & 0.115       & 0.713           & [0.694-0.699]         \\
+\(\quad\)\acs{SHHS}              & 76              & 0.793         & 0.086       & 0.809           & [0.744-0.812]         & 0.680         & 0.120       & 0.700           & [0.653-0.707]         \\
+                 & 766             & 0.798         & 0.086       & 0.815           & [0.792-0.805]         & 0.690         & 0.123       & 0.711           & [0.681-0.699]         \\
+\(\quad\)\acs{WSC}\(^{\dagger}\)             & 239             & 0.826         & 0.065       & 0.835           & [0.818-0.834]         & 0.720         & 0.096       & 0.736           & [0.708-0.732]         \\
+                 & 2411            & 0.824         & 0.068       & 0.837           & [0.821-0.827]         & 0.718         & 0.100       & 0.736           & [0.714-0.722]         \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small \item Metrics are aggregated across all subjects for each cohort in test partition (\(N=1584\) \acp{PSG}). 
+Bottom rows in \ac{LOCO} configuration correspond to evaluating performance on entire cohort. 
+\describe{PSG}; %
+\describe{LOCI}; %
+\acs{LOCI}-wd: \acs{LOCI} with weight decay; %
+\describe{LOCO}; %
+\describe{ISRUC}; %
+\describe{MrOS}; %
+\describe{SHHS}; %
+\describe{SSC}; %
+\describe{WSC}; %
+\(^{\dagger}\)significantly better than corresponding \ac{LOCI}; %
+\(^{\ddagger}\)significantly better than corresponding \ac{LOCO}.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
 
 \subsubsection{More data is good, diverse data is better}
-\begin{figure}
-    \centering
-    \includegraphics[width=\columnwidth]{figures/paper-ii/figure_04_a-b.pdf}
-    \caption{Caption}
-    \label{fig:paper-ii-figure4}
-\end{figure}
-We observed a general increase in classification performance both in terms of overall accuracy and \cohen, when including more data in the model training phase in both the mixed- and single-cohort setting (\cref{fig:paper-ii-figure4}a, Table S3\todo{Suppl. table}).
+
+We observed a general increase in classification performance both in terms of overall accuracy and \cohen, when including more data in the model training phase in both the mixed- and single-cohort setting (\cref{fig:sleep-stages:paper-ii:figure-04}a,~\cref{tab:sleep-stages:paper-ii:table-s03}).
 Classification performance was consistently lower in the single-cohort setting compared to the corresponding mixed-cohort setting. 
-Interestingly, we found that training a model with just \SI{0.25}{\percent} of mixed-cohort training data still achieved an acceptable accuracy comparable to training a model with only SHHS data, while using all available training data increased that performance by almost 10 percentage points.
-Furthermore, we observed that the model trained with \SI{100}{\percent} of the training partition reached a state-of-the-art level of performance with an overall accuracy of \ci{0.869}{0.064}{0.865}{0.872} and \cohen of \ci{0.799}{0.098}{0.794}{0.804} (see Table S3\todo{Suppl. table}).
-The model furthermore performs well with respect to classifying individual sleep stages as shown in the confusion matrix in~\cref{fig:paper-ii-figure4}b.
-However, the model still has difficulties classifying and distinguishing between certain sleep stages, especially between N2, N1, and N3; and W, N2, and N1.
+Interestingly, we found that training a model with just \SI{0.25}{\percent} of mixed-cohort training data still achieved an acceptable accuracy comparable to training a model with only \ac{SHHS} data, while using all available training data increased that performance by almost 10 percentage points.
+Furthermore, we observed that the model trained with \SI{100}{\percent} of the training partition reached a state-of-the-art level of performance with an overall accuracy of \ci{0.869}{0.064}{0.865}{0.872} and \cohen of \ci{0.799}{0.098}{0.794}{0.804} (\cref{tab:sleep-stages:paper-ii:table-s03}).
+The model furthermore performs well with respect to classifying individual sleep stages as shown in the confusion matrix in~\cref{fig:sleep-stages:paper-ii:figure-04}b.
+However, the model still has difficulties classifying and distinguishing between certain sleep stages, especially between \ac{N2}, \ac{N1}, and \ac{N3}; and \ac{W}, \ac{N2}, and \ac{N1}.
+
+\begin{table}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-0.25\marginparsep}
+\begin{threeparttable}
+\small
+\caption[\acs{MASSC}v2 performance for fractions of data.]{Model performance of test partition with varying fractions of training data.}
+\label{tab:sleep-stages:paper-ii:table-s03}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+                      & \multicolumn{4}{c}{\textbf{Overall accuracy}}                         & \multicolumn{4}{c}{\textbf{Cohen’s kappa}}                            \\ \cline{2-9}
+\textbf{Fraction, \%} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} \\ \midrule
+\(\quad\)0.25                  & 0.782         & 0.097       & 0.801           & [0.777-0.787]         & 0.671         & 0.141       & 0.696           & [0.664-0.678]         \\
+\(\quad\)0.50                  & 0.804         & 0.086       & 0.824           & [0.800-0.808]         & 0.696         & 0.131       & 0.724           & [0.689-0.702]         \\
+\(\quad\)1                     & 0.824         & 0.079       & 0.840           & [0.820-0.828]         & 0.730         & 0.118       & 0.753           & [0.724-0.736]         \\
+\(\quad\)5                     & 0.841         & 0.074       & 0.856           & [0.837-0.844]         & 0.757         & 0.113       & 0.780           & [0.751-0.763]         \\
+\(\quad\)10                    & 0.850         & 0.069       & 0.864           & [0.847-0.853]         & 0.770         & 0.108       & 0.791           & [0.765-0.775]         \\
+\(\quad\)25                    & 0.858         & 0.066       & 0.873           & [0.854-0.861]         & 0.782         & 0.102       & 0.804           & [0.777-0.787]         \\
+\(\quad\)50                    & 0.860         & 0.063       & 0.874           & [0.856-0.863]         & 0.787         & 0.097       & 0.809           & [0.782-0.792]         \\
+\(\quad\)75                    & 0.867         & 0.062       & 0.882           & [0.864-0.870]         & 0.797         & 0.096       & 0.818           & [0.792-0.802]         \\
+\(\quad\)100                   & 0.869         & 0.064       & 0.883           & [0.865-0.872]         & 0.799         & 0.098       & 0.820           & [0.794-0.804]         \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small \item Increasing the available training data increased performance on the test partition (\(N=1584\)) shown here as aggregated metrics across all subjects. No statistical difference was found by comparing confidence intervals between models trained with 75\% and 100\% of available training data, which indicates a saturation in training.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
 
 \subsubsection{Increasing the number of data sources improves classification performance}
-\begin{figure}
+
+\begin{figure}[tb]
     \centering
     \includegraphics[width=0.75\columnwidth]{figures/paper-ii/figure_05.pdf}
-    \caption{Caption}
-    \label{fig:paper-ii-figure5}
+    \caption[\acs{MASSC}v2 number of cohorts increases performance]{Number of cohorts in training partition increases model performance. Each datapoint is shown as the overall accuracy aggregated across all subjects for a specific training configuration. For example, the bottom dot in column 2 (3 cohort configuration) shows the performance on the test set (overall accuracy \ci{0.755}{0.109}{0.750}{0.760}), when training with 500 PSGs randomly and evenly drawn from \ac{SSC}, \ac{ISRUC}, and \ac{WSC}. Notice the scale on the \(y\)-axis.}
+    \label{fig:sleep-stages:paper-ii:figure-05}
 \end{figure}
-On average, we saw an increase in overall accuracy, when increasing the number of cohorts from 2 to 4 using 500 PSGs in each configuration, see~\cref{fig:paper-ii-figure5} and Table S4\todo{Suppl. table}.
+
+On average, we saw an increase in overall accuracy, when increasing the number of cohorts from 2 to 4 using 500 \acp{PSG} in each configuration, see~\cref{fig:sleep-stages:paper-ii:figure-05} and~\cref{tab:sleep-stages:paper-ii:table-s04}.
 Specifically, we found that the average overall accuracy increased from \ci{0.788}{0.102}{0.787}{0.790} in the 2-cohort configuration to \ci{0.808}{0.092}{0.807}{0.810} and \ci{0.821}{0.085}{0.819}{0.823} in the 3- and 4-cohort configurations, respectively.
+
+\begin{table}
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+\begin{threeparttable}
+\footnotesize
+\caption[\acs{MASSC}v2 test performance.]{Model performance on test partition (\(N=1584\)) with varying number of cohorts in training partition.}
+\label{tab:sleep-stages:paper-ii:table-s04}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+                          & \multicolumn{4}{c}{\textbf{Overall accuracy}}                         & \multicolumn{4}{c}{\textbf{Kappa}}                                    \\ \cline{2-9}
+\textbf{Training cohorts} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} & \textbf{Mean} & \textbf{SD} & \textbf{Median} & \textbf{95\% CI, mean} \\ \midrule
+\textbf{2}                &               &             &                 &                       &               &             &                 &                       \\
+\textbf{Overall}          & 0.788         & 0.102       & 0.811           & [0.787-0.790]         & 0.683         & 0.143       & 0.710           & [0.681-0.685]         \\
+\acs{ISRUC}-\acs{MrOS}                & 0.781         & 0.102       & 0.804           & [0.776-0.786]         & 0.675         & 0.143       & 0.703           & [0.668-0.682]         \\
+\acs{ISRUC}-\acs{SHHS}                & 0.808         & 0.097       & 0.835           & [0.804-0.813]         & 0.717         & 0.142       & 0.756           & [0.710-0.724]         \\
+\acs{ISRUC}-\acs{SSC}                 & 0.735         & 0.103       & 0.753           & [0.729-0.740]         & 0.613         & 0.140       & 0.638           & [0.606-0.620]         \\
+\acs{ISRUC}-\acs{WSC}                 & 0.745         & 0.107       & 0.758           & [0.740-0.750]         & 0.628         & 0.140       & 0.642           & [0.621-0.635]         \\
+\acs{MrOS}-\acs{SHHS}                 & 0.829         & 0.081       & 0.849           & [0.825-0.833]         & 0.740         & 0.124       & 0.769           & [0.734-0.746]         \\
+\acs{MrOS}-\acs{SSC}                  & 0.796         & 0.090       & 0.816           & [0.791-0.800]         & 0.683         & 0.133       & 0.708           & [0.677-0.690]         \\
+\acs{MrOS}-\acs{WSC}                  & 0.805         & 0.087       & 0.822           & [0.801-0.809]         & 0.699         & 0.126       & 0.722           & [0.693-0.705]         \\
+\acs{SHHS}-\acs{SSC}                  & 0.816         & 0.090       & 0.839           & [0.812-0.821]         & 0.722         & 0.129       & 0.755           & [0.716-0.729]         \\
+\acs{SHHS}-\acs{WSC}                  & 0.824         & 0.089       & 0.846           & [0.820-0.828]         & 0.733         & 0.128       & 0.762           & [0.727-0.739]         \\
+\acs{SSC}-\acs{WSC}                   & 0.742         & 0.110       & 0.755           & [0.737-0.748]         & 0.620         & 0.145       & 0.634           & [0.613-0.627]         \\
+\textbf{3}                &               &             &                 &                       &               &             &                 &                       \\
+\textbf{Overall}          & 0.808         & 0.092       & 0.830           & [0.807-0.810]         & 0.711         & 0.131       & 0.739           & [0.709-0.713]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{SHHS}           & 0.820         & 0.092       & 0.844           & [0.815-0.825]         & 0.732         & 0.134       & 0.766           & [0.725-0.738]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{SSC}            & 0.798         & 0.088       & 0.816           & [0.794-0.802]         & 0.694         & 0.129       & 0.720           & [0.688-0.700]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{WSC}            & 0.811         & 0.083       & 0.828           & [0.807-0.815]         & 0.711         & 0.119       & 0.735           & [0.705-0.717]         \\
+\acs{ISRUC}-\acs{SHHS}-\acs{SSC}            & 0.807         & 0.090       & 0.828           & [0.803-0.812]         & 0.714         & 0.126       & 0.739           & [0.708-0.721]         \\
+\acs{ISRUC}-\acs{SHHS}-\acs{WSC}            & 0.817         & 0.091       & 0.842           & [0.813-0.822]         & 0.728         & 0.128       & 0.759           & [0.722-0.735]         \\
+\acs{ISRUC}-\acs{SSC}-\acs{WSC}             & 0.755         & 0.109       & 0.775           & [0.750-0.760]         & 0.639         & 0.150       & 0.670           & [0.631-0.646]         \\
+\acs{MrOS}-\acs{SHHS}-\acs{SSC}             & 0.833         & 0.071       & 0.848           & [0.829-0.837]         & 0.744         & 0.109       & 0.766           & [0.739-0.750]         \\
+\acs{MrOS}-\acs{SHHS}-\acs{WSC}             & 0.840         & 0.073       & 0.854           & [0.836-0.843]         & 0.753         & 0.109       & 0.774           & [0.748-0.759]         \\
+\acs{MrOS}-\acs{SSC}-\acs{WSC}              & 0.795         & 0.088       & 0.811           & [0.791-0.800]         & 0.687         & 0.123       & 0.706           & [0.681-0.693]         \\
+\acs{SHHS}-\acs{SSC}-\acs{WSC}              & 0.807         & 0.101       & 0.833           & [0.802-0.812]         & 0.710         & 0.142       & 0.744           & [0.703-0.717]         \\
+\textbf{4}                &               &             &                 &                       &               &             &                 &                       \\
+\textbf{Overall}          & 0.821         & 0.085       & 0.840           & [0.819-0.823]         & 0.728         & 0.124       & 0.755           & [0.726-0.731]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{SHHS}-\acs{SSC}       & 0.827         & 0.078       & 0.843           & [0.823-0.831]         & 0.739         & 0.115       & 0.764           & [0.733-0.744]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{SHHS}-\acs{WSC}       & 0.835         & 0.075       & 0.850           & [0.831-0.838]         & 0.747         & 0.112       & 0.768           & [0.742-0.753]         \\
+\acs{ISRUC}-\acs{MrOS}-\acs{SSC}-\acs{WSC}        & 0.794         & 0.097       & 0.817           & [0.789-0.799]         & 0.687         & 0.139       & 0.716           & [0.680-0.694]         \\
+\acs{ISRUC}-\acs{SHHS}-\acs{SSC}-\acs{WSC}        & 0.819         & 0.091       & 0.843           & [0.814-0.823]         & 0.728         & 0.131       & 0.759           & [0.721-0.734]         \\
+\acs{MrOS}-\acs{SHHS}-\acs{SSC}-\acs{WSC}         & 0.830         & 0.076       & 0.846           & [0.826-0.834]         & 0.741         & 0.112       & 0.763           & [0.736-0.747]         \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small \item The total number of training records were fixed at \(N=500\) for all configurations. %
+\describe{ISRUC}; %
+\describe{MrOS}; %
+\describe{SHHS}; %
+\describe{SSC}; %
+\describe{WSC}.
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
 
 \subsection{Discussion}
 In this work, we present an end-to-end deep learning-based model for fully automatic micro- and macro-sleep stage classification. 
-Using all of the available data sources for training our model, we reached an overall accuracy on test partition of \ci{0.869}{0.064}{0.865}{0.872}, and a \cohen of \ci{0.799}{0.098}{0.794}{0.804}, which is in the very high end of the substantial agreement category for observer agreement51.
-We found that individual cohorts exhibit major differences in overall accuracy and \cohen when subjected to both training and testing conditions and specifically, we found that average performance on the test partition in the LOCI configurations varied significantly from \ci{0.676}{0.124}{0.670}{0.682} when training on ISRUC, to \ci{0.837}{0.084}{0.833}{0.841} when training on SHHS.
+Using all of the available data sources for training our model, we reached an overall accuracy on test partition of \ci{0.869}{0.064}{0.865}{0.872}, and a \cohen of \ci{0.799}{0.098}{0.794}{0.804}, which is in the very high end of the substantial agreement category for observer agreement~\cite{Landis1977}.
+We found that individual cohorts exhibit major differences in overall accuracy and \cohen when subjected to both training and testing conditions and specifically, we found that average performance on the test partition in the \ac{LOCI} configurations varied significantly from \ci{0.676}{0.124}{0.670}{0.682} when training on \ac{ISRUC}, to \ci{0.837}{0.084}{0.833}{0.841} when training on \ac{SHHS}.
 Each individual cohort also showed large deviations in predictive performance when tested on the other cohorts.
-For example, when conditioned on SHHS data, the lowest average accuracy was 0.721 on SSC test data compared to the highest at 0.872 on SHHS test data, while conditioning on SSC training data, the lowest average accuracy was 0.704 on ISRUC test data compared to 0.824 on WSC test data.
-Classification performance was generally higher on the test set when using the LOCO configuration, except for SHHS (higher in LOCI) and SSC (no difference).
+For example, when conditioned on \ac{SHHS} data, the lowest average accuracy was 0.721 on \ac{SSC} test data compared to the highest at 0.872 on \ac{SHHS} test data, while conditioning on \ac{SSC} training data, the lowest average accuracy was 0.704 on \ac{ISRUC} test data compared to 0.824 on \ac{WSC} test data.
+Classification performance was generally higher on the test set when using the \ac{LOCO} configuration, except for \ac{SHHS} (higher in \ac{LOCI}) and \ac{SSC} (no difference).
 We also found that having data from multiple sources always resulted in better-performing models compared to training on single cohorts.
 Increasing the number of data sources increased classification performance, although this was non-significant.
 In the design of the model, we observed that model performance was enhanced by the addition of the recurrent module (bGRU), a phenomenon likely reflecting the fact that sleep stage scoring at a specific time in one subject can be influenced by signal content (frequency, amplitude, presence of micro-events) at later time steps.
 However, the complexity of the module given by the number of hidden units did not affect performance.
 In all our experiments, we also evaluated the performance of the model every 1 s compared to the performance evaluated every 30 s and found them to be similar, which indicates the model is stable in classification in periods corresponding to an epoch of data.
 
-Only a handful of studies have previously reported results when using multiple cohorts~\cite{Stephansen2018, Biswal2018a, Patanaik2018}.
-Some authors have reported a drop from 81.9\% to 77.7\% when training on the Massachusetts General Hospital cohort (MGH) and testing on MGH and SHHS, respectively~\cite{Biswal2018a}, while others have shown significant drops from 89.8\% to 81.4\% and 72.1\% on two separate hold-out sets from Singapore and USA~\cite{Patanaik2018}.
-We also observed similar trends in our LOCI and LOCO experiments, where excluding the training subset of a cohort from the training partition resulted in a significant drop in performance on the respective test subset from that cohort.
-A benefit of our LOCI and LOCO experiments is the possibility for direct benchmarking against previous publications using specific cohorts in their experiments.
-For example, we obtain an accuracy of 0.805 in the LOCO-SHHS training-testing case compared to 0.777 previously reported by~\citeauthor{Biswal2018a}~\cite{Biswal2018a}, both of which reflect classification performance when SHHS had not been used for training; and an accuracy of 0.865 in the LOCI-WSC case compared to 0.841 reported by \citeauthor{Olesen2018c}~\cite{Olesen2018c}, where both have been using a subset of WSC for training the model. 
-Interestingly, we obtained the same level of performance on the SHHS data in our LOCI experiment as reported by \citeauthor{Sors2018} (87\% accuracy, 81\% \cohen) even though they only used single-EEG for their experiments~\cite{Sors2018}.
-Other works that have investigated single- vs. multi-channel models for automatic sleep stage classification have found that models generally benefit from having more channels available for training~\cite{Chambon2018c, Biswal2018a, Phan2019a}.
+Only a handful of studies have previously reported results when using multiple cohorts~\cite{Stephansen2018, Biswal2018, Patanaik2018}.
+Some authors have reported a drop from 81.9\% to 77.7\% when training on the Massachusetts General Hospital cohort (MGH) and testing on MGH and \ac{SHHS}, respectively~\cite{Biswal2018}, while others have shown significant drops from 89.8\% to 81.4\% and 72.1\% on two separate hold-out sets from Singapore and USA~\cite{Patanaik2018}.
+We also observed similar trends in our \ac{LOCI} and \ac{LOCO} experiments, where excluding the training subset of a cohort from the training partition resulted in a significant drop in performance on the respective test subset from that cohort.
+A benefit of our \ac{LOCI} and \ac{LOCO} experiments is the possibility for direct benchmarking against previous publications using specific cohorts in their experiments.
+For example, we obtain an accuracy of 0.805 in the \ac{LOCO}-\ac{SHHS} training-testing case compared to 0.777 previously reported by~\citeauthor{Biswal2018}~\cite{Biswal2018}, both of which reflect classification performance when \ac{SHHS} had not been used for training; and an accuracy of 0.865 in the \ac{LOCI}-\ac{WSC} case compared to 0.841 reported previously~\cite{Olesen2018c}, where both have been using a subset of \ac{WSC} for training the model. 
+Interestingly, we obtained the same level of performance on the \ac{SHHS} data in our \ac{LOCI} experiment as reported by \citeauthor{Sors2018} (87\% accuracy, 81\% \cohen) even though they only used single-\ac{EEG} for their experiments~\cite{Sors2018}.
+Other works that have investigated single- vs. multi-channel models for automatic sleep stage classification have found that models generally benefit from having more channels available for training~\cite{Chambon2018c, Biswal2018, Phan2019a}.
 It may be that some cohorts share different characteristics that makes them more suitable for single- or multi-channel models, but this is speculative and would need to be verified in subsequent studies.
 
 We only optimized our network architecture with respect to the temporal processing module and therefore cannot assess what impact different design choices for the other modules would have had on final performance.
-For example, the EMG signal has different statistical properties and spectral content, and separate, parallel architectures for EMG and EEG/EOG feature extraction may be warranted, as proposed by others~\cite{Chambon2018c, Stephansen2018}.
+For example, the \ac{EMG} signal has different statistical properties and spectral content, and separate, parallel architectures for \ac{EMG} and \ac{EEG}/ \ac{EOG} feature extraction may be warranted, as proposed by others~\cite{Chambon2018c, Stephansen2018}.
 Other studies have however shown equal performance in large cohorts using a similar channel mixing approach as proposed here~\cite{Olesen2018c}.
 Another limitation is found in our training runs, as we did not consider balancing our data with respect to the proportion of sleep stages, which may or may not have had impact on overall performance.
-It is well established that there is significant variation in scoring and validation of N1/REM and N2/N3~\cite{Younes2016, Younes2018, Norman2000}, which challenges the training for any classification algorithm.
+It is well established that there is significant variation in scoring and validation of \ac{N1}/\ac{REM} and \ac{N2}/\ac{N3}~\cite{Younes2016, Younes2018, Norman2000}, which challenges the training for any classification algorithm.
 Some researchers have experimented balancing the cost of misclassifying sleep stages by weighting them by their inverse frequency of occurrence and found no significant improvement~\cite{Olesen2018c, Sors2018}, while others have experimented with balancing the sleep stage frequencies in each batch of data input to the neural network model~\cite{Chambon2018c}, but more rigorous research in resampling or over/under-sampling techniques is warranted in this regard.
 We ultimately decided against experimenting with balancing our sleep stages in each batch, as we prioritized flexibility with regards to the length of input sequences fed to the network.
 All our models ran through at least 50 epochs of training (passes through the training partition), which might have induced a bias in the configurations with larger cohorts.
-For example, one pass through the training partition in the LOCI-ISRUC case corresponds to much less data than one pass through the LOCI-SHHS case.
+For example, one pass through the training partition in the \ac{LOCI}-\ac{ISRUC} case corresponds to much less data than one pass through the \ac{LOCI}-\ac{SHHS} case.
 However, since we selected the best performing model based on \cohen across all 50 epochs, we have allowed for more effective training in cases with less available training data.
 We observed that models using less data in the training partition generally had to run for longer time (\ie more epochs) before converging.
 
 In future studies on automatic sleep stage classification algorithms, we strongly recommend researchers to test and report results on not just hold-out test partitions, but also on cohorts completely unseen by the model both during training and testing/validation.
 Our experiments indicate that even though good performance can be achieved on hold-out data using a single cohort, this does not necessarily translate into good generalization performance.
-Such approach requires availability of many publicly available, high-quality, well-documented databases with easily accessible PSG data, associated annotations and related patient information.
-In this regard, websites such as the NSRR, which contains several large databases with clinical data as well as PSG and annotation data in a standardized format~\cite{Dean2016,Zhang2018}, are an invaluable resource for researchers. 
-We also propose that the sleep science community establishes a common reference dataset on which researchers in machine learning can benchmark their models, similar to what the computer vision and general machine learning community has done with the ImageNet Large Scale Visual Recognition Challenge (ILSVRC)~\cite{Russakovsky2015}, an annual competition in which researchers submit their models to test in various competitions.
+Such approach requires availability of many publicly available, high-quality, well-documented databases with easily accessible \ac{PSG} data, associated annotations and related patient information.
+In this regard, websites such as the \ac{NSRR}, which contains several large databases with clinical data as well as \ac{PSG} and annotation data in a standardized format~\cite{Dean2016,Zhang2018}, are an invaluable resource for researchers. 
+We also propose that the sleep science community establishes a common reference dataset on which researchers in machine learning can benchmark their models, similar to what the computer vision and general machine learning community has done with the ImageNet Large Scale Visual Recognition Challenge~\cite{Russakovsky2015}, an annual competition in which researchers submit their models to test in various competitions.
 
-In summary, we have developed an automatic sleep stage classification algorithm based on deep learning, that can accurately classify sleep stages at a flexible resolution with a state-of-the-art classification performance of 87\% accuracy on a test set of 1584 PSGs.
-We trained and tested our model using five cohorts with varying numbers of PSGs covering multiple phenotypes with specific focus on how well cohorts can generalize to each other.
-We found that different cohorts generalize very differently both in intra- and inter-cohort settings (LOCI vs. LOCO experiments).
-Furthermore, we also found that having more data sources significantly improve classification performance and generalizability to the extent that even just a small number of training PSGs can reach high classification performance by including many different sources.
-To our knowledge, this is one of the largest, if not the largest, study on automatic sleep stage classification in terms of PSG volume, diversity, and performance.
+In summary, we have developed an automatic sleep stage classification algorithm based on deep learning, that can accurately classify sleep stages at a flexible resolution with a state-of-the-art classification performance of 87\% accuracy on a test set of 1584 \acp{PSG}.
+We trained and tested our model using five cohorts with varying numbers of \acp{PSG} covering multiple phenotypes with specific focus on how well cohorts can generalize to each other.
+We found that different cohorts generalize very differently both in intra- and inter-cohort settings (\ac{LOCI} vs. \ac{LOCO} experiments).
+Furthermore, we also found that having more data sources significantly improve classification performance and generalizability to the extent that even just a small number of training \acp{PSG} can reach high classification performance by including many different sources.
+To our knowledge, this is one of the largest, if not the largest, study on automatic sleep stage classification in terms of \ac{PSG} volume, diversity, and performance.

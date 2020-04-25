@@ -192,7 +192,7 @@
          }
 
        \ifthenelse{\boolean{ct@eulermath}}%
-         {\PassOptionsToPackage{euler-digits}{eulervm}%
+         {\PassOptionsToPackage{small}{eulervm}%
          \RequirePackage{eulervm}} % Euler math fonts
          {\relax}
    }
@@ -580,15 +580,15 @@
 %     }%
 % }{%
 
-\DeclareRobustCommand*{\deactivateaddvspace}{\let\addvspace\@gobble}%
-\AtBeginDocument{%
-    \addtocontents{lof}{\deactivateaddvspace}%
-    \addtocontents{lot}{\deactivateaddvspace}%
-            \ifthenelse{\boolean{ct@listings}}%
-            {%
-                \addtocontents{lol}{\deactivateaddvspace}%
-            }{\relax}%
-}%
+% \DeclareRobustCommand*{\deactivateaddvspace}{\let\addvspace\@gobble}%
+% \AtBeginDocument{%
+%     \addtocontents{lof}{\deactivateaddvspace}%
+%     \addtocontents{lot}{\deactivateaddvspace}%
+%             \ifthenelse{\boolean{ct@listings}}%
+%             {%
+%                 \addtocontents{lol}{\deactivateaddvspace}%
+%             }{\relax}%
+% }%
 %    }
 
 % ********************************************************************

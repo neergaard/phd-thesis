@@ -1,22 +1,81 @@
 \chapter{Sleep stage classification}\label{chap:sleep-stage-classification}
+% \acresetall
+\begin{flushright}{
+        \texttt{What is my purpose?}\\{\slshape You pass butter.}\\\texttt{Oh my God.}} \\ \medskip
+        --- Butter Robot to Rick Sanchez\\Rick and Morty, season 1, episode 9
+\end{flushright}
+\vspace{6cm}
 
-This chapter presents methods and main findings in two published research papers and one submitted manuscript.
+This chapter presents methods and main findings in two published research papers and one manuscript currently under review regarding automatic methods for sleep stage classification.
 
-First, the problem of automated sleep stage classification is presented and associated research questions are formulated. Second, the first version of the multi-modal automatic sleep stage classification (MASSCv1) model is presented along with the preliminary results published in~\cite{Olesen2018c}. Third, the second, unpublished version of the MASSC (MASSCv2) is presented. Fourth, the STAGES model for sleep stage classification originally published in~\cite{Stephansen2018} is presented along with associated results. The chapter will conclude with a summary and discussion of the main findings of the individual papers.
+First, the problem of automated sleep stage classification is presented and associated research questions are formulated. 
+Then, an initial version of the \acf{MASSC} model based on end-to-end deep learning is presented along with the results published in~\cite{Olesen2018c}, which is followed by the findings from applying an updated version of the model in a multi-cohort experimental setting.
+Afterwards, the \ac{STAGES} model for sleep stage classification originally published in~\cite{Stephansen2018} is presented along with results compared to multiple scorers.
+The chapter will conclude with a summary of the main findings in~\cref{sec:sleep-stage-classification:summary}
 
 Parts of this chapter have been modified from their original publications. 
 \begin{itemize}
-    \item \Cref{sec:paperi} has been modified from \newline \fullcite{Olesen2018c}\footnote{\textcopyright 2018 IEEE}.
-    \item \Cref{sec:paperii} is based on a manuscript under review in \textit{SLEEP}.
-    \item \Cref{sec:paperiii} has been modified from \newline \fullcite{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International Licen: \url{http://creativecommons.org/licenses/by/4.0/}}.
+    \item \Cref{sec:paperi} has been modified from \newline \printpublication{Olesen2018c}\footnote{\textcopyright 2018 IEEE}.
+    \item \Cref{sec:paperii} is based on \newline \printpublication{Olesen2020AutomaticSetting}.
+    \item \Cref{sec:paperiii} has been modified from \newline \printpublication{Stephansen2018}\footnote{Creative Commons Attributes 4.0 International License: \url{http://creativecommons.org/licenses/by/4.0/}}.
 \end{itemize} 
 
 \section{Research background}
-\subsection{Research questions}
+
+% Sleep staging is the principal tool available to medical doctors in the analysis of sleep disorders. 
+% Natural human sleep consists of recurring cycles of three to four distinct phases, which are primarily characterized by changes in brain activity, eye movements, muscle activations and breathing.
+% A \ac{PSG} containing \ac{EEG}, \ac{EOG}, \ac{EMG} and other bioelectric signals is collected during sleep, and subsequently processed and analyzed by sleep technicians according to standards by the \ac{AASM}. 
+% Each \SI{30}{\second} epoch of data is categorized into either \ac{W}, \ac{REM} sleep, or one of three stages of non-\ac{REM} sleep (\ac{N1}, \ac{N2},\ac{N3})~\cite{Berry2016}. 
+% However, this approach is prone to subjective interpretation of sleep staging rules, which have prompted extensive research in using various signal processing and machine learning approaches~\cite{Sen2014}.
+
+Sleep staging is important to the analysis of human sleep with about \num{845000} sleep studies performed in 2014 in the US alone~\cite{Chiao2017}. 
+A standard clinical sleep study consists of a full-night \ac{PSG} comprising \ac{EEG}, \ac{EOG}, \ac{EMG}, \ac{ECG}, respiratory inductance plethysmography, oronasal thermal flow, nasal pressure, and blood oxygen saturation recordings.
+These studies are evaluated by experts for the presence of events of clinical relevance, as determined by standards created by the \ac{AASM}, such as the number of blood oxygen desaturations, micro-arousals, leg movements, periods of cessated breathing, to name a few. 
+The overall sleep architecture is captured in a visual representation called a hypnogram, which is achieved by labeling every \SI{30}{\second} of \ac{PSG} data into one of five stages of sleep: \ac{W}, \ac{REM} sleep, \ac{N1}, \ac{N2}, and \ac{N3}, and plotting as a function of time. 
+The latter three stages are distinguished by distinct \ac{EEG} amplitude and frequency distributions, the presence of specific \ac{EEG} micro-events and arousability differences reflecting sleep depth.
+
+Sleep stage scoring is summarized in key metrics, such as the percentage of \ac{TST} spent in any of the five stages (\%\ac{W}, or \ac{WASO}; \%\ac{REM}; \%\ac{N1}; \%\ac{N2}; \%\ac{N3}), and visually in the form of a hypnogram, which shows temporal progression of sleep stages across the night as mentioned. 
+Current clinical practice (gold standard) of sleep study analysis is manual scoring and annotation of sleep stages and sleep events based on guidelines from the \ac{AASM}~\cite{Berry2018}. 
+\graffito{This is described in detail in~\cref{sec:challenges-sleep-stage-scoring}}These guidelines, based on observations made in healthy young males almost 70 years ago, are problematic for several reasons: a) technicians will never score the same data the exact same way as another technician, or even the same way twice~\cite{Norman2000,Rosenberg2013,Younes2016,Younes2017,Younes2018}; b) normal sleep from healthy young males may not reflect sleep patterns of patients referred to sleep clinics; and c) the \SI{30}{\second} epoch rule was arbitrarily based on physical limitations of recording equipment, when \acp{PSG} were recorded on paper, and may not accurately reflect the true underlying neurobiological mechanisms.
+
+Automatic sleep stage classification has not yet seen wide-spread adoption in clinical practice despite ongoing research demonstrating feasibility and industrial interests~\cite{Fiorillo2019}. 
+A major issue has been a lack of available data for designing and training models. 
+The publicly available PhysioNet Sleep-EDF and the expanded version databases~\cite{Goldberger2000,Kemp2000} has been used extensively for training both shallow and deep learning-based machine learning models~\cite{Vilamala2017,Phan2018,Supratak2017}, but given the small sample size and homogeneity (most papers use the same healthy 20 subjects), it is questionable how well models derived from this data generalize to unseen data, even if high classification performance is often reported~\cite{Fiorillo2019}. 
+Other databases which have been extensively used include the St. Vincent’s University Hospital and University College Dublin Sleep Apnea Database (\(n=25\))~\cite{Goldberger2000,Sen2014}, and the Montreal Archive of Sleep Studies (MASS, \(n=200\))~\cite{OReilly2014,Supratak2017,Chambon2018c,Andreotti2018,Phan2019a,Phan2019b}. 
+
+The argument for using deep learning-based models to classify high-dimensional electrophysiological data, e.g. \acp{PSG}, into discrete outcomes such as sleep stages is compelling, because of their ability to capture variability in the underlying highly complex data representations, that might be missed by machine learning methods relying on manual feature engineering.
+In the image, speech, and natural language processing domains, the success of deep learning models using un-transformed data has been unsurpassed in the last decade, thanks largely due to the availability of ever-increasing amounts of compute resources and more significantly very large, robust and diverse datasets~\cite{LeCun2015}.
+
+Recently deep learning models for automatic sleep stage classification have been developed and validated using two or more databases or cohorts~\cite{Stephansen2018, Biswal2018, Patanaik2018}, or a single large volume cohort~\cite{Biswal2018, Olesen2018c,Biswal2017}. 
+The assumption has been that by incorporating multiple sources of variance in the dataset used for training (\eg from multiple technicians, sites, recording setups, equipment, \etc), final models will be better at generalizing to new, unseen data. 
+However, no study to date has investigated multiple, large-scale cohorts for automatic sleep stage classification, or how different cohorts generalize to one another.
+
+\subsection{Research motivation and objectives}
+
+Motivated by these issues, we were interested in the following research questions specifically related to research hypothesis~\ref{hypothesis:sleep-stages}\graffito{\ref{hypothesis:sleep-stages}: \hypothesis\xspace sleep stages.}:
+\newcommand{\questionSleepStageClassification}{can sleep stages be effectively and reliably classified using novel machine learning algorithms}
+\newcommand{\questionSleepStageDatasets}{in cases of multiple available data sources, is it better to have more volume or more diverse data}
+\newcommand{\questionSleepStageGuarantee}{how can we guarantee that such a system is stable with respect to the impact of sleep disorders}
+\begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~1.\arabic*}, ref={\bfseries\scshape RQ~1.\arabic*}]
+    \item \questionSleepStageClassification\label{question:sleep-stages-classification},
+    \item \questionSleepStageDatasets\label{question:sleep-stages-datasets},
+    \item \questionSleepStageGuarantee\label{question:sleep-stages-guarantee}.
+\end{enumerate}
+
+Derived from the research hypothesis and associated questions, the following research objectives were formulated:
+
+\begin{enumerate}[label=(\roman*)]
+    \item a single model should classify sleep stages and assign probabilities to each sleep stage to allow for stage mixing;
+    \item the model should be tested using as diverse data as possible.
+\end{enumerate}
+
+The following sections describe the steps taken to complete the research objectives and answer the research questions.
+
 
 % Research papers
-\input{chapters/research/sleep-stage-classification/paper-i}
-\input{chapters/research/sleep-stage-classification/paper-ii}
-\input{chapters/research/sleep-stage-classification/paper-iii}
+\clearpage\input{chapters/research/sleep-stage-classification/paper-i}
+\clearpage\input{chapters/research/sleep-stage-classification/paper-ii}
+\clearpage\input{chapters/research/sleep-stage-classification/paper-iii}
 
-\section{Chapter summary}
+% Chapter summary
+\clearpage\input{chapters/research/sleep-stage-classification/summary}

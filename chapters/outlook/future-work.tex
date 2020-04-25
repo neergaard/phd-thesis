@@ -1,5 +1,32 @@
-\chapter{Future work}
+\chapter{Future work}\label{chap:future-work}
+
+\begin{flushright}{\slshape 
+        Think for yourselves, don't be sheep.} \\ \medskip
+        --- Rick Sanchez\\Rick and Morty, season 2, episode 11
+\end{flushright}
 
 \vspace{6cm}
 
-This is a list of future work tasks.
+This thesis has proposed novel methods for sleep stage classification, sleep event detection, and identification of patients with narcolepsy, which may aid clinicians in their work.
+However, the development of automatic, \ac{AI}-based systems for clinical sleep analysis is a fast-growing, open-ended field with room for further investigations.
+An incomplete list of suggestions for future directions of research within computational sleep science is provided here:
+
+% Objective and fast identification of RBD and prodromal RBD has a great potential for early identification of neurodegeneration. This thesis has proposed new methods which have the potential to help researchers and clinicians with this purpose. However, this research field needs further investigations which include the following aims:
+
+% \paragraph{Technical}
+\begin{itemize}[label=-]
+\item Although the methods described in \cref{chap:sleep-stage-classification,chap:sleep-event-detection,chap:classification-sleep-disorders} could be described as a single \textit{system}, future research should investigate the development of a unified model, that can make predictions on a small segment scale (sleep stages, micro-events) and a larger, whole-\ac{PSG} scale (outcome modeling, identification of sleep disorders).
+\item Unsupervised and semi-supervised learning approaches such as contrastive predicting coding should be investigated with the aim of creating a flexible \emph{generic} model capable of completing multiple several downstream tasks.
+\item The transfer learning experiments in~\cref{sec:paperv} was only tested within one cohort; the findings should be replicated across multiple datasets.
+\item The \ac{MSED} utility wrt. sleep disorder characterization, classification and prediction should be investigated more thoroughly.
+% \end{itemize}
+
+% \paragraph{Clinical}
+% \begin{itemize}[label=-]
+\item Although the methods described in this thesis have been tested in data with good performance, these results may still be biased towards the applied cohorts. 
+To alleviate this, the sleep science community should consider establishing publicly available benchmark datasets for independent validation of algorithms.
+\item The narcolepsy detector presented in \cref{chap:classification-sleep-disorders} should be validated in more samples from multiple international sleep labs.
+\item In developing the narcolepsy detector, we did not investigate the inclusion of \ac{MSLT} findings, due to the specific scope. However, it would be valuable to investigate the relationship between objective findings such as \ac{MSLT} and the algorithm output. 
+\item It should also be investigated how stable the narcolepsy detection is with regards to the first night effect, repeated \ac{PSG} recordings, and/or if the inclusion of multiple nights can add value.
+\item It should be investigated whether the framework for narcolepsy detection could be adapted for detection of other hypersomnias, either in a separate system or as a detection algorithm for central hypersomnias in general.
+\end{itemize}

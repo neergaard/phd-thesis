@@ -1,53 +1,75 @@
-\myChapter{Sleep event detection}
-% \begin{flushright}{\slshape
-% 		It's a magical world, Hobbes, ol' buddy\ldots\\
-% 		\ldots Let's go exploring!}\\ \medskip
-% 		--- Calvin\\Calvin and Hobbes, by\defcitealias{Watterson1996}{Bill Watterson}\citetalias{Watterson1996} \citep{Watterson1996}
-% \end{flushright}
+\chapter{Sleep event detection}\label{chap:sleep-event-detection}
+\begin{flushright}{\slshape 
+        What, Morty, you want me to show you my math?} \\ \medskip
+        --- Rick Sanchez\\Rick and Morty, season 1, episode 6
+\end{flushright}
 \vspace{6cm}
 
 This chapter presents the methods developed for detection of sleep events.
-Specifically, the \ac{MSED} algorithm originally published in~\cite{Olesen2019} for arousal and limb movement detection is presented first in~\cref{sec:paperiv}, which is then followed by the updated version. A method for improving single-\ac{EEG} arousal detection is also included in~\cref{sec:paperv}. The chapter will conclude with a summary and discussion of the main findings of the individual research items in~\cref{sec:eventdetection-summary}.
+The \ac{MSED} algorithm for arousal and limb movement detection, originally published in~\cite{Olesen2019}, is presented first in~\cref{sec:paperiv} and followed by the updated version in~\cref{sec:papervi}. 
+A method for improving single-\ac{EEG} arousal detection is also included in~\cref{sec:paperv}. 
+The chapter will conclude with a summary and discussion of the main findings of the individual research items in~\cref{sec:eventdetection-summary}.
 
 Parts of this chapter have been modified from the following original publications:
 % \paragraph{\Cref{sec:paperiv}} has been modified from\newline \fullcite{Olesen2019}\footnote{\textcopyright 2019 IEEE}
 % \paragraph{\Cref{sec:paperv}} has been modified from\newline \fullcite{Olesen2020b} (\textit{submitted})
 \begin{itemize}
-    \item \fullcite{Olesen2019}\footnote{\textcopyright 2019 IEEE}
-    \item \fullcite{Olesen2020b} (\textit{submitted})
+    \item \printpublication{Olesen2019}\footnote{\textcopyright 2019 IEEE}
+    \item \printpublication{Olesen2020MSED}
+    \item \printpublication{Olesen2020DeepDetection}
 \end{itemize}
 
 
 \section{Research background}
 
-As described in~\cref{chap:clinical-background}, correct diagnosis of sleep disorders is predicated on precise scoring of sleep stages as well as accurate scoring of these discrete sleep events. 
-However, the current gold standard of manual analysis by experienced technicians is inherently biased and inconsistent and several studies have shown low inter-rater reliability on both the scoring of sleep stages~\cite{Norman2000,Rosenberg2013,Younes2016}, arousals~\cite{Bonnet2007}, and respiratory events~\cite{Rosenberg2014}. 
-Furthermore, manual analysis of \acsp{PSG} is time-consuming and prone to scorer fatigue. 
-Thus, there is a need for efficient systems that provide deterministic and reliable scorings of sleep studies.
+As described in~\cref{chap:clinical-background}, a correct diagnosis of sleep disorders is predicated on precise scoring of sleep stages as well as accurate scoring of discrete sleep events. 
+However, the current gold standard of manual analysis by experienced technicians is inherently biased and inconsistent due to low inter-rater reliability on the scoring of sleep stages~\cite{Norman2000,Rosenberg2013,Younes2016}, arousals~\cite{Bonnet2007}, and respiratory events~\cite{Rosenberg2014}, as described in~\cref{sec:challenges-scoring-sleep-studies}. 
+As manual analysis of \acsp{PSG} is also time-consuming and prone to scorer fatigue, there is a need for efficient systems that provide deterministic and reliable scorings of sleep studies.
 
-Several recent studies have already explored automatic classification of sleep stages in large cohorts with good results~\cite{Olesen2018,Stephansen2018,Chambon2018a,Biswal2018, Phan2018}, however, the reliable and consistent detection and classification of discrete PSG events in large cohorts remain largely unexplored. 
+Although classification of sleep stages in large cohorts has been explored with good results~\cite{Olesen2018,Stephansen2018,Chambon2018c, Biswal2018, Phan2018}, reliable and consistent detection and classification of discrete \ac{PSG} events in large cohorts remains largely unexplored. 
+Two studies recently proposed methods for automatic detection of arousals~\cite{Brink-Kjaer2020}, and leg movements~\cite{Carvelli2020}, and both tested their algorithms on a subset of data from two cohorts scored by multiple technicians. 
+Both studies found that their algorithms could score as well as, or in some cases outperform, human scorers. 
+However, both methods predicted events at discrete intervals, which might introduce biases in the decision making of when to merge and split certain predictions.
 
-Recent studies on certain micro-events in sleep have indicated that sleep spindles and K-complexes can be reliably detected and annotated with start time and duration using deep learning methods~\cite{Chambon2018b,Chambon2019}. 
-Specifically, these studies proposed a single-shot event detection algorithm, that parallels the YOLO and SSD algorithms used for object detection in 2D images~\cite{Redmon2016,Liu2016}, however, they were limited in scope by detecting events only at the \ac{EEG} level, and did not explicitly take advantage of the temporal connection of the detected events. 
+Recent studies on certain micro-events in sleep have indicated that deep learning methods reliably detect and annotate sleep spindles and K-complexes with start time and duration~\cite{Chambon2018b,Chambon2019}. 
+These studies proposed a single-shot event detection algorithm, that parallels the YOLO and SSD algorithms used for object detection in \twod images~\cite{Redmon2016a,Redmon2016b,Liu2016}, but were limited in scope by detecting events only at the \ac{EEG} level, and did not explicitly take advantage of the temporal connection of the detected events. 
 Additionally, experiments were carried out on a small-scale database~\cite{Chambon2018b}. 
 
-Designing reliable and robust systems for automated sleep analysis based on machine learning algorithms often require multiple heterogenous data sources of sufficient size.
-However, due to differences in clinical practice, very few datasets in sleep science are standardized with regards to recording setups despite guidelines from the \ac{AASM}.
+Designing reliable and robust systems for automated sleep analysis based on machine learning algorithms often requires multiple heterogeneous data sources of sufficient size.
+However, due to differences in clinical practice, few datasets in sleep science have standardized recording setups despite guidelines from the \ac{AASM}.
+This creates a \textit{channel mismatch problem}, in which the overlap between our source and target domains is small, and the domains are possibly disjointed. 
+Deep transfer learning\graffito{Using a pre-trained deep neural network on a separate domain.} has recently been investigated to solve the channel mismatch problem when training and testing sleep stage classification models~\cite{Phan2019, Phan2019c}.
+By using a fine-tuning strategy the authors significantly improved the performance of sleep stage scoring models when trained on various combinations of \ac{EEG} and \ac{EOG} channels.
 
-In these cases, we end up with a \textit{channel mismatch problem}, in which the overlap between our source and target domains is small, and the domains are possibly disjointed. 
-Recent studies have investigated the use of deep transfer learning to solve the channel mismatch problem when training and testing sleep stage classification models~\cite{Phan2019, Phan2019c}.
-The authors found that using a fine-tuning strategy significantly improved the performance of sleep stage scoring models when trained on various combinations of \ac{EEG} and \ac{EOG} channels.
+\subsection{Research motivation and objectives}
 
-\subsection{Research questions}
+Motivated by these unresolved issues in sleep scoring, we were interested in the following research questions specifically related to research hypothesis~\ref{hypothesis:sleep-events}\graffito{\ref{hypothesis:sleep-events}: \hypothesis\xspace sleep events.}:
+\newcommand{\questionSleepEventsDetection}{can sleep events be detected precisely and reliably using novel machine learning algorithms}
+\newcommand{\questionSleepEventsJointly}{can the detection of one event class modulate the detection of an event from another class}
+\newcommand{\questionSleepEventsTransfer}{how can we overcome the channel mismatch problem for sleep event detection}
+\begin{enumerate}[label={\footnotesize\bfseries\scshape RQ~2.\arabic*}, ref={\bfseries\scshape RQ~2.\arabic*}]
+    \item \questionSleepEventsDetection\label{question:sleep-events-detection}?
+    \item \questionSleepEventsJointly\label{question:sleep-events-jointly}?
+    \item \questionSleepEventsTransfer\label{question:sleep-events-transfer}?
+\end{enumerate}
+In this case, \textit{detection} covers both \textit{localization}\graffito{Localization places an unclassified sleep event in the time domain, while classification determines the class, or type, of the sleep event.} and \textit{classification} of sleep events.
+
+
+% \begin{displayquote}
+%     based on a single overnight \ac{PSG} recording, can we diagnose narcolepsy with the same level of performance as the current clinical gold standard?
+% \end{displayquote}
+
+Derived from the research hypothesis and associated questions, the following research objectives were formulated:
+
+\begin{enumerate}[label=(\roman*)]
+    \item a single model should detect multiple sleep events independently;
+    \item the events should be annotated with a start and duration directly to avoid unnecessary postprocessing of predictions.
+\end{enumerate}
+
+The following sections describe the steps taken to complete the posed design objectives and answer the research questions.
 
 % Research papers
-\input{chapters/research/event-detection/paper-iv.tex}
-\input{chapters/research/event-detection/paper-v.tex}
-% \input{chapters/research/event-detection/paper-vi.tex}
-
-\section{Chapter summary}\label{sec:eventdetection-summary}
-
-Aspects that were not investigated in this thesis, but are of interest in future work include
-\begin{itemize}
-    \item An evaluation of individual sleep events when placed in the context of a micro-sleep architecture, \eg a high-resolution hypnodensity.
-\end{itemize}
+\clearpage\input{chapters/research/event-detection/paper-iv.tex}
+\clearpage\input{chapters/research/event-detection/paper-vi.tex}
+\clearpage\input{chapters/research/event-detection/paper-v.tex}
+\clearpage\input{chapters/research/event-detection/summary}

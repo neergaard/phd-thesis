@@ -31,7 +31,7 @@
 \PassOptionsToPackage{
   drafting=false,    % print version information on the bottom of the pages
   tocaligned=false, % the left column of the toc will be aligned (no indentation)
-  dottedtoc=false,  % page numbers in ToC flushed right
+  dottedtoc=true,  % page numbers in ToC flushed right
   parts,
   eulerchapternumbers=true, % use AMS Euler for chapter font (otherwise Palatino)
   linedheaders=false,       % chaper headers will have line above and beneath
@@ -52,14 +52,14 @@
 \newcommand{\myDegree}{Doctor of Philosophy (PhD)\xspace}
 \newcommand{\myDocument}{PhD Thesis\xspace}
 \newcommand{\myName}{Alexander Neergaard Olesen\xspace}
-\newcommand{\myProf}{Associate Professor, Helge. B. D. Sørensen, PhD, MSc. E.E.\xspace}
+\newcommand{\myProf}{Associate Professor MSK, Helge. B. D. Sørensen, PhD, MSc. E.E.\xspace}
 \newcommand{\myOtherProf}{Professor Poul Jennum, MD, PhD\xspace}
 \newcommand{\mySupervisor}{Professor Emmanuel Mignot, MD, PhD\xspace}
 \newcommand{\myFaculty}{Department of Health Technology\xspace}
 \newcommand{\myDepartment}{Section for Digital Health\xspace}
 \newcommand{\myUni}{Technical University of Denmark\xspace}
 \newcommand{\myLocation}{Kgs. Lyngby\xspace}
-\newcommand{\myTime}{March 2020\xspace}
+\newcommand{\myTime}{April 2020\xspace}
 \newcommand{\myVersion}{\classicthesis}
 
 % ********************************************************************
@@ -71,6 +71,7 @@
 \newcommand{\eg}{e.\,g.\xspace}
 \newcommand{\Eg}{E.\,g.\xspace}
 \newcommand{\etc}{\textit{etc.\xspace}}
+\newcommand{\etal}{\textit{et al.}\xspace}
 % \newcommand{\cohen}{Cohen's $\kappa$}
 \newcommand{\wake}{\textsc{w}\xspace}
 \newcommand{\rem}{\textsc{r}\xspace}
@@ -79,14 +80,15 @@
 \newcommand{\nII}{\textsc{n2}\xspace}
 \newcommand{\nIII}{\textsc{n3}\xspace}
 \newcommand{\ntI}{\textsc{nt1}\xspace}
-\newcommand{\real}{\mathbb{R}\xspace}
+\newcommand{\real}[1]{\mathbb{R}^{#1}\xspace}
 \newcommand{\cohen}{Cohen's~\ensuremath{\kappa}\xspace}
 \newcommand{\ci}[4]{\ensuremath{#1 \pm #2}, \SI{95}{\percent} CI: \ensuremath{\left[ #3-#4 \right]}\xspace}
 \newcommand{\muci}[3]{#1 (\SI{95}{\percent} CI: \ensuremath{\left[ #2-#3 \right])}\xspace}
-\newcommand{\plusminus}[2]{\ensuremath{#1 \pm #2}}
-\newcommand{\train}{\textsc{train}}
-\newcommand{\eval}{\textsc{eval}}
-\newcommand{\test}{\textsc{test}}
+\newcommand{\meanstdrange}[4]{\num[separate-uncertainty]{#1 +- #2} \ensuremath{\left[#3-#4 \right]}\xspace}
+\newcommand{\plusminus}[2]{\num[separate-uncertainty]{#1+-#2}}
+\newcommand{\train}{\textsc{train}\xspace}
+\newcommand{\eval}{\textsc{eval}\xspace}
+\newcommand{\test}{\textsc{test}\xspace}
 \newcommand{\eog}{\textsc{eog}\xspace}
 \newcommand{\mbl}{\mathcal{M}_{\mathrm{FM}}\xspace}
 \newcommand{\mpt}{\mathcal{M}_{\mathrm{PT}}\xspace}
@@ -94,6 +96,11 @@
 \newcommand{\mse}{\mathcal{M}_{\mathrm{SE}}\xspace}
 \newcommand{\N}{\mathbb{N}\xspace}
 \newcommand{\hla}{\textsc{hla-dqb1*06:02}\xspace}
+\newcommand{\oned}{\textsc{1d}\xspace}
+\newcommand{\twod}{\textsc{2d}\xspace}
+\newcommand{\threed}{\textsc{3d}\xspace}
+\newcommand{\describe}[1]{\acs{#1}:~\acl{#1}}
+\newcommand{\R}[1]{\mathbb{R}^{#1}\xspace}
 % ****************************************************************************************************
 
 
@@ -103,7 +110,7 @@
 % ********************************************************************
 % Packages with options that might require adjustments
 % ********************************************************************
-\PassOptionsToPackage{danish,english}{babel} % change this to your language(s), main language last
+\PassOptionsToPackage{danish,main=english}{babel} % change this to your language(s), main language last
 % Spanish languages need extra options in order to work with this template
 %\PassOptionsToPackage{spanish,es-lcroman}{babel}
     \usepackage{babel}
@@ -114,30 +121,58 @@
 %   backend=bibtex8,bibencoding=ascii,%
   language=auto,%
   style=ieee,%
+%   bibstyle=authoryear-comp,
   %style=authoryear-comp, % Author 1999, 2010
   %bibstyle=authoryear,dashed=false, % dashed: substitute rep. author with ---
   sorting=none, % name, year, title
-  maxbibnames=6, % default: 3, et al.
-  minbibnames=3,
+  maxbibnames=99, % default: 3, et al.
+  minbibnames=1,
   maxcitenames=3,
-  mincitenames=3,
+  mincitenames=1,
   %backref=true,%
   natbib=true % natbib compatibility mode (\citep and \citet still work)
 }{biblatex}
     \usepackage{biblatex}
     
-\renewcommand*{\mkbibnamefamily}[1]{%
-  \ifitemannotation{jointfirst}
-    {#1\(\dagger\)}
+\renewbibmacro{in:}{}
+% \renewcommand*{\mkbibnamefamily}[1]{%
+%   \ifitemannotation{jointfirst}
+%     {#1\(^{\ast}\)}
+%     {#1}}
+
+\renewcommand*{\mkbibnamegiven}[1]{%
+  \ifitemannotation{highlight}
+    {\textbf{#1}}
     {#1}}
 
-\PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
-  \usepackage{amsmath}
+\renewcommand*{\mkbibnamefamily}[1]{%
+  \ifitemannotation{highlight}
+    {\textbf{#1}}
+    {#1}}
+
+% \PassOptionsToPackage{fleqn}{amsmath}       % math environments and more by the AMS
+%   \usepackage{amsmath}
+\PassOptionsToPackage{fleqn}{mathtools}       % math environments and more by the AMS
+  \usepackage{mathtools}
+\DeclarePairedDelimiter\parentheses{\lparen}{\rparen}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+% \DeclarePairedDelimiter\abs{\left|}{\left|}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator{\sign}{sign}
-\newcommand{\func}[2]{\ensuremath{#1 \! \left(  #2 \right)}}
-\newcommand{\parenthesis}[1]{\left( #1 \right)}
+\newcommand{\func}[2]{\ensuremath{#1 \parentheses*{ #2 }}}
+% \newcommand{\parenthesis}[1]{\left( #1 \right)}
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+\DeclarePairedDelimiter\braces{\lbrace}{\rbrace}
+\DeclarePairedDelimiter\brackets{\lbrack}{\rbrack}
+\DeclarePairedDelimiter\bbrackets{\llbracket}{\rrbracket}
+\DeclareMathOperator{\E}{E}
+\DeclareMathOperator{\Var}{Var}
+\newcommand{\expect}[1]{\ensuremath{\E\brackets*{#1}}}
+\newcommand{\variance}[1]{\ensuremath{\Var\brackets*{#1}}}
 
 % ********************************************************************
 % General useful packages
@@ -146,10 +181,12 @@
 \graphicspath{ {images/} }
 \usepackage{scrhack} % fix warnings when using KOMA with listings package
 \usepackage{xspace} % to get the spacing after macros right
-\PassOptionsToPackage{printonlyused,smaller}{acronym}
+\usepackage{relsize}
+% \PassOptionsToPackage{printonlyused,smaller}{acronym}
+\PassOptionsToPackage{printonlyused}{acronym}
   \usepackage{acronym} % nice macros for handling all acronyms in the thesis
   %\renewcommand{\bflabel}[1]{{#1}\hfill} % fix the list of acronyms --> no longer working
-  %\renewcommand*{\acsfont}[1]{\textsc{#1}}
+%   \renewcommand*{\acsfont}[1]{\textbf{#1}}
   %\renewcommand*{\aclabelfont}[1]{\acsfont{#1}}
   %\def\bflabel#1{{#1\hfill}}
   \def\bflabel#1{{\acsfont{#1}\hfill}}
@@ -159,6 +196,10 @@
 \patchcmd{\AC@@acro}{] #3}{] \MakeUppercase #3}{}{}
 \makeatother
 % \usepackage{tocbibind}
+\usepackage{layout}
+\usepackage{printlen}
+\usepackage{tasks}
+\usepackage{textcomp}
 % ****************************************************************************************************
 %\usepackage{pgfplots} % External TikZ/PGF support (thanks to Andreas Nautsch)
 %\usetikzlibrary{external}
@@ -179,7 +220,19 @@
 \usepackage{pdflscape}
 \usepackage[strict]{changepage}% <-- new
 \usepackage{geometry}
+% \usepackage{rotation}
 % \usepackage{addmargin}
+
+% This length is useful for wider figures and tables
+\newlength{\widelength}
+\addtolength{\widelength}{\textwidth}
+\addtolength{\widelength}{\marginparwidth}
+\addtolength{\widelength}{\marginparsep}
+\newlength{\marginwidth}
+\addtolength{\marginwidth}{\marginparwidth}
+\addtolength{\marginwidth}{\marginparsep}
+
+
 % ****************************************************************************************************
 
 
@@ -214,7 +267,8 @@
 % ****************************************************************************************************
 % 6. Last calls before the bar closes
 % ****************************************************************************************************
-\usepackage[detect-all]{siunitx}
+\usepackage[mode=text]{siunitx}
+% \sisetup{detect-all,mode=text}
 \usepackage{nth}
 % \PassOptionsToPackage{table}{xcolor}
 %     \usepackage{xcolor}
@@ -254,12 +308,13 @@
   breaklinks=true, pageanchor=true,%
   pdfpagemode=UseNone, %
   % pdfpagemode=UseOutlines,%
+  pdfstartpage=1, %
   plainpages=false, bookmarksnumbered, bookmarksopen=true, bookmarksopenlevel=1,%
   hypertexnames=true, pdfhighlight=/O,%nesting=true,%frenchlinks,%
-  urlcolor=dtu-red, linkcolor=Black, citecolor=dtu-navy, %pagecolor=RoyalBlue,%
+  %urlcolor=dtu-red, %linkcolor=dtu-red, citecolor=dtu-navy, %pagecolor=RoyalBlue,%
   %urlcolor=Black, linkcolor=Black, citecolor=Black, %pagecolor=Black,%
   pdftitle={\myTitle},%
-  pdfauthor={\textcopyright\ \myName, \myUni, \myFaculty},%
+  pdfauthor={\myName, \myUni, \myFaculty},%
   pdfsubject={},%
   pdfkeywords={},%
   pdfcreator={pdfLaTeX},%
@@ -323,7 +378,7 @@
 %\areaset[current]{312pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip
 %\setlength{\marginparwidth}{7em}%
 %\setlength{\marginparsep}{2em}%
-\captionsetup{format=hang,font=small}
+\captionsetup{format=plain,font=small,labelfont=bf}
 
 % ********************************************************************
 % Using different fonts
@@ -353,3 +408,12 @@
 \usepackage{todonotes}
 \usepackage{stmaryrd}
 \usepackage{xfrac}
+\usepackage{pdfpages}
+\usepackage[version=4]{mhchem}
+\usepackage{tcolorbox}
+
+\newcommand{\objective}{to develop a system based on artificial intelligence, that can assist clinicians in the analysis of sleep studies}
+\newcommand{\hypothesis}{Advanced biomedical signal processing and machine learning algorithms can be used for efficient, high-performing analysis of sleep studies with regards to}
+\newcommand{\hypothesisSleepStages}{Sleep stages can be effectively classified using advanced biomedical signal processing and machine learning algorithms}
+\newcommand{\hypothesisSleepEvents}{Sleep events can be precisely annotated using advanced biomedical signal processing and machine learning algorithms}
+\newcommand{\hypothesisSleepDisorders}{Sleep disorders can be efficiently diagnosed using advanced biomedical signal processing and machine learning algorithms}

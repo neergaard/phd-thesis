@@ -1,22 +1,108 @@
-\sectionmark{Stephansen \& Olesen, \textit{et al.}, 2018}
-\section{Paper III: Neural network analysis of sleep stages enables efficient diagnosis of narcolepsy}\label{sec:paperiii-narcolepsy}
-\sectionmark{Stephansen \& Olesen, \textit{et al.}, 2018}
+\section[Paper III: Neural network analysis of sleep stages enables efficient diagnosis of narcolepsy]{Paper III: Neural network analysis of sleep stages enables efficient diagnosis of narcolepsy%
+    \sectionmark{Stephansen \& Olesen et al., 2018}}\label{sec:paperiii-narcolepsy}
+\sectionmark{Stephansen \& Olesen et al., 2018}
 
+% \protect\graffito{Sleep stage classification using neural networks is described in~\cref{chap:sleep-stage-classification}}
+\begin{tcolorbox}[colframe=white]
+\paragraph{Abstract:} Analysis of sleep for the diagnosis of sleep disorders such as \ac{NT1} currently requires visual inspection of polysomnography records by trained scoring technicians. 
+Here, we used neural networks in approximately \num{3000} normal and abnormal sleep recordings to automate sleep stage scoring, producing a hypnodensity graph---a probability distribution conveying more information than classical hypnograms. 
+% Accuracy of sleep stage scoring was validated in 70 subjects assessed by six scorers. 
+% The best model performed better than any individual scorer (87\% versus consensus). 
+% It also reliably scores sleep down to \SI{5}{\second} instead of \SI{30}{\second} scoring epochs.
+A \ac{NT1} marker based on unusual sleep stage overlaps achieved a specificity of 96\% and a sensitivity of 91\%, validated in independent datasets. 
+Addition of \hla typing increased specificity to 99\%. 
+Our method can reduce time spent in sleep clinics and automates \ac{NT1} diagnosis. 
+It also opens the possibility of diagnosing \ac{NT1} using home sleep studies.
+\end{tcolorbox}
 
 \subsection{Methods}
 
-The following sections will describe the narcolepsy model aspects in detail from initial hypnodensity computation, feature engineering, and finally data modeling using \ac{GP} classification algorithms.
+The following sections describe the narcolepsy model aspects in detail from initial hypnodensity computation, to feature engineering, and finally data modeling using \ac{GP} classification algorithms.
 The main outcome of this approach is to be able to classify a hypnodensity representation of a \ac{PSG} as either being positive or negative for \ac{NT1}.
 
+\subsubsection{Data descriptions}
+
+\paragraph{Patient-based Austrian Hypersomnia Cohort}
+Patients in this cohort were examined at the Innsbruck Medical University in Austria as described in~\citeauthor{Frauscher2013}~\cite{Frauscher2013}.
+The AHC contains 118 \acp{PSG} in 86 high pretest probability patients for narcolepsy (see~\cref{tab:sleep-stages:paper-iii:table-s01} for details).
+42 patients (81 studies) are clear T1N with cataplexy cases, with all but 3 having a positive MSLT (these three subjects had a mean sleep latency (MSL)>8 minutes but multiple SOREMPs).
+The rest of the sample has idiopathic hypersomnia and type 2 narcolepsy.
+Four patients have an AHI>15/hour and 25 had a PLMI>15/hour.
+Almost all subjects had two sleep recordings performed, which were kept together such that no two recordings from the same subject were split between training and testing partitions.
+
+% \begin{landscape}
+\begin{table}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+\small
+\centering
+\begin{threeparttable}  
+\caption[\acs{STAGES} cohorts]{Description of the various cohorts included in this study and how they were used.}
+\label{tab:classification-sleep-disorders:paper-iii:table-s01}
+\begin{tabular}{@{}lccccccccc@{}}
+    \toprule
+    \textbf{Cohort}         & \textbf{Age}, years        & \textbf{BMI}, \si{\kilo\gram\per\meter\squared}        & \textbf{Sex}, \%       & \textbf{Train}  & \textbf{Test}              & \textbf{Replication}            & \textbf{\acs{NT1}}, \% & \textbf{H}, \% \\ \midrule
+    \acs{WSC}            & 59.7 $ \pm $ 8.4  & 31.6 $ \pm $ 7.1  & 53.1      & 170                  & 116          & None        & 0        & 0 \\
+    \acs{SSC}            & 45.4 $ \pm $ 13.8 & 23.9 $ \pm $ 6.5  & 59.4      & 139                  & 112          & None        & 11.6     & 1.8 \\
+    \acs{KHC}            & 29.1 $ \pm $ 13.2 & 24.1 $ \pm $ 4.3  & 58.6      & 87                   & 71           & None        & 45.8     & 54.2 \\
+    AHC            & 34.5 $ \pm $ 13.8 & 25.9 $ \pm $ 4.9  & 54        & 42 (76)         & 44 (84) & None        & 52.3     & 47.7 \\
+    JCTS           & 53.2 $ \pm $ 9.8  & 31.0 $ \pm $ 4.4  & 57.1      & 7                    & None         & None        & 100      & 0 \\
+    IHC            & 33.7 $ \pm $ 17.6 & -           & 56.7      & 87                   & 61           & None        & 47.3     & 50 \\
+    DHC            & 33.4 $ \pm $ 14.8 & 24.8 $ \pm $ 4.9  & 50        & 79                   & None         & None        & 26.6     & 48.1 \\
+    FHC            & 28.8 $ \pm $ 15.2 & 24.4 $ \pm $ 8.1  & 59        & None                 & None         & 122         & 51.6     & 18 \\
+    CNC            & 28.5 $ \pm $ 16.9 & 23.2 $ \pm $ 11.5 & 51.3      & None                 & None         & 199         & 34.2     & 0 \\ \midrule
+    Total subjects & & & & 611                  & 404          & 321         &          & \\
+    Total \acp{PSG} & & & & 645                  & 444          & 321         &          & \\ \bottomrule% \multicolumn{4}{l}{Total subjects} & 611                  & 404          & 321         &          & \\
+    % \multicolumn{4}{l}{Total \acp{PSG}} & 645                  & 444          & 321         &          & \\ \bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item %
+\describe{WSC}; %
+\describe{SSC}; %
+\describe{KHC}; %
+\describe{AHC}; %
+\describe{JCTS}; %
+\describe{IHC}; %
+\describe{DHC}; %
+\describe{FHC}; %
+\describe{CNC}; %
+\describe{NT1}; %
+H, unspecific hypersomnia (\ac{NT2} and idiopathic hypersomnia).
+\end{tablenotes}
+\end{threeparttable}
+\end{adjustwidth*}
+\end{table}
+% \end{landscape}
+
+\paragraph{The Jazz Clinical Trial Sample}
+This sample includes seven baseline sleep \acp{PSG} from five sites taken from a clinical trial study of sodium oxybate in narcolepsy (SXB15 with 45 sites in Canada, USA, and Switzerland) conducted by Orphan Medical, now named Jazz Pharmaceuticals.
+The few patients included are those with clear and frequent cataplexy (a requirement of the trial) that had no stimulant or antidepressant treatment at baseline~\cite{InternationalXyremStudyGroup2005}.
+All 7 subjects in this sample were used exclusively for training the narcolepsy biomarker algorithm.
+
+\paragraph{Patient-based Italian Hypersomnia Cohort}
+Patients in this high pretest probability cohort (see~\cref{tab:sleep-stages:paper-iii:table-s01} for demographics) were examined at the IRCCS, Istituto delle Scienze Neurologiche ASL di Bologna in Italy as described in~\citeauthor{Pizza2015}~\cite{Pizza2015}.
+The IHC contains 70 \ntI patients (\SI{58}{\percent} male, \plusminus{29.5}{1.9} years old), with either documented low CSF hypocretin levels (59 cases, all but 2 HLA DQB1*06:02 positive), or clear cataplexy, positive MSLTs and HLA positivity (11 subjects).
+As non-\ntI cases with unexplained daytime somnolence, the cohort includes 77 other patients: 19 with idiopathic hypersomnia, 7 with type 2 narcolepsy and normal CSF hypocretin-1, 48 with a subjective complaint of excessive daytime sleepiness not confirmed by MSLT, and 3 with secondary hypersomnia.
+Subjects in this cohort were used for training (n=87) and testing (n=61) the narcolepsy biomarker algorithm. 
+
+\paragraph{Patient-based Danish Hypersomnia Cohort}
+Patients in this cohort were examined at the Rigshospitalet, Glostrup, Denmark as described in~\citeauthor{Christensen2017}~\cite{Christensen2017}.
+The DHC contains 79 \acp{PSG} in controls and patients (see~\cref{tab:sleep-stages:paper-iii:table-s01} for details).
+Based on \ac{PSG}, multiple sleep latency test and cerebrospinal fluid hypocretin-1 measures, the cohort includes healthy controls (19 subjects), patients with other sleep disorders and excessive daytime sleepiness (20 patients with CSF hypocretin-1 $\geq$ 110 pg/ml), narcolepsy type 2 (22 patients with CSF hypocretin-1 $\geq$ 110 pg/ml), and T1N (28 patients with CSF hypocretin 1 $\leq$ 110 pg/ml).
+All 79 subjects in this cohort were used exclusively for training the narcolepsy biomarker algorithm.
+
+\paragraph{Patient-based French Hypersomnia Cohort}
+This cohort consists of 122 individual \acp{PSG} recorded at the Sleep-Wake Disorders Center, Department of Neurology, Gui-de-Chauliac Hospital, CHU Montpellier, France (see~\cref{tab:sleep-stages:paper-iii:table-s01} for demographics).
+The FHC contains 63 subjects with T1N (all but two tested with CSF hypocretin-1 $\leq$ 110 pg/ml, five below 18 years old, 55 tested for HLA, all positive for HLA DQB1*06:02) and 22 narcolepsy type 2 (19 with CSF hypocretin-1 > 200 pg/ml, and three subjects with CSF hypocretin-1 between 110 and 200 pg/ml, three HLA positive).
+The remaining 36 subjects are controls (15 tested for HLA, two with DQB1*06:02) without other symptoms of hypersomnia.
+The FHC was used as data for the replication study of the narcolepsy biomarker algorithm.
+
+\paragraph{Patient-based Chinese Narcolepsy Cohort}
+This cohort contains 199 individual \acp{PSG} recorded (see~\cref{tab:sleep-stages:paper-iii:table-s01} for demographics).
+The CNC contains 67 subjects diagnosed with T1N exhibiting clear-cut cataplexy (55 tested HLA DQB1*06:02 positive), while the remaining 132 subjects are randomly selected population controls (15 HLA DQB1*06:02 positive, 34 HLA negative, remaining unknown)~\cite{Andlauer2012}.
+Together with the FHC, the CNC was used as data for the replication study of the narcolepsy biomarker algorithm.
+
 \subsubsection{Model overview}
-
-The general pipeline for training and testing the narcolepsy model is shown in~\cref{fig:paperiii-figure5c}.
-On the left side is shown the input data sources from the cohorts described in~\cref{tab:paperiii-supptable01}.
-The \acp{PSG} from these cohorts are extracted and subjected to the sleep stage scoring model described in~\cref{sec:paperiii} resulting in a hypnodensity\graffito{The hypnodensity is further described in~\cref{sec:paperiii}, but is essentially a probability distribution over sleep stages.} representation for the \textit{i}th \ac{PSG}.
-
-The hypnodensity data are split into training and testing subsets in a \SI{60}{\percent}/\SI{40}{\percent} ratio.
-The training data are used for building the \ac{GP} narcolepsy model with a subset of features determined using a feature reduction agorithm.
-Cross-validation was employed to determined the optimal classification threshold, and the performance of the classifier was determined on the held-out testing data.
 
 \begin{figure}
     % \centering
@@ -24,12 +110,20 @@ Cross-validation was employed to determined the optimal classification threshold
         \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-iii/Figure_5c.png}
         \caption[Narcolepsy detector algorithm design]{Narcolepsy detector algorithm design. Hypnodensities are extracted from data, as described in~\cref{sec:paperiii}. 
         These data are separated into a training (\SI{60}{\percent}) and a testing (\SI{40}{\percent}) split. 
-        From the training split, 481 potentially relevant features described in~\cref{tab:paperiii-supptable10} are extracted from each hypnodensity. 
+        From the training split, 481 potentially relevant features described in~\cref{tab:sleep-disorders:paper-iii:table-s10} are extracted from each hypnodensity. 
         The prominent features are selected using a \ac{RFE} algorithm, and the narcolepsy detection model is trained using a \ac{GP} model.
         The performance of the \ac{GP} narcolepsy detection  model is evaluated using the selected features computed on the test data.}
         \label{fig:paperiii-figure5c}
     \end{adjustwidth*}
 \end{figure}
+
+The general pipeline for training and testing the narcolepsy model is shown in~\cref{fig:paperiii-figure5c}.
+The input data sources from the cohorts described in~\cref{tab:classification-sleep-disorders:paper-iii:table-s01} are shown on the left side.
+The \acp{PSG} from these cohorts are extracted and subjected to the sleep stage scoring model described in~\cref{sec:paperiii} resulting in a hypnodensity\graffito{The hypnodensity is further described in~\cref{sec:paperiii}, but is essentially a probability distribution over sleep stages.} representation for each \ac{PSG}.
+
+The hypnodensity data are split into training and testing subsets in a \SI{60}{\percent}/\SI{40}{\percent} ratio.
+The training data are used for building the \ac{GP} narcolepsy model with a subset of features determined using a feature reduction agorithm.
+Cross-validation was employed to determine the optimal classification threshold, and the performance of the classifier was determined on the held-out testing data.
 
 \subsubsection{Feature extraction for \ac{NT1}}
 
@@ -44,12 +138,12 @@ Overall, the features fall into two categories:
 To quantify narcolepsy-like behavior for a single recording \textit{i}, features were generated based on a proto-feature derived from \textit{k}-combinations of $\mathcal{S} = \lbrace \wake, \rem, \nI, \nII, \nIII \rbrace$. 
 For the \textit{n}th \num{5}, \num{15} or \SI{30}{\second} segment in recording \textit{i}, a single \textit{k}-combination is selected from the set of all \textit{k}-combinations, and the proto-feature is then calculated as the sum of the pair-wise products of the elements in the single \textit{k}-combination, such that
 \begin{equation}
-    \boldsymbol{\Phi}^{(i)}_{n} \! \! \left( \mathcal{S}_{k} \right) = \sum_{\zeta \in \lbrack \mathcal{S}_{k} \rbrack^2} \prod_{s \in \zeta}{p\!\left( \! s \! \mid \! \mathbf{x}_{n}^{(i)} \! \right)}, \quad p \in \lbrack 0,1 \rbrack,
+    \func{\boldsymbol{\Phi}^{(i)}_{n}}{\mathcal{S}_{k}} = \sum_{\zeta \in \lbrack \mathcal{S}_{k} \rbrack^2} \prod_{s \in \zeta}{\func{p}{ s \mid \mathbf{x}_{n}^{(i)} }}, \quad p \in \lbrack 0,1 \rbrack,
 \end{equation}
-where $\boldsymbol{\Phi}^{(i)}_{n}$ is the proto-feature for the \textit{n}th segment in recording \textit{i}, $\zeta \in \lbrack \mathcal{S}_{k} \rbrack^2$ is a \num{2}-tuple, or pair-wise combination, in the set of all pair-wise combinations in the \textit{k}-combination of $\mathcal{S}$, and $s$ is a single element, or sleep stage, in $\zeta$.
+where $\boldsymbol{\Phi}^{(i)}_{n}$ is the proto-feature for the \textit{n}th segment in recording \textit{i}, $\zeta \in \lbrack \mathcal{S}_{k} \rbrack^2$ is a 2-tuple, or pair-wise combination, in the set of all pair-wise combinations in the \textit{k}-combination of $\mathcal{S}$, and $s$ is a single element, or sleep stage, in $\zeta$.
 For $k \in \llbracket 5 \rrbracket$, there are 31 different $\mathcal{S}_k$, e.g. $\lbrace \wake, \rem \rbrace, \lbrace \nI, \nII, \nIII \rbrace$.
-The predicted probability of a 5, 15 or \SI{30}{\second} epoch belonging to a certain class in $\mathcal{S}$ given the data $\mathbf{x}^{(i)}_n$ is given by \( p\!\left( \! s \! \mid \! \mathbf{x}_{n}^{(i)} \! \right) \).
-For every value of \textit{k}, 15 features based on the mean, derivative, entropy and cumulative sum were extracted as shown in~\cref{tab:paperiii-supptable10}.
+The predicted probability of a 5, 15 or \SI{30}{\second} epoch belonging to a certain class in $\mathcal{S}$ given the data $\mathbf{x}^{(i)}_n$ is given by \( \func{p}{s \mid \mathbf{x}_{n}^{(i)} } \).
+For every value of \textit{k}, 15 features based on the mean, derivative, entropy and cumulative sum were extracted as shown in~\cref{tab:sleep-disorders:paper-iii:table-s10}.
 
 \begin{table}[t]
 \begin{adjustwidth*}{}{}
@@ -57,35 +151,34 @@ For every value of \textit{k}, 15 features based on the mean, derivative, entrop
 \renewcommand{\arraystretch}{1.2}
 \begin{threeparttable}
     \caption[Description of narcolepsy features]{Description of each feature, how it is calculated, and how it is numerated.}
-    \label{tab:paperiii-supptable10}
+    \label{tab:sleep-disorders:paper-iii:table-s10}
     \begin{tabular}{@{}llc@{}} \toprule
         \textbf{\#} & \textbf{Description} & \textbf{Formula} \\ \midrule
-        \num{1} & General prevalence of a value & \( \log \! \parenthesis{\frac{1}{N} \sum_{n=1}^{N}{\boldsymbol{\Phi}_{n} \! \! \parenthesis{\mathcal{S}_{k}}}} \) \\
-        \num{2} & Highest achieved value & \( -\log \! \parenthesis{1 - \max{\boldsymbol{\Phi}_{n} \! \! \parenthesis{\mathcal{S}_{k}}}} \) \\
-        \num{3} & Average fluctuations in value & \( \log \! \parenthesis{ \frac{1}{N} \sum_{n=1}^{N}{ \mid \frac{ \mathrm{d} \boldsymbol{\Phi}_{n} \! \! \parenthesis{\mathcal{S}_{k}} }{ \mathrm{d} n } \mid }} \) \\
-        \num{4} & Log of Shannon entropy & \( \log \! \parenthesis{ \frac{-\sum_{i} s_{i}^{2} \log s_{i}^{2}}{N} } \) \\
-        \numrange[range-phrase = --]{5}{8} & Time until \textit{p} times max. value & \( \log \! \parenthesis{\mathrm{first}_{p} \! \parenthesis{ \frac{ \mathrm{cum \, sum \! \parenthesis{ \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} }} }{ \mathrm{sum} \! \parenthesis{ \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} } } } \times 30} \) \\
-        \num{9} & Weighted maximum & \( \sqrt{\max{ \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} } \times \bar{ \boldsymbol{\Phi}} \! \! \parenthesis{\mathcal{S}_{k}} } \) \\
-        \num{10} & Weighted average fluctuation & \( \parenthesis{ \frac{1}{N} \sum_{n=1}^{N}{ \mid \frac{ \mathrm{d} \boldsymbol{\Phi}_{n} \! \! \parenthesis{\mathcal{S}_{k}} }{ \mathrm{d} n } \mid }} \times \bar{ \boldsymbol{\Phi}} \! \! \parenthesis{\mathcal{S}_{k}} \) \\
-        \num{11} & Weighted Shannon entropy & \( \log \! \parenthesis{ \frac{-\sum_{i} s_{i}^{2} \log s_{i}^{2}}{N} \times \bar{ \boldsymbol{\Phi}} \! \! \parenthesis{\mathcal{S}_{k}} } \) \\
-        \numrange[range-phrase = --]{12}{15} & Weighted time until \textit{p} max value & \( \sqrt{ \log \! \parenthesis{\mathrm{first}_{p} \! \parenthesis{ \frac{ \mathrm{cum \, sum \! \parenthesis{ \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} }} }{ \mathrm{sum} \! \parenthesis{ \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} } } } \times 30} } \) \\
+        \num{1} & General prevalence of a value & \( \func{\log}{\frac{1}{N} \sum_{n=1}^{N}{\func{\boldsymbol{\Phi}_{n}}{\mathcal{S}_{k}}}} \) \\
+        \num{2} & Highest achieved value & \( \func{-\log}{1 - \max \func{\boldsymbol{\Phi}_{n}}{\mathcal{S}_{k}}} \) \\
+        \num{3} & Average fluctuations in value & \( \func{\log}{ \frac{1}{N} \sum_{n=1}^{N} \left| \frac{ \mathrm{d} \func{\boldsymbol{\Phi}_{n}}{\mathcal{S}_{k}} }{ \mathrm{d} n } \right| } \) \\
+        \num{4} & Log of Shannon entropy & \( \func{\log}{ \frac{-\sum_{i} s_{i}^{2} \log s_{i}^{2}}{N} } \) \\
+        \numrange[range-phrase = --]{5}{8} & Time until \textit{p} times max. value & \( \func{\log}{ \func{\mathrm{first}_{p}}{ \frac{ \func{\mathrm{cum \, sum}}{ \func{\boldsymbol{\Phi}}{\mathcal{S}_{k}} }}{ \func{\mathrm{sum}}{ \func{\boldsymbol{\Phi}}{\mathcal{S}_{k}} } } } \times 30} \) \\
+        \num{9} & Weighted maximum & \( \sqrt{\max \func{\boldsymbol{\Phi}}{\mathcal{S}_{k}} \times \func{\bar{ \boldsymbol{\Phi}}}{\mathcal{S}_{k}} } \) \\
+        \num{10} & Weighted average fluctuation & \( \parentheses*{ \frac{1}{N} \sum_{n=1}^{N} \left| \frac{ \mathrm{d} \func{\boldsymbol{\Phi}_{n}}{\mathcal{S}_{k}} }{ \mathrm{d} n } \right| } \times \func{\bar{ \boldsymbol{\Phi}}}{\mathcal{S}_{k}} \) \\
+        \num{11} & Weighted Shannon entropy & \( \func{\log}{ \frac{-\sum_{i} s_{i}^{2} \log s_{i}^{2}}{N} \times \func{\bar{ \boldsymbol{\Phi}}}{\mathcal{S}_{k}} } \) \\
+        \numrange[range-phrase = --]{12}{15} & Weighted time until \textit{p} max value & \( \sqrt{ \func{\log}{ \func{\mathrm{first}_{p}}{ \frac{ \func{\mathrm{cum \, sum}}{ \boldsymbol{\Phi}}{\mathcal{S}_{k}} }{ \func{\mathrm{sum}}{ \func{\boldsymbol{\Phi}}{\mathcal{S}_{k}} } } } \times 30} } \) \\
         \bottomrule
     \end{tabular}
     \begin{tablenotes}
         \small
-        \item[4] The Shannon entropy is calculated using wavelet decompositions of \( \boldsymbol{\Phi} \! \! \parenthesis{\mathcal{S}_{k}} \), where \(s_i\) contains the \textit{i}th detail coefficient. This feature describes the amount of information contained in the signal.
+        \item[4] The Shannon entropy is calculated using wavelet decompositions of \( \func{\boldsymbol{\Phi}}{\mathcal{S}_{k}} \), where \(s_i\) contains the \textit{i}th detail coefficient. This feature describes the amount of information contained in the signal.
         \item[5--8] \textit{p} here corresponds to \SIlist{5;10;30;50}{\percent}. 
         \item[12--15] \textit{p} here corresponds to \SIlist{5;10;30;50}{\percent}. 
         \item Each individual feature is scaled by subtracting the mean and dividing by the difference between the \nth{85} and \nth{15} percentile values.
         Each value was assessed visually to ensure that the transformations and scaling was done optimally.
-        \( \mathrm{cum \, sum} \) is the cumulative sum.
     \end{tablenotes}
 \end{threeparttable}
 \end{adjustwidth*}
 \end{table}
 
-\paragraph{Additional \ac{PSG} features}
-In addition to the features described above, another set of features reflecting abnormal sleep stage sequencing in \ac{NT1} was investigated.
+\paragraph{Additional polysomnogram features}
+Apart from the hypnodensity-derived features, we also defined features based on the conventional hypnogram analysis.
 
 One set of such features was selected because they have been found to differentiate \ac{NT1} from other subjects in prior studies~\cite{Christensen2015a,Roth2013,Hansen2017,Drakatos2013,Liu2015b}. 
 These include
@@ -101,7 +194,7 @@ Other features include
     \item the number of \ac{W}/\ac{N1} hypnogram bouts longer than \SI{3}{\minute}~\cite{Christensen2015a}.
 \end{itemize}
 
-In this study we also explore: 
+In this study we also explored: 
 \begin{itemize}
     \item the cumulative \ac{W}/\ac{N1} duration for wakefulness periods shorter than \SI{15}{\minute};
     \item cumulative \ac{REM} duration following \ac{W}/\ac{N1} periods longer than \SI{2.5}{\minute}; and,
@@ -121,7 +214,7 @@ In this study we also explore:
 \subsubsection{Probabilistic models for diagnostic purposes} 
 The large set of features was reduced using a cross-validated \ac{RFE} algorithm~\cite{Guyon2002}.
 Using a threshold of 0.40 yielded 38 relevant features, which were fed to a \ac{GP} classifier as described below.
-GP classifiers are non-parametric probabilistic models that produce robust non-linear decision boundaries using kernels\graffito{Gaussian processes can also be viewed as a probabilistic extension of support vector machines.} and provide estimates of the uncertainities in classifications.
+\Ac{GP} classifiers are non-parametric probabilistic models that produce robust non-linear decision boundaries using kernels\graffito{Gaussian processes can also be viewed as a probabilistic extension of support vector machines.} and provide estimates of the uncertainties in classifications.
 This is useful when combining estimates, but also when making a diagnosis; if an estimate is particularly uncertain, a doctor may opt for more tests to increase certainty before making a diagnosis.
 During \ac{GP} model building, a training dataset is used to optimize a set of hyper-parameters, which specify the kernel function, the basis function coefficients, here a constant, noise variance, and to form the underlying covariance and mean function from which inference about new cases are made~\cite{Rasmussen2006}.
 In this case, the kernel is the squared exponential:
@@ -141,25 +234,26 @@ To test whether our detector differentiates \ac{NT1} from these other cases with
 \subsection{Results}
 
 The neural networks produce outputs that depend on evidence in the input data for or against a certain sleep stage based on features learned through training.
-We hypothesized that narcolepsy, a condition characterized by sleep/wake stage mixing/ dissociation~\cite{Christensen2015a,Olsen2017,Jensen2014,Vassalli2013,Pizza2015}, would result in a greater than normal overlap between stages, such as that shown in~\cref{fig:paperiii-figure03}.
+We hypothesized that narcolepsy, a condition characterized by sleep-wake dissociation~\cite{Christensen2015a,Olsen2017,Jensen2014,Vassalli2013,Pizza2015}, would result in a greater than normal overlap between stages, such as that shown in~\cref{fig:paperiii-figure03}.
 Based on this result, we hypothesized that such sleep stage model outputs could be used as a biomarker for the diagnosis of \ac{NT1} using a standard nocturnal \ac{PSG} rather than the \ac{PSG}-\ac{MSLT} combination.
 
-To quantify narcolepsy-like behavior for a single recording, we generated features quantifying sleep stage mixing/dissociation. 
-These are based on descriptive statistics and other features describing persistence of a set of new time series generated from the geometric mean of every permutation of the set of sleep stages, as obtained from the 16 sleep stage prediction models.
+To quantify narcolepsy-like behavior for a single recording, we generated features quantifying sleep stage dissociation using 16 sleep stage prediction models. 
+These features were based on descriptive statistics and other features describing persistence of a set of new time series generated from every permutation product of the set of predicted sleep stages.
 
-In addition to this, we also added features expected to predict narcolepsy based on prior work, such as \ac{REM} sleep latency and sleep stage sequencing parameters. 
+We also added features expected to predict narcolepsy based on prior work, such as \ac{REM} sleep latency and sleep stage sequencing parameters. 
 A \ac{RFE} procedure was performed on extracted features with average outcome setting the optimal number of relevant features at 38~\cite{Guyon2002}. 
 
 \begin{table}
     % \centering
     % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
     \small
-    \caption[Narcolepsy features selection frequencies]{Selection frequency and descriptions of each of the 38 features included in the \acl{GP} model used for narcolepsy prediction. Numbers in second column correspond to feature number in~\cref{tab:paperiii-supptable10}.}
+    \begin{threeparttable}
+    \caption[Narcolepsy features selection frequencies]{Selection frequency and descriptions of each of the 38 features included in the \acl{GP} model used for narcolepsy prediction. Numbers in second column correspond to feature number in~\cref{tab:sleep-disorders:paper-iii:table-s10}.}
     \label{tab:paperiii-supptable05}
     % \begin{tabular}{@{}lp{4.5cm}lp{2.5cm}@{}}
     \begin{tabular}{@{}lp{6cm}lr@{}}
         \toprule
-           & Feature                                                & Stage combination  & Frequency \\ \midrule
+           & \textbf{Feature}                                                & \textbf{Stage combination}  & \textbf{Frequency} \\ \midrule
         1  & 12                                                     & \ac{W}, \ac{N2}, \ac{REM}             & 1.00                         \\
         2  & \multicolumn{2}{l}{Nightly \acp{SOREMP}}                                                       & 0.91                         \\
         3  & 15                                                     & \ac{W}                                & 0.82                         \\
@@ -199,6 +293,16 @@ A \ac{RFE} procedure was performed on extracted features with average outcome se
         37 & \multicolumn{2}{l}{Accumulation of \ac{REM} epochs following \ac{W} periods}                   & 0.41                         \\
         38 & \multicolumn{2}{l}{Hypnodensity sleep stage bout transitions from \ac{N2} to \ac{REM}}         & 0.41                         \\ \bottomrule
     \end{tabular}
+    \begin{tablenotes}
+    \item %
+    \describe{SOREMP}; %
+    \describe{W}; %
+    \describe{N1}; %
+    \describe{N2}; %
+    \describe{N3}; %
+    \describe{REM}.
+    \end{tablenotes}
+    \end{threeparttable}
     % \end{adjustwidth*}
 \end{table}
 
@@ -206,36 +310,36 @@ An optimal selection frequency cut-off of 0.40\graffito{That means including a f
 The selected features are described in~\cref{tab:paperiii-supptable05} with detailed description of the eight most important features reported in~\cref{tab:paperiii-table04}.
 
 Final predictions were achieved by creating a separate \ac{GP} narcolepsy classifier for each of the sleep scoring models used in the final implementation. 
-This was tested in seven independent datasets: a training dataset constituted of PSG from WSC32,33, SSC10,32,KHC10,34,AHC35, Jazz Clinical Trial Sample (JCTS)43,Italian Hypersomnia Cohort (IHC)41 and DHC; with verification in test data mostly constituted of PSG from the same cohorts and independent replication in the French Hypersomnia Cohort (FHC) and the Chinese Narcolepsy Cohort (CNC)12 that had never been seen by the algorithm~\cref{tab:paperiii-supptable01}. 
-The algorithm produced values between -1 and 1, with 1 indicating a high probability of narcolepsy. 
-A cut-off threshold between narcolepsy type 1 and “other“ was set at -0.03 (red dot, Fig. 4), determined using training data, as shown in Fig. 4a. 
-The optimal trade-off achieves both high sensitivity and specificity, which is seen to translate well onto the test data (Fig. 4b) and the never seen replication sample (Fig. 4c).
+The models were trained (tested) on data from seven (five) different cohorts with subsequent independent replication in two cohorts previously unseen by the algorithm, see~\cref{tab:classification-sleep-disorders:paper-iii:table-s01}.
+The algorithm produced values between -1 and 1, with 1 indicating a high probability of \ac{NT1}.
+A cut-off threshold of -0.03 was determined using cross-validation on the training dataset, which is shown with red dots in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}. 
+This optimal trade-off achieves both high sensitivity and specificity, which is seen to translate well onto the test data and the replication sample in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}b-c.
 
 \begin{figure}
     \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
     \myfloatalign   
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4a.png}}
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4a.png}}
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4b.png}} \\
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4b.png}} \\
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4c.png}}
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4c.png}}
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4d.png}} \\
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4d.png}} \\
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4e.png}}
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4e.png}}
     \subfloat[]
-    {\includegraphics[width=0.5\textwidth + 0.5\marginparwidth + 0.5\marginparsep]{figures/paper-iii/Figure_4f.png}}
+    {\includegraphics[width=0.49\textwidth + 0.49\marginparwidth + 0.49\marginparsep]{figures/paper-iii/Figure_4f.png}}
     \caption[Diagnostic receiver operating characteristics curves for narcolepsy model]{Diagnostic receiver operating characteristics curves for narcolepsy model displaying the trade-offs between sensitivity and specificity for the narcolepsy biomarker for (a) training sample, (b) testing sample, (c) replication sample, and (e) high pretest sample. 
     (d)–(f) Adding \ac{HLA} to model greatly increases specificity. 
     Cut-off thresholds are presented for models with (red dot) and without \ac{HLA} (green dot)}
-    \label{fig:paperiii-figure04}
+    \label{fig:classification-sleep-disorders:paper-iii:figure-04}
     \end{adjustwidth*}
 \end{figure}
 
 In the training data, a sensitivity of \SI{94}{\percent} and specificity of
 \SI{96}{\percent} was achieved, and in the testing data a sensitivity of \SI{91}{\percent} and specificity of \SI{96}{\percent} was achieved, while the sensitivity and specificity for the replication sample was \SIlist{93;91}{\percent}, respectively. 
-When \ac{HLA} was added to this model (\cref{fig:paperiii-figure04}d--f), the sensitivity changed to \SI{90}{\percent} and the specificity rose to \SI{99}{\percent}, and the cut-off threshold was updated to \num{-0.53} shown with green dots in~\cref{fig:paperiii-figure04}d--f.
+When \ac{HLA} was added to this model (\cref{fig:classification-sleep-disorders:paper-iii:figure-04}d--f), the sensitivity changed to \SI{90}{\percent} and the specificity rose to \SI{99}{\percent}, and the cut-off threshold was updated to \num{-0.53} shown with green dots in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}d--f.
 Furthermore, in the high pretest sample we obtained a sensitivity and specificity of \SIlist{90;92}{\percent}, which rose to \SIlist{90;98}{\percent} when adding \ac{HLA}.
 More descriptive statistics including \SI{95}{\percent} confidence intervals are shown in~\cref{tab:paperiii-supptable06}.
 
@@ -243,23 +347,35 @@ More descriptive statistics including \SI{95}{\percent} confidence intervals are
     % \centering
     \small
     \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-    \caption{Eight most frequently selected features for \ac{NT1} detection.}
+    \begin{threeparttable}
+    \caption[Description of most frequent features]{Eight most frequently selected features for \acs{NT1} detection.}
     \label{tab:paperiii-table04}
     % \begin{tabular*}{\textwidth+\marginparwidth+0.5\marginparsep}{@{}lcp{\textwidth}@{}}
     \begin{tabular}{@{}lcp{\marginparsep+\textwidth}@{}}
         \toprule
-          & Frequency & Description \\
+          & \textbf{Frequency} & \textbf{Description} \\
         \midrule
         1 & 1.00 & Time until \SI{5}{\percent} of the weighted sum of the product between \acs{W}, \acs{N2}, and \acs{REM} calculated at every epoch has accumulated. This feature expresses the known sleep stage dissociation and altered sleep timing.\\
         2 & 0.91 & Number of \acp{SOREMP} appearing throughout the recording.\\
         3 & 0.82 & Time until \SI{50}{\percent} of \ac{W} in recording has accumulated weighted by total amount of \ac{W}.\\
         4 & 0.82 & Shannon entropy of \ac{REM} sleep. This expresses the amount of information held in a signal, or in this case, how many different values the \ac{REM} sleep stage distribution obtains, \ie how consolidated phases of \ac{REM} are when the stage appears. \\
         5 & 0.68 & Maximum probability of \ac{W} obtained in a recording. \\
-        6 & 0.68 & Naximum value obtained of the product between \ac{N2} and \ac{REM} probability in a recording.\\
+        6 & 0.68 & Maximum value obtained of the product between \ac{N2} and \ac{REM} probability in a recording.\\
         7 & 0.68 & Time until \SI{30}{\percent} of the epoch-by-epoch sum product between \ac{W} and \ac{N2} has accumulated, weighted by the sum total. \\
         8 & 0.64 & The time taken before \SI{10}{\percent} of the epoch-by-epoch sum product between \ac{W} and \ac{N1} has accumulated, weighted by the sum total.\\
         \bottomrule
     \end{tabular}
+    \begin{tablenotes}
+    \item %
+    \describe{NT1}; %
+    \describe{W}; %
+    \describe{N1}; %
+    \describe{N2}; %
+    \describe{N3}; %
+    \describe{REM}; %
+    \describe{SOREMP}.
+    \end{tablenotes}
+    \end{threeparttable}
     \end{adjustwidth*}
 \end{table}
 
@@ -267,8 +383,8 @@ More descriptive statistics including \SI{95}{\percent} confidence intervals are
     % \centering
     \small
     \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-    \caption[Narcolepsy biomarker performance]{Descriptive statistics on the evaluation of the narcolepsy biomarker in models with and without the \ac{HLA} biomarker. 
-    Performance on models with \ac{HLA} typing is reported for both regular and optimized threshold, since the \ac{ROC} curve changes by adding \ac{HLA}. Mean value and 95\% confidence interval.}
+    \begin{threeparttable}
+    \caption[Narcolepsy biomarker performance]{Descriptive statistics on the evaluation of the narcolepsy biomarker in models with and without the \ac{HLA} biomarker. Mean value (top) and 95\% confidence interval (bottom).}
     \label{tab:paperiii-supptable06}
     \begin{tabular}{@{}llllllrr@{}}
         \toprule
@@ -288,42 +404,66 @@ More descriptive statistics including \SI{95}{\percent} confidence intervals are
         \multirow[t]{2}{0.175\textwidth}{HPT, HLA, optim.}    & 0.93          & 0.94             & 0.9              & 0.94      & 0.9       & 296       & 0.61                       \\
                             & 0.90-0.95     & 0.90-0.97        & 0.85-0.95        & 0.90-0.97 & 0.85-0.95 &           &                            \\ \bottomrule
     \end{tabular}
+    \begin{tablenotes}
+    \small 
+    \item Performance on models with \ac{HLA} typing is reported for both regular and optimized threshold, since the \acs{ROC} curve changes by adding \ac{HLA}. %
+    \describe{HLA}; %
+    \describe{ROC}; %
+    \describe{NT1}; %
+    T, test dataset; %
+    R, replication dataset; %
+    HPT, high pre-test probability dataset; %
+    PPV, positive predictive value (precision); %
+    NPV, negative predictive value.
+    \end{tablenotes}
+    \end{threeparttable}
     \end{adjustwidth*}
 \end{table}
 
 \subsection{Discussion}
 
 Using our models, and considering how typical \ac{NT1} behaved in our sleep stage machine learning routines, we extracted features that could be useful to diagnose this condition.
-\Ac{NT1} is characterized by a loss of hypocretin-producing cells in the hypothalamus and can be best diagnosed by measuring hypocretin levels in the \ac{CSF}~\cite{Peyron2000,Mignot2002}, a procedure that requires a lumbar puncture, which is rarely performed in the United States\todo{Need sources on this and in Europe}.
-At the symptomatic level, \ac{NT1} is characterized by sleepiness, cataplexy\graffito{cataplexic episodes are defined by muscle weakness during wakefulness often triggered by strong emotions.} and numerous symptoms reflecting poor nocturnal sleep (insomnia) and symptoms of \textit{dissociated REM sleep}.
-Dissociated \ac{REM} sleep is reflected in the hypnogram/hypnodensity by the presence of unusual states of consciousness where \ac{REM} sleep intermingles with wakefulness thus producing disturbing reports of dreams that interrupt wakefulness and seem real\graffito{this is also called hypnagogic halluciations.}, or episodes where the sleeper is awake, but paralyzed, as in normal REM sleep\graffito{this is also called sleep paralysis.}.
-The current gold standard for \ac{NT1} diagnosis is the presence of cataplexy and a positive \ac{MSLT}.
-In a recent large study of the \ac{MSLT}, specificity and sensitivity for \ac{NT1} was \SIlist{98.6;92.9}{\percent} in comparing \ac{NT1} versus controls, and \SIlist{71.2;93.4}{\percent} in comparing \ac{NT1} versus other hypersomnia cases~\cite{Andlauer2013}.
+% \Ac{NT1} is characterized by a loss of hypocretin-producing cells in the hypothalamus and can be best diagnosed by measuring hypocretin levels in the \ac{CSF}~\cite{Peyron2000,Mignot2002}, a procedure that requires a lumbar puncture, which is rarely performed in the United States\todo{Need sources on this and in Europe}.
+% At the symptomatic level, \ac{NT1} is characterized by sleepiness, cataplexy\graffito{cataplexic episodes are defined by muscle weakness during wakefulness often triggered by strong emotions.} and numerous symptoms reflecting poor nocturnal sleep (insomnia) and symptoms of \textit{dissociated REM sleep}.
+% Dissociated \ac{REM} sleep is reflected in the hypnogram/hypnodensity by the presence of unusual states of consciousness where \ac{REM} sleep intermingles with wakefulness thus producing disturbing reports of dreams that interrupt wakefulness and seem real\graffito{this is also called hypnagogic halluciations.}, or episodes where the sleeper is awake, but paralyzed, as in normal REM sleep\graffito{this is also called sleep paralysis.}.
+% The current gold standard for \ac{NT1} diagnosis is the presence of cataplexy and a positive \ac{MSLT}.
+% In a recent large study of the \ac{MSLT}, specificity and sensitivity for \ac{NT1} was \SIlist{98.6;92.9}{\percent} in comparing \ac{NT1} versus controls, and \SIlist{71.2;93.4}{\percent} in comparing \ac{NT1} versus other hypersomnia cases~\cite{Andlauer2013}.
 
-\Cref{tab:paperiii-table04,tab:paperiii-supptable05} reveal features found in nocturnal \acp{PSG} that discriminate \ac{NT1} and non-narcoleptics. 
-One of the most prominent features, short latency \ac{REM} sleep, bears great resemblance to the \ac{REM} sleep latency, which is already used clinically to diagnose narcolepsy, although in this case it is calculated using fuzzy logic and thus represent a latency where accumulated sleep is suggestive of a high probability of \ac{REM} sleep having occurred\graffito{As opposed to a discrete \ac{REM} latency scored by a technician}. 
-A short \ac{REM} latency during \ac{PSG} recording\graffito{Short in this case typically means less than \SI{15}{\minute}} has recently been shown to be extremely specific (\SI{99}{\percent}) and moderately sensitive (\SIrange{40}{50}{\percent}) for \ac{NT1} classification~\cite{Andlauer2013,Reiter2015}. 
+\Cref{tab:paperiii-table04,tab:paperiii-supptable05} reveal features found in nocturnal \acp{PSG}s that discriminate \ac{NT1} from non-narcolepsy. 
+One of the most prominent features, short latency \ac{REM} sleep, bears great resemblance to the \ac{REM} sleep latency, which is currently used clinically to diagnose narcolepsy. As short \ac{REML} is calculated using fuzzy logic, it represents a latency where accumulated sleep suggests high probability of \ac{REM} sleep occurrence\graffito{As opposed to a discrete \ac{REM} latency scored by a technician}. 
+A short \ac{REM} latency during \ac{PSG} recording\graffito{Short in this case typically means less than \SI{15}{\minute}} is extremely specific (\SI{99}{\percent}) and moderately sensitive (\SIrange{40}{50}{\percent}) for \ac{NT1} classification~\cite{Andlauer2013,Reiter2015}. 
 The remaining selected features also describe a generally altered sleep architecture, particularly between \ac{REM} sleep, light sleep\graffito{Here light sleep is comprised of \ac{N1} and \ac{N2}} and \ac{W}.
 These dissociations mirror aspects of narcolepsy which are already known and thus reinforce their validity as biomarkers.
 
-For example, the primary feature as determined by the \ac{RFE} algorithm was the time until \SI{5}{\percent} of the accumulated sum of the probability products between stages \ac{W}, \ac{N2} and \ac{REM} had been reached, which reflects the uncertainty between \ac{W}, \ac{REM} and \ac{N2} sleep at the beginning of the night. 
+For example, the primary feature, as determined by the \ac{RFE} algorithm, was the time it took to reach\SI{5}{\percent} of the accumulated sum of the probability products between stages \ac{W}, \ac{N2} and \ac{REM}, which reflects the uncertainty between \ac{W}, \ac{REM} and \ac{N2} sleep at the beginning of the night. 
 Specifically, for the \textit{n}th epoch, the model will output probabilities for each sleep stage, and the proto-feature \( \boldsymbol{\Phi}_n \) is calculated as
 \begin{equation}
-    \boldsymbol{\Phi}_n = p \! \parenthesis{\wake} \times p \! \parenthesis{\nII} + p \! \parenthesis{\wake} \times p \! \parenthesis{\rem} + p \! \parenthesis{\nII} \times p \! \parenthesis{\rem}
+    \boldsymbol{\Phi}_n = \func{p}{\wake} \times \func{p}{\nII} + \func{p}{\wake} \times \func{p}{\rem} + \func{p}{\nII} \times \func{p}{\rem}
 \end{equation}
 The feature value is then calculated as the time it takes in minutes for the accumulated sum of \( \boldsymbol{\Phi}_n \) to reach \SI{5}{\percent} of the total sum \( \sum_n \boldsymbol{\Phi}_n \). 
-Since each of probability product in \( \boldsymbol{\Phi}_n \) reflects the staging uncertainty between each sleep stage pair, \( \boldsymbol{\Phi}_n \) alone reflects the general sleep stage uncertainty for that specific epoch as predicted by the model. 
-A very high value will be attained for epoch \textit{n} if the probabilities for \ac{N2}, \ac{W} and \ac{REM} are equally probable with probabilities for the remaining sleep stages being low or close to zero. 
+Since each probability product in \( \boldsymbol{\Phi}_n \) reflects the staging uncertainty between each sleep stage pair, \( \boldsymbol{\Phi}_n \) alone reflects the general sleep stage uncertainty for that specific epoch as predicted by the model. 
+A high feature value is attained for epoch \textit{n} when \ac{N2}, \ac{W} and \ac{REM} are of equal probability and the remaining two sleep stages are close to zero. 
 A \ac{PSG} with a high staging uncertainty between sleep and wake early in the night would reach the \SI{5}{\percent} threshold rapidly.
 
-Using these features, we were able to determine an optimal cut-off that discriminated narcolepsy from controls and any other patients with as high specificity and sensitivity as the \ac{MSLT}\graffito{See also~\cref{tab:paperiii-supptable06} for details}, notably when \ac{HLA} typing is added. 
-This is true for both the test and the never seen replication samples. 
-Although we do observe a small drop in specificity in the replication sample, the efficacy of the detector was also tested in the context of naive patients with hypersomnia in the high pretest probability sample, and performance found to be similar to the \ac{MSLT}.
+Using these features, we determined an optimal cut-off that discriminated narcolepsy from controls and other patients with specificity and sensitivity as high as the \ac{MSLT}\graffito{See also~\cref{tab:paperiii-supptable06} for details}, notably when \ac{HLA} typing is added. 
+This is true for both the test and replication samples. 
+Although we observed a small drop in specificity in the replication sample, the performance was similar to the \ac{MSLT} when the efficacy of the detector was tested in the context of naive patients with hypersomnia in the high pretest probability sample.
 
 Furthermore, \acp{MSLT} requires that patients spend an entire night and day in a sleep laboratory. 
-The use of this novel biomarker could reduce time spent to only a standard \SI{8}{\hour} nightly \ac{PSG} recording, as done for the screening of other sleep pathologies, \eg \ac{OSA}, allowing improved recognition of \ac{NT1} cases at a fraction of the cost. 
+This novel biomarker could allow for improved recognition of ac{NT1} cases at a reduced cost by only requiring a standard \ac{PSG} screening as used for other sleep pathologies, such as \ac{OSA}.
 A positive predictive value could also be provided depending on the nature of the sample and known narcolepsy prevalence\graffito{This prevalence is low in general population screening, intermediary in a overall clinic population sample, and high in hypersomnia cohorts}.
 It also opens the possibility of using home sleep recordings for diagnosing narcolepsy. 
 In this direction, because of the probabilistic and automatic nature of our biomarker, estimates from more than one night could be automatically analyzed and combined over time ensuring improved prediction. 
 However, it is important to note that this algorithm will not replace the \ac{MSLT} in the ability to predict excessive daytime sleepiness through the measure of mean sleep latency across daytime naps, which is an important characteristic of other hypersomnias.
 
+When the staging data were presented as hypnodensity distributions, the model conveyed more information about the subject than through a hypnogram alone.
+This led to the creation of a biomarker for narcolepsy that achieved similar performance to the current clinical gold standard, the MSLT, but only requires a single sleep study.
+If increased specificity is needed, for example, in large-scale screening, HLA or additional genetic typing brings specificity above 99\% without loss of sensitivity.
+This presents an option for robust, consistent, inexpensive and simpler diagnosis of subjects who may have narcolepsy, as such tests may also be carried out in a home environment.
+
+This study shows how hypnodensity graphs can be created automatically from raw sleep study data, and how the resulting interpretable features can be used to generate a diagnosis probability for \ac{NT1}.
+Another approach would be to classify narcolepsy directly from the neural network by optimizing the performance not only for sleep staging, but also for direct diagnosis by adding an additional softmax output, thereby creating a multitask classifier.
+This approach could lead to better predictions, since features are not then limited to by a designer imagination. 
+A drawback of this approach is that features would no longer be as interpretable and meaningful to clinicians. 
+If meaning could be extracted from these neural network generated features, this might open the door to a single universal sleep analysis model, covering multiple diseases.
+Development of such a model would require adding more subjects with narcolepsy and other conditions to the pool of training data.

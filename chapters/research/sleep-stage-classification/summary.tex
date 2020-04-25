@@ -1,0 +1,26 @@
+\section{Chapter summary}\label{sec:sleep-stage-classification:summary}
+
+Sleep%
+\graffito{\ref{hypothesis:sleep-stages}: \hypothesis{} sleep stages} %
+stage classification is performed manually by experts in sleep clinics leading to major inter- and intra-variability~\cite{Norman2000,Rosenberg2013,Younes2017,Younes2016,Younes2018}.
+One potential way to overcome this challenge is to assist or augment the manual scoring with fully automatic intelligent systems (\ref{hypothesis:sleep-stages}), that provide consistency and robustness in the analysis of sleep patterns.
+In this chapter, we introduced methods for automating sleep stage classification using deep neural networks with two separate model frameworks to answer research questions~\ref{question:sleep-stages-classification}, \ref{question:sleep-stages-datasets}, and \ref{question:sleep-stages-guarantee}.
+
+\Cref{sec:paperi}\graffito{\ref{question:sleep-stages-classification}: \questionSleepStageClassification} described the initial version of the \ac{MASSC} algorithm, and end-to-end deep learning model based on the ResNet-50 architecture. 
+We trained and tested the algorithm on a collective of 2310 \acp{PSG} using three different training strategies, the best of which yielded a high accuracy value of 84.1\% and a \cohen of 0.746.
+In view of the large number of \ac{PSG} recordings included in the study, these numbers compare favorably to the current state-of-the-art in automatic sleep stage scoring, as well as the reported inter-rater reliability measures described in~\cref{sec:challenges-sleep-stage-scoring}.
+
+However%
+\graffito{\ref{question:sleep-stages-datasets}: \questionSleepStageDatasets}, %
+like many other published papers on automatic sleep stage classification, the results reported in~\cref{sec:paperi} are based solely on a single cohort of \acp{PSG}, which immediately raises concerns over the actual generalizability of the model.
+In~\cref{sec:paperii} we applied an updated version of the \ac{MASSC} algorithm in four different experimental settings using five cohorts differing in size, demographics, inherent co-morbidities and recording setups.
+We found that training models on individual cohorts yielded large variations in classification performance both in \ac{LOCI} and \ac{LOCO} training configurations. 
+Strikingly, we found consistently higher sleep stage classification accuracy as a function of the data fraction by mixing cohorts in the training data compared to training models on single cohorts.
+Using 100\% of the training data, our model achieved an accuracy of 86.9\% and a \cohen of 0.799, which in light of the high numbers of both training and testing records compares favorably to the state-of-the-art, as well as our previous reported results in~\cref{sec:paperi}.
+
+The%
+\graffito{\ref{question:sleep-stages-guarantee}: \questionSleepStageGuarantee} %
+final section described the sleep stage classification part of the \ac{STAGES} model.
+Here, we used specific transformations of the input \ac{PSG} signals coupled with multiple realizations of a deep neural network architecture to create a final ensemble model for classifying sleep stages.
+Based on a total 2784 \acp{PSG}, the best performing model as determined by a \(2^5\)-factorial experimental design yielded an accuracy of 86.8\% on a dataset scored by six technicians, while outperforming every single one based on both a biased and unbiased consensus score.
+The model was also shown to be stable with respect to the presence of several sleep disorders, with the exception of narcolepsy which had a significant impact on the algorithm.\graffito{The implications of this will be detailed in~\cref{chap:classification-sleep-disorders}}

@@ -1,0 +1,13 @@
+\begingroup
+    \let\clearpage\relax
+    \let\cleardoublepage\relax
+    %*******************************************************
+    % List of Figures
+    %*******************************************************
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\tocEntry{\listfigurename}}
+    \pdfbookmark[1]{\listfigurename}{lof}
+    \listoffigures
+    % \newpage
+    % \vspace{8ex}
+\endgroup
