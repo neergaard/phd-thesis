@@ -392,36 +392,8 @@ Comparisons between models was done on a per epoch basis.
 \end{adjustwidth*}
 \end{table}
 
-% \begin{table}[tb]
-% % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-%     \small
-%     \centering
-%     \caption[\acs{STAGES} model experimental configurations]{\ac{STAGES} model experimental configurations. 32 single models are tested, and 9 ensembles, totaling 41 models.}
-%     \label{tab:sleep-stages:paper-iii:table-s08}
-%     \begin{tabular}{@{}lllllllllll@{}}
-%         \toprule
-%         \multirow{3}{*}{Single models} & \multicolumn{2}{l}{Memory}        & \multicolumn{2}{l}{Seg. Len.} & \multicolumn{2}{l}{Complexity} & \multicolumn{2}{l}{Encoding} & \multicolumn{2}{l}{Realizations} \\ \midrule
-%         & \multicolumn{2}{l}{Simple FF}     & \multicolumn{2}{l}{5 s}       &\multicolumn{2}{l}{Low}        & \multicolumn{2}{l}{Octave}   & \multicolumn{2}{l}{1}            \\
-%         & \multicolumn{2}{l}{\ac{LSTM}}          & \multicolumn{2}{l}{15 s}      & \multicolumn{2}{l}{High}       & \multicolumn{2}{l}{\ac{CC}}       & \multicolumn{2}{l}{2}            \\ \midrule
-%         \multirow{2}{*}{Ensemble models} & & Oct FF & Oct \ac{LSTM} & \ac{CC} FF & \ac{CC} \ac{LSTM} & FF & \ac{LSTM} & Oct & \ac{CC} & All models \\
-%         & & 8          & 8            & 8         & 8           & 16     & 16       & 16             & 16            & 32         \\ \bottomrule
-%     \end{tabular}
-%     % \\
-%     % \small
-%     % \begin{tabular}{@{}llllllllll@{}}
-%     %     \toprule
-%     %     \multicolumn{10}{c}{Ensembles} \\ \midrule
-%     %     Parameters included & All Oct FF & All Oct \ac{LSTM} & All \ac{CC} FF & All \ac{CC} \ac{LSTM} & All FF & All \ac{LSTM} & All Oct models & All \ac{CC} models & All models \\
-%     %     N. models           & 8          & 8            & 8         & 8           & 16     & 16       & 16             & 16            & 32         \\ \bottomrule
-%     % \end{tabular}
-% % \end{adjustwidth*}
-% \end{table}
-
-\subsection{Results}
-\subsubsection{Inter-scorer reliability cohort}
-
 % \begin{landscape}
-\begin{table}
+\begin{table}[t]
 \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
 \begin{threeparttable}
     \small
@@ -450,6 +422,34 @@ Comparisons between models was done on a per epoch basis.
 \end{table}
 % \end{landscape}
 
+% \begin{table}[tb]
+% % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+%     \small
+%     \centering
+%     \caption[\acs{STAGES} model experimental configurations]{\ac{STAGES} model experimental configurations. 32 single models are tested, and 9 ensembles, totaling 41 models.}
+%     \label{tab:sleep-stages:paper-iii:table-s08}
+%     \begin{tabular}{@{}lllllllllll@{}}
+%         \toprule
+%         \multirow{3}{*}{Single models} & \multicolumn{2}{l}{Memory}        & \multicolumn{2}{l}{Seg. Len.} & \multicolumn{2}{l}{Complexity} & \multicolumn{2}{l}{Encoding} & \multicolumn{2}{l}{Realizations} \\ \midrule
+%         & \multicolumn{2}{l}{Simple FF}     & \multicolumn{2}{l}{5 s}       &\multicolumn{2}{l}{Low}        & \multicolumn{2}{l}{Octave}   & \multicolumn{2}{l}{1}            \\
+%         & \multicolumn{2}{l}{\ac{LSTM}}          & \multicolumn{2}{l}{15 s}      & \multicolumn{2}{l}{High}       & \multicolumn{2}{l}{\ac{CC}}       & \multicolumn{2}{l}{2}            \\ \midrule
+%         \multirow{2}{*}{Ensemble models} & & Oct FF & Oct \ac{LSTM} & \ac{CC} FF & \ac{CC} \ac{LSTM} & FF & \ac{LSTM} & Oct & \ac{CC} & All models \\
+%         & & 8          & 8            & 8         & 8           & 16     & 16       & 16             & 16            & 32         \\ \bottomrule
+%     \end{tabular}
+%     % \\
+%     % \small
+%     % \begin{tabular}{@{}llllllllll@{}}
+%     %     \toprule
+%     %     \multicolumn{10}{c}{Ensembles} \\ \midrule
+%     %     Parameters included & All Oct FF & All Oct \ac{LSTM} & All \ac{CC} FF & All \ac{CC} \ac{LSTM} & All FF & All \ac{LSTM} & All Oct models & All \ac{CC} models & All models \\
+%     %     N. models           & 8          & 8            & 8         & 8           & 16     & 16       & 16             & 16            & 32         \\ \bottomrule
+%     % \end{tabular}
+% % \end{adjustwidth*}
+% \end{table}
+
+\subsection{Results}
+\subsubsection{Inter-scorer reliability cohort}
+
 We assessed inter-scorer reliability using the \ac{IS-RC}, a cohort of 70 \acp{PSG} scored by 6 scorers across three locations in the USA~\cite{Kuna2013}.
 \cref{tab:sleep-stages:paper-iii:table-01} displays individual scorer performance as well as the averaged performance across scorers, with top and bottom of table showing accuracies and \cohen, respectively.
 The results are shown for each individual scorer when compared to the consensus of all scorers (biased), and compared to the consensus of the remaining scorers (unbiased).
@@ -459,7 +459,7 @@ At a significance level of \(\alpha=0.05\), the model performs statistically bet
 
 % \begingroup
 % \setlength{\tabcolsep}{0pt} % Default value: 6pt
-\begin{table}
+\begin{table}[tb]
 \small
 \centering
 \begin{threeparttable}
@@ -509,7 +509,7 @@ where $p_e$ is the baseline accuracy and $p_o$ is the scorer accuracy, such that
 In this implementation, scorers with a higher consensus with the group are considered more reliable and have their assessments weighted heavier than the rest.
 This also avoided split decisions on end-results.
 
-\begin{table}
+\begin{table}[tb]
     % \centering
     \caption[\acs{STAGES} test performance]{Performance of best models on various datasets compared to the six-scorer consensus. All comparisons are on a by-epoch-basis.}
     \label{tab:sleep-stages:paper-iii:table-02}
@@ -571,6 +571,14 @@ small variations in model parameters, such as the number of
 feature-maps and hidden nodes.
 This was achieved by randomly varying the parameters between 50 and 150\% of the original values using the \ac{CC}/SH/LS/\ac{LSTM} as a template (this model achieved similar performance to the \ac{CC}/LH/LS/\ac{LSTM} while requiring significantly less computational power).
 
+% All models make errors, but as these errors occur independently of each other, the risk of not detecting and correcting errors falls with increasing model numbers.
+% For this reason, 16 such models were trained, and at each analyzed segment both mean and variance of model estimates were calculated. 
+We trained 16 models, and at each segment (\SIlist{5;10;15;30}{\second}) the mean and variance of model estimates were calculated. 
+As expected, the relative model variance (standardized to the average variance in a correct wakefulness prediction) is generally lower in correct predictions and this can be used to inform users about uncertain/incorrect estimates. 
+To demonstrate the effectiveness of this final implementation, the average of the models is shown alongside the distribution of \plusminus{5234}{14} scorers on 150 epochs, a dataset provided by the AASM (AASM inter-scorer reliability (ISR) dataset, (see Datasets section in Methods). 
+On these epochs, the AASM ISR achieved a 90\% agreement between scorers. 
+In comparison, the model estimates reached a 95\% accuracy compared to the AASM consensus (Fig. 2b). 
+Using the model ensemble and reporting on sleep stage probabilities and inter-model variance for quality purpose constitute the core of our sleep scoring algorithm.
 \begin{table}
 % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
     \centering
@@ -607,34 +615,6 @@ This was achieved by randomly varying the parameters between 50 and 150\% of the
 \end{threeparttable}
 % \end{adjustwidth*}
 \end{table}
-
-% All models make errors, but as these errors occur independently of each other, the risk of not detecting and correcting errors falls with increasing model numbers.
-% For this reason, 16 such models were trained, and at each analyzed segment both mean and variance of model estimates were calculated. 
-We trained 16 models, and at each segment (\SIlist{5;10;15;30}{\second}) the mean and variance of model estimates were calculated. 
-As expected, the relative model variance (standardized to the average variance in a correct wakefulness prediction) is generally lower in correct predictions and this can be used to inform users about uncertain/incorrect estimates. 
-To demonstrate the effectiveness of this final implementation, the average of the models is shown alongside the distribution of \plusminus{5234}{14} scorers on 150 epochs, a dataset provided by the AASM (AASM inter-scorer reliability (ISR) dataset, (see Datasets section in Methods). 
-On these epochs, the AASM ISR achieved a 90\% agreement between scorers. 
-In comparison, the model estimates reached a 95\% accuracy compared to the AASM consensus (Fig. 2b). 
-Using the model ensemble and reporting on sleep stage probabilities and inter-model variance for quality purpose constitute the core of our sleep scoring algorithm.
-
-\begin{figure}
-\begin{adjustwidth*}{}{-\marginparsep-\marginparwidth}
-    % \centering
-    \includegraphics[width=\linewidth]{figures/paper-iii/Figure_2a}
-    \caption[Hypnodensity example evaluated by different models]{The figure displays the hypnodensity graph. Displayed models are in order: multiple scorer assessment (1); ensembles: All models, those with memory (\ac{LSTM}) and those without memory (FF) (2–4); single models. OCT is octave encoding, Color codes: white, wake; red, \ac{N1}; light blue, \ac{N2}; dark blue, \ac{N3}; black, \ac{REM}.}
-    \label{fig:sleep-stages:paper-iii:figure-02a}
-\end{adjustwidth*}
-\end{figure}
-
-\begin{figure}
-\begin{adjustwidth*}{}{-\marginparsep-\marginparwidth}
-    % \centering
-    \includegraphics[width=\linewidth]{figures/paper-iii/Figure_2b}
-    \caption[Evaluation of model on \acs{AASM} \acs{ISR}.]{The 150 epochs of a recording from the \ac{AASM} \ac{ISR} are analyzed by 16 models with randomly varying parameters, using the \ac{CC}/SH/LS/\ac{LSTM} model as a template. These data were also evaluated by \plusminus{5234}{14} different scorers. The distribution of these is shown on top, the average model predictions are shown in the middle, and the model variance is shown at the bottom.}
-    \label{fig:sleep-stages:paper-iii:figure-02b}
-\end{adjustwidth*}
-\end{figure}
-
 \subsubsection{Ensemble/best model performance}
 \Cref{tab:sleep-stages:paper-iii:table-s02} reports on concordance for our best model, the ensemble of all \ac{CC} models.
 Concordance is presented in a weighted and unweighted manner, between the best model estimate and scorer consensus (\cref{tab:sleep-stages:paper-iii:table-03}).
@@ -657,6 +637,23 @@ This is seen in both model and scorer estimates.
 Choosing to present the data as hypnodensity graphs mitigates this problem. 
 The various model estimates produce similar results, which also resemble the scorer assessment distribution, although models without memory fluctuate slightly more, and tend to place a higher probability on \ac{REM} sleep in periods of wakefulness, since no contextual information is provided
 
+\begin{figure}[p]
+\begin{adjustwidth*}{}{-\marginparsep-\marginparwidth}
+    % \centering
+    \includegraphics[width=\linewidth]{figures/paper-iii/Figure_2a}
+    \caption[Hypnodensity example evaluated by different models]{The figure displays the hypnodensity graph. Displayed models are in order: multiple scorer assessment (1); ensembles: All models, those with memory (\ac{LSTM}) and those without memory (FF) (2–4); single models. OCT is octave encoding, Color codes: white, wake; red, \ac{N1}; light blue, \ac{N2}; dark blue, \ac{N3}; black, \ac{REM}.}
+    \label{fig:sleep-stages:paper-iii:figure-02a}
+\end{adjustwidth*}
+\end{figure}
+
+\begin{figure}
+\begin{adjustwidth*}{}{-\marginparsep-\marginparwidth}
+    % \centering
+    \includegraphics[width=\linewidth]{figures/paper-iii/Figure_2b}
+    \caption[Evaluation of model on \acs{AASM} \acs{ISR}.]{The 150 epochs of a recording from the \ac{AASM} \ac{ISR} are analyzed by 16 models with randomly varying parameters, using the \ac{CC}/SH/LS/\ac{LSTM} model as a template. These data were also evaluated by \plusminus{5234}{14} different scorers. The distribution of these is shown on top, the average model predictions are shown in the middle, and the model variance is shown at the bottom.}
+    \label{fig:sleep-stages:paper-iii:figure-02b}
+\end{adjustwidth*}
+\end{figure}
 % \begin{figure}[!tb]
 %     \myfloatalign   
 %     \subfloat[]

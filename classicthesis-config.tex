@@ -61,6 +61,7 @@
 \newcommand{\myLocation}{Kgs. Lyngby\xspace}
 \newcommand{\myTime}{April 2020\xspace}
 \newcommand{\myVersion}{\classicthesis}
+\newcommand{\myAddress}{Ørsteds Plads\\Building 345C\\DK-2800 \myLocation\\Denmark}
 
 % ********************************************************************
 % Setup, finetuning, and useful commands
@@ -302,7 +303,7 @@
 % ********************************************************************
 \hypersetup{%
   %draft, % hyperref's draft mode, for printing see below
-  colorlinks=true, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
+  colorlinks=false, linktocpage=true, pdfstartpage=3, pdfstartview=FitV,%
   % uncomment the following line if you want to have black links (e.g., for printing)
   %colorlinks=false, linktocpage=false, pdfstartpage=3, pdfstartview=FitV, pdfborder={0 0 0},%
   breaklinks=true, pageanchor=true,%
@@ -388,11 +389,11 @@
 % \usepackage[osf]{libertine}
 % \usepackage[light,condensed,math]{iwona}
 %\renewcommand{\sfdefault}{iwona}
-%\usepackage{lmodern} % <-- no osf support :-(
+% \usepackage{lmodern} % <-- no osf support :-(
 %\usepackage{cfr-lm} %
 %\usepackage[urw-garamond]{mathdesign} <-- no osf support :-(
-%\usepackage[default,osfigures]{opensans} % scale=0.95
-%\usepackage[sfdefault]{FiraSans}
+% \usepackage[osfigures]{opensans} % scale=0.95
+% \usepackage{FiraSans}
 % \usepackage[opticals,mathlf]{MinionPro} % onlytext
 % ********************************************************************
 % \usepackage[largesc,osf]{newpxtext}
@@ -417,3 +418,15 @@
 \newcommand{\hypothesisSleepStages}{Sleep stages can be effectively classified using advanced biomedical signal processing and machine learning algorithms}
 \newcommand{\hypothesisSleepEvents}{Sleep events can be precisely annotated using advanced biomedical signal processing and machine learning algorithms}
 \newcommand{\hypothesisSleepDisorders}{Sleep disorders can be efficiently diagnosed using advanced biomedical signal processing and machine learning algorithms}
+
+% DTU frieze
+\newcommand{\frieze}{%
+	\AddToShipoutPicture*{
+		\put(0,0){
+			\parbox[b][\paperheight]{\paperwidth}{%
+				\includegraphics[trim=125mm 0 0 0, clip=true, width=0.66\paperwidth]{figures/DTU-frise-SH-15.pdf}
+				\vspace*{1cm}
+			}
+		}
+	}
+}

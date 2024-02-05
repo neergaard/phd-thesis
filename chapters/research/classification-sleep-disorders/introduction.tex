@@ -33,6 +33,15 @@ Unique to narcolepsy is the extremely strong association with the genetic marker
 The pathology also includes episodes of \textit{sleep-wake dissociations}, where the neuron groups in the sleep-wake or \ac{REM}-\ac{NREM} switches fire at the wrong time.
 This results in the clinical manifestations shown with parentheses in~\cref{fig:clinical-background:flipflop}.
 % For example, experiencing REM sleep muscle paralysis while awake (sleep paralysis, cataplexy) or dreaming while awake (hypnagogic hallucinations)\todo{Revision. When this happens in NREM it results in ... etc.}.
+\begin{figure}[t]
+    \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+        \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-iii/Figure_3.png}
+        \caption[Examples of hypnodensity graphs.]{Examples of hypnodensity graph in subjects with and without narcolepsy. 
+        Hypnodensity for a subject without narcolepsy (top) and a subject with narcolepsy (bottom). 
+        Color codes: white, \ac{W}; red, \ac{N1}; light blue, \ac{N2}; dark blue, \ac{N3}; black, \ac{REM}.}
+        \label{fig:paperiii-figure03}
+    \end{adjustwidth*}
+\end{figure}
 
 The differentiation of sleep stages is also particularly important for the diagnosis of narcolepsy.
 Current diagnostic guidelines for \ac{NT1} require a full-night \ac{PSG} and a \ac{MSLT} the following day, where patients are asked to nap \numrange{4}{5} times for \SI{20}{\minute} every \SI{2}{\hour} during the daytime, and for each nap, the sleep latency and \ac{REM} latency are noted~\cite{Littner2005}.
@@ -47,16 +56,6 @@ In \cref{sec:paperiii}, we saw how a sleep stage classification algorithm could 
 The results presented an interesting observation: sleep stage classification performance was unperturbed by existing sleep disorders, except in patients with narcolepsy.
 Furthermore, when comparing the hypnodensities in patients with and without narcolepsy, the former exhibited a much more diffuse sleep architecture with less pronounced sleep-wake cycles and increased \ac{REM}/\ac{W}/\ac{N1} disassociation. 
 This is illustrated in~\cref{fig:paperiii-figure03} where the bottom (top) trace shows a hypnodensity graph for a subject with (without) narcolepsy.
-
-\begin{figure}[t]
-    \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-        \includegraphics[width=\textwidth+\marginparwidth+\marginparsep]{figures/paper-iii/Figure_3.png}
-        \caption[Examples of hypnodensity graphs.]{Examples of hypnodensity graph in subjects with and without narcolepsy. 
-        Hypnodensity for a subject without narcolepsy (top) and a subject with narcolepsy (bottom). 
-        Color codes: white, \ac{W}; red, \ac{N1}; light blue, \ac{N2}; dark blue, \ac{N3}; black, \ac{REM}.}
-        \label{fig:paperiii-figure03}
-    \end{adjustwidth*}
-\end{figure}
 
 These findings motivated a novel research question with is directly associated with research hypothesis~\ref{hypothesis:sleep-disorders}\graffito{\ref{hypothesis:sleep-disorders}: \hypothesis\xspace sleep disorders.}: 
 \newcommand{\questionSleepDisorders}{based on a single overnight \ac{PSG} recording, is it possible to diagnose narcolepsy with the same level of performance as the current clinical gold standard?}
@@ -77,7 +76,7 @@ Derived from the research hypothesis and associated question, the following obje
 The following sections describe the steps taken to complete the posed objectives and answer the research question.
 
 % Research papers
-\clearpage\input{chapters/research/classification-sleep-disorders/paper-iii}
+\cleardoublepage\input{chapters/research/classification-sleep-disorders/paper-iii}
 
 \clearpage\section{Chapter summary}
 

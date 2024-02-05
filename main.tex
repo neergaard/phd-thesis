@@ -8,11 +8,11 @@
                 numbers=noenddot, %
                 % headlines, %
                 headinclude, %
-                % headlinesep, %
-                footinclude, %
+                headlinesep, %
+                % footinclude, %
                 cleardoublepage=empty, %
                 abstract=on,
-                % BCOR=5mm,
+                BCOR=8mm,
                 paper=a4,fontsize=10pt,
                 ]{scrreprt}
 
@@ -48,27 +48,30 @@
 %********************************************************************
 % Frontmatter
 %*******************************************************
+
 \include{frontbackmatter/dirty-titlepage}
+\cleardoublepage
+\include{frontbackmatter/comic}
 \include{frontbackmatter/titleback}
 \include{frontbackmatter/titlepage}
-\cleardoublepage\include{frontbackmatter/comic}
-\cleardoublepage\include{frontbackmatter/toc}
-\cleardoublepage\include{frontbackmatter/preface}
-\cleardoublepage\include{frontbackmatter/acknowledgments}
-\cleardoublepage\include{frontbackmatter/abstract-en}
-\cleardoublepage\include{frontbackmatter/abstract-dk}
-\cleardoublepage\include{frontbackmatter/lof}
-\cleardoublepage\include{frontbackmatter/lot}
-\cleardoublepage\include{frontbackmatter/acronyms}
-% \cleardoublepage\include{frontbackmatter/publications}
+\include{frontbackmatter/preface}\cleardoublepage
+\include{frontbackmatter/acknowledgments}
+\include{frontbackmatter/abstract-en}
+\include{frontbackmatter/abstract-dk}
+\include{frontbackmatter/lof}
+\include{frontbackmatter/lot}
+\include{frontbackmatter/acronyms}
+% \include{frontbackmatter/publications}
+\include{frontbackmatter/toc}\cleardoublepage
+
 %********************************************************************
 % Mainmatter
 %*******************************************************
-\cleardoublepage
+
 \pagestyle{scrheadings}
 \pagenumbering{arabic}
-%\setcounter{page}{90}
-% use \cleardoublepage here to avoid problems with pdfbookmark
+% %\setcounter{page}{90}
+% % use \cleardoublepage here to avoid problems with pdfbookmark
 \cleardoublepage
 
 
@@ -84,17 +87,19 @@
 \include{chapters/research/classification-sleep-disorders/introduction}\cleardoublepage
 
 \part{Outlook}\label{part:outlook}
-\include{chapters/outlook/discussion}\cleardoublepage
-\include{chapters/outlook/conclusion}\cleardoublepage
-\include{chapters/outlook/future-work}\cleardoublepage
+\include{chapters/outlook/discussion}\cleardoublepage\cleardoublepage
+\include{chapters/outlook/conclusion}\cleardoublepage\cleardoublepage
+\include{chapters/outlook/future-work}\cleardoublepage\cleardoublepage
 
-\cleardoublepage\include{frontbackmatter/Bibliography}
+\include{frontbackmatter/Bibliography}
 
 
 
 % ********************************************************************
 % Backmatter
 %*******************************************************
+
+
 \appendix
 \renewcommand{\thechapter}{\Alph{chapter}}
 \cleardoublepage
@@ -111,7 +116,7 @@
 %********************************************************************
 % Other Stuff in the Back
 %*******************************************************
-
+\include{frontbackmatter/Colophon}
 % ********************************************************************
 % Game Over: Restore, Restart, or Quit?
 %*******************************************************

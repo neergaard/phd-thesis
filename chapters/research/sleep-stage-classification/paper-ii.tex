@@ -105,14 +105,6 @@ SE: sleep efficiency; %
 % \end{sidewaystable}
 \end{landscape}
 
-\begin{figure}[tb]
-\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-    \includegraphics[width=\linewidth]{figures/paper-ii/figure_network.png}
-    \caption[\acs{MASSC}v2 model overview]{Model overview. a) The input is a sequence of data \(\mathbf{x}\) containing raw signal data from \ac{EEG}, left/right \ac{EOG}, and \ac{EMG} channels, which is supplied to the network modules in sequence. The feature extraction module consists of \(R\) repeated blocks of residual units, see b) panel to the right. The output of the model is a matrix \(\mathbf{y}\) containing class probabilities for each sleep stage for each time step, which can be visualized either directly as a hypnodensity, or by \(\argmax{\mathbf{y}}\) as a hypnogram. The \textbf{A} and \textbf{M} labels in the hypnogram plots corresponds to automatic and manually scored hypnograms. b) Schematic of a single residual block in the feature extraction module. Convolutional layers are described by the kernel size \(\times\) number of filters using a stride value of 1. Shortcut uses \(1\times1\) convolutions with added zero-padding to maintain temporal dimension. Conv, convolutional layer; BatchNorm, batch normalization; \describe{ReLU}; \(f_0\), base number of filters (\(f_0=4\)).}
-    \label{fig:sleep-stages:paper-ii:figure-01}
-\end{adjustwidth*}
-\end{figure}
-
 \subsection{Methods}
 
 \subsubsection{Data pipeline}
@@ -131,12 +123,21 @@ Furthermore, as we are potentially interested in classifying multiple sleep stag
 For example, if $\alpha=8$, the sequence $\mathbf{x}$ contains \SI{4}{\minute} of successive \ac{PSG} data described by 8 epochs of length \SI{30}{\second}.
 Furthermore, we denote by $\llbracket a, b \rrbracket$ the set of integers from $a$ to $b$, i.e. $\llbracket a, b \rrbracket = \lbrace n \in \mathbb{N} \mid a \leq n \leq b \rbrace$, and by $\llbracket N \rrbracket$ the shorthand form of $\llbracket 1, N \rrbracket$.
 
+
+\begin{figure}[tb]
+\begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
+    \includegraphics[width=\linewidth]{figures/paper-ii/figure_network.png}
+    \caption[\acs{MASSC}v2 model overview]{Model overview. a) The input is a sequence of data \(\mathbf{x}\) containing raw signal data from \ac{EEG}, left/right \ac{EOG}, and \ac{EMG} channels, which is supplied to the network modules in sequence. The feature extraction module consists of \(R\) repeated blocks of residual units, see b) panel to the right. The output of the model is a matrix \(\mathbf{y}\) containing class probabilities for each sleep stage for each time step, which can be visualized either directly as a hypnodensity, or by \(\argmax{\mathbf{y}}\) as a hypnogram. The \textbf{A} and \textbf{M} labels in the hypnogram plots corresponds to automatic and manually scored hypnograms. b) Schematic of a single residual block in the feature extraction module. Convolutional layers are described by the kernel size \(\times\) number of filters using a stride value of 1. Shortcut uses \(1\times1\) convolutions with added zero-padding to maintain temporal dimension. Conv, convolutional layer; BatchNorm, batch normalization; \describe{ReLU}; \(f_0\), base number of filters (\(f_0=4\)).}
+    \label{fig:sleep-stages:paper-ii:figure-01}
+\end{adjustwidth*}
+\end{figure}
+
 \subsubsection{Network architecture}
 
 \begin{table}[t]
 % \centering
 \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
-\raggedleft
+\raggedright
 \begin{threeparttable}
     \small
     % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
@@ -476,7 +477,7 @@ However, the model still has difficulties classifying and distinguishing between
 On average, we saw an increase in overall accuracy, when increasing the number of cohorts from 2 to 4 using 500 \acp{PSG} in each configuration, see~\cref{fig:sleep-stages:paper-ii:figure-05} and~\cref{tab:sleep-stages:paper-ii:table-s04}.
 Specifically, we found that the average overall accuracy increased from \ci{0.788}{0.102}{0.787}{0.790} in the 2-cohort configuration to \ci{0.808}{0.092}{0.807}{0.810} and \ci{0.821}{0.085}{0.819}{0.823} in the 3- and 4-cohort configurations, respectively.
 
-\begin{table}
+\begin{table}[p]
 \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
 \begin{threeparttable}
 \footnotesize

@@ -227,10 +227,12 @@ An exception is the \ac{AHI}, although the associated effect is small and most l
 It is noted, that although \ac{AHI}, \ac{ArI}, and \ac{PLMI} are not normally distributed and summarizing these variables with standard deviations is invalid, it is nevertheless standard practice in sleep medicine and thus presented the same way here. 
 We performed little data cleaning in order to provide as much data and variation to the deep learning model as possible, however, future efforts should explore and apply inclusion criteria such as minimal total sleep time, artifact detection and removal of studies with severe artifacts. 
 We did impose a trivial lower bound on the number of scored events (\num{>0}) for a \ac{PSG} to be included in this study, but stricter requirements could potentially improve model performance.
-
-In this work, we investigated somatic \ac{PSG} events present in multiple signal modalities instead of \ac{EEG}-specific events, which required changes to the network architecture. 
-Specifically, we kept the signal modality encoded in the first dimension of the tensor propagated through the network, which allowed for the use of \oned convolutional operators. 
-By performing \oned convolutions and keeping the channel information in the feature maps instead of keeping them as separate dimensions and performing \twod convolutions as proposed in~\cite{Chambon2018b,Chambon2019}, we simplify and reduce the number of computations and training time by a factor $\propto C$. 
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/paper-iv/embc19-distribution.pdf}
+    \caption[Visualization of F1 scores]{Visualization of F1 scores for both \ac{Ar} and \ac{LM} detection using the dynamic model.}
+    \label{fig:paperiv-test_distribution}
+\end{figure}
 \begin{table}[tb]
     \sisetup{separate-uncertainty}
     \small
@@ -252,13 +254,10 @@ By performing \oned convolutions and keeping the channel information in the feat
     \end{tablenotes}
     \end{threeparttable}
 \end{table}
+In this work, we investigated somatic \ac{PSG} events present in multiple signal modalities instead of \ac{EEG}-specific events, which required changes to the network architecture. 
+Specifically, we kept the signal modality encoded in the first dimension of the tensor propagated through the network, which allowed for the use of \oned convolutional operators. 
+By performing \oned convolutions and keeping the channel information in the feature maps instead of keeping them as separate dimensions and performing \twod convolutions as proposed in~\cite{Chambon2018b,Chambon2019}, we simplify and reduce the number of computations and training time by a factor $\propto C$. 
 
-\begin{figure}
-    \centering
-    \includegraphics[width=\textwidth]{figures/paper-iv/embc19-distribution.pdf}
-    \caption[Visualization of F1 scores]{Visualization of F1 scores for both \ac{Ar} and \ac{LM} detection using the dynamic model.}
-    \label{fig:paperiv-test_distribution}
-\end{figure}
 However, we did not investigate the effects of modeling the conditional probability of \ac{Ar} and \ac{LM} occurrence, but the proposed architecture is versatile enough to detect both events jointly as well as separately. 
 Previous work also suggest that detecting multiple objects at the same time is of high interest and leads to (at least) non-inferior performances~\cite{Chambon2018b, Chambon2019, Redmon2016a, Redmon2016b, Liu2016}.
 

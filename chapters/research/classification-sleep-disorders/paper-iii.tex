@@ -237,13 +237,7 @@ The neural networks produce outputs that depend on evidence in the input data fo
 We hypothesized that narcolepsy, a condition characterized by sleep-wake dissociation~\cite{Christensen2015a,Olsen2017,Jensen2014,Vassalli2013,Pizza2015}, would result in a greater than normal overlap between stages, such as that shown in~\cref{fig:paperiii-figure03}.
 Based on this result, we hypothesized that such sleep stage model outputs could be used as a biomarker for the diagnosis of \ac{NT1} using a standard nocturnal \ac{PSG} rather than the \ac{PSG}-\ac{MSLT} combination.
 
-To quantify narcolepsy-like behavior for a single recording, we generated features quantifying sleep stage dissociation using 16 sleep stage prediction models. 
-These features were based on descriptive statistics and other features describing persistence of a set of new time series generated from every permutation product of the set of predicted sleep stages.
-
-We also added features expected to predict narcolepsy based on prior work, such as \ac{REM} sleep latency and sleep stage sequencing parameters. 
-A \ac{RFE} procedure was performed on extracted features with average outcome setting the optimal number of relevant features at 38~\cite{Guyon2002}. 
-
-\begin{table}
+\begin{table}[htbp]
     % \centering
     % \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
     \small
@@ -306,16 +300,7 @@ A \ac{RFE} procedure was performed on extracted features with average outcome se
     % \end{adjustwidth*}
 \end{table}
 
-An optimal selection frequency cut-off of 0.40\graffito{That means including a feature if it was selected in \SI{40}{\percent} of the cross-validation runs} was determined using a cross-validation setup on the training data. 
-The selected features are described in~\cref{tab:paperiii-supptable05} with detailed description of the eight most important features reported in~\cref{tab:paperiii-table04}.
-
-Final predictions were achieved by creating a separate \ac{GP} narcolepsy classifier for each of the sleep scoring models used in the final implementation. 
-The models were trained (tested) on data from seven (five) different cohorts with subsequent independent replication in two cohorts previously unseen by the algorithm, see~\cref{tab:classification-sleep-disorders:paper-iii:table-s01}.
-The algorithm produced values between -1 and 1, with 1 indicating a high probability of \ac{NT1}.
-A cut-off threshold of -0.03 was determined using cross-validation on the training dataset, which is shown with red dots in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}. 
-This optimal trade-off achieves both high sensitivity and specificity, which is seen to translate well onto the test data and the replication sample in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}b-c.
-
-\begin{figure}
+\begin{figure}[htbp]
     \begin{adjustwidth*}{}{-\marginparwidth-\marginparsep}
     \myfloatalign   
     \subfloat[]
@@ -336,6 +321,21 @@ This optimal trade-off achieves both high sensitivity and specificity, which is 
     \label{fig:classification-sleep-disorders:paper-iii:figure-04}
     \end{adjustwidth*}
 \end{figure}
+
+To quantify narcolepsy-like behavior for a single recording, we generated features quantifying sleep stage dissociation using 16 sleep stage prediction models. 
+These features were based on descriptive statistics and other features describing persistence of a set of new time series generated from every permutation product of the set of predicted sleep stages.
+
+We also added features expected to predict narcolepsy based on prior work, such as \ac{REM} sleep latency and sleep stage sequencing parameters. 
+A \ac{RFE} procedure was performed on extracted features with average outcome setting the optimal number of relevant features at 38~\cite{Guyon2002}. 
+
+An optimal selection frequency cut-off of 0.40\graffito{That means including a feature if it was selected in \SI{40}{\percent} of the cross-validation runs} was determined using a cross-validation setup on the training data. 
+The selected features are described in~\cref{tab:paperiii-supptable05} with detailed description of the eight most important features reported in~\cref{tab:paperiii-table04}.
+
+Final predictions were achieved by creating a separate \ac{GP} narcolepsy classifier for each of the sleep scoring models used in the final implementation. 
+The models were trained (tested) on data from seven (five) different cohorts with subsequent independent replication in two cohorts previously unseen by the algorithm, see~\cref{tab:classification-sleep-disorders:paper-iii:table-s01}.
+The algorithm produced values between -1 and 1, with 1 indicating a high probability of \ac{NT1}.
+A cut-off threshold of -0.03 was determined using cross-validation on the training dataset, which is shown with red dots in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}. 
+This optimal trade-off achieves both high sensitivity and specificity, which is seen to translate well onto the test data and the replication sample in~\cref{fig:classification-sleep-disorders:paper-iii:figure-04}b-c.
 
 In the training data, a sensitivity of \SI{94}{\percent} and specificity of
 \SI{96}{\percent} was achieved, and in the testing data a sensitivity of \SI{91}{\percent} and specificity of \SI{96}{\percent} was achieved, while the sensitivity and specificity for the replication sample was \SIlist{93;91}{\percent}, respectively. 
